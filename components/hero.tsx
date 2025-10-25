@@ -16,13 +16,15 @@ export default function Hero() {
             className="space-y-8"
           >
             <div>
-              <h1 className="text-4xl lg:text-5xl font-serif font-bold text-black leading-tight mb-6">
-                ARCHITECTURAL VISION MEETS ENGINEERING PRECISION
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-black leading-tight tracking-tight uppercase">
+                <span className="whitespace-nowrap">BUILDING FUTURES WITH</span>
+                <br />
+                STRUCTURAL EXCELLENCE
               </h1>
-              <p className="text-lg text-gray-600 leading-relaxed">
-                Pyramids Consulting Engineers & Architects delivers exceptional
-                design and structural solutions that redefine spaces and inspire
-                communities.
+              <p className="text-lg text-gray-600 leading-relaxed mt-6">
+                We are your trusted partners in construction and engineering
+                consultancy — delivering smart, sustainable, and cost-effective
+                solutions for every project.
               </p>
             </div>
 
@@ -30,48 +32,45 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="flex flex-col sm:flex-row gap-4"
+              className="flex flex-col md:flex-row items-center gap-12 md:gap-16"
             >
-              <button className="px-8 py-4 bg-yellow-400 text-black font-bold rounded-lg hover:bg-yellow-500 transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2 group">
-                Start Your Project
-                <ArrowRight
-                  size={20}
-                  className="group-hover:translate-x-1 transition-transform"
-                />
-              </button>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-left"
-            >
-              <p className="text-sm font-semibold text-black mb-4 uppercase tracking-wide">
-                TRANSFORMING VISIONS INTO ENDURING ARCHITECTURE
+              {/* Left Text Block */}
+              <p className="font-bold text-lg text-black leading-snug uppercase text-left whitespace-nowrap">
+                START YOUR <br />
+                PROJECT TODAY <br />
+                WITH US
               </p>
+
+              {/* Middle Paragraph */}
+              <p className="text-gray-600 text-base leading-relaxed max-w-xs text-left">
+                We are a <br /> professional <br /> solution for every <br />
+                build.
+              </p>
+
+              {/* Right Button */}
+              <button className="px-8 py-4 bg-yellow-400 text-black font-medium rounded-none hover:bg-black hover:text-yellow-400 transition-all duration-300 transform hover:scale-105 flex items-center gap-2 whitespace-nowrap">
+                Get Started
+                <ArrowRight size={20} />
+              </button>
             </motion.div>
           </motion.div>
 
-          {/* Right Stats Box - Now using your PNG image */}
+          {/* Right Stats Box - Your custom box stays exactly the same */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             className="relative flex justify-center items-center -mr-50 mb-40"
           >
-            {/* Container for the image and overlay text */}
             <div className="relative w-full max-w-lg">
-              {/* Your transparent PNG */}
               <img
                 src="/blackbox-removebg-preview.png"
                 alt="Engineering Excellence"
                 className="w-full h-auto"
               />
 
-              {/* Text overlay positioned on top of the image */}
               <div className="absolute inset-0 flex flex-col justify-center items-end text-white p-8 ml-32 mt-10">
-                <h3 className="text-4xl font-extrabold mb-8 text-center font-serif font-montserrat ">
+                <h3 className="text-4xl font-extrabold mb-8 text-center font-serif font-montserrat">
                   ENGINEERING EXCELLENCE:
                   <br /> OUR LEGACY
                 </h3>
