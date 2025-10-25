@@ -15,36 +15,37 @@ export default function Expertise() {
       icon: Building2,
       title: "Architectural Design",
       description:
-        "Innovative and sustainable architectural solutions for residential and commercial projects.",
+        "Creative vision meets structural integrity in bespoke residential, commercial, and institutional architectural solutions.",
     },
     {
       icon: Hammer,
       title: "Structural Engineering",
       description:
-        "Advanced structural design ensuring safety, durability, and aesthetic excellence.",
+        "Precision engineering ensuring structural safety, efficiency, and compliance with international building standards.",
     },
     {
       icon: Lightbulb,
-      title: "Urban Planning",
+      title: "Urban Planning & Development",
       description:
-        "Strategic urban development and master planning for sustainable communities.",
+        "Comprehensive master planning for sustainable cities, infrastructure, and community-focused urban environments.",
     },
     {
       icon: Leaf,
-      title: "Green Building",
+      title: "Sustainable Architecture",
       description:
-        "Eco-friendly design practices and LEED-certified sustainable architecture.",
+        "LEED-certified green building design integrating energy efficiency and environmental stewardship.",
     },
     {
       icon: Users,
-      title: "Project Management",
+      title: "Construction Management",
       description:
-        "Comprehensive project oversight from conception to completion.",
+        "End-to-end project oversight ensuring quality, timeline adherence, and budget optimization.",
     },
     {
       icon: Zap,
-      title: "Building Systems",
-      description: "MEP engineering and smart building technology integration.",
+      title: "Interior Architecture",
+      description:
+        "Functional and aesthetic interior spaces that reflect brand identity and enhance user experience.",
     },
   ];
 
@@ -77,14 +78,15 @@ export default function Expertise() {
           className="mb-16"
         >
           <span className="text-yellow-400 font-bold text-sm uppercase tracking-wider">
-            WHO WE ARE
+            OUR EXPERTISE
           </span>
           <h2 className="text-5xl lg:text-6xl font-serif font-bold text-black mt-4 mb-6">
-            EXPERT SOLUTIONS FOR EVERY CONSTRUCTION NEED
+            INTEGRATED DESIGN & ENGINEERING SOLUTIONS
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl">
-            Pyramids delivers professional services backed by expertise and
-            innovation for superior results.
+            Pyramids Consulting delivers comprehensive architectural and
+            engineering services, blending innovative design with technical
+            precision for exceptional project outcomes.
           </p>
         </motion.div>
 

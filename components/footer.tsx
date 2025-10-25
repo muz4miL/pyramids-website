@@ -12,11 +12,21 @@ export default function Footer() {
       "Architectural Design",
       "Structural Engineering",
       "Urban Planning",
-      "Green Building",
+      "Construction Management",
     ],
-    Company: ["About Us", "Our Team", "Careers", "Blog"],
-    Resources: ["Portfolio", "Case Studies", "News", "Contact"],
-    Legal: ["Privacy Policy", "Terms of Service", "Cookie Policy"],
+    Expertise: [
+      "Sustainable Architecture",
+      "Interior Design",
+      "Project Oversight",
+      "Technical Consulting",
+    ],
+    Company: ["About Us", "Our Team", "Projects", "Careers"],
+    Resources: [
+      "Case Studies",
+      "Industry Insights",
+      "Design Process",
+      "Contact",
+    ],
   };
 
   const socialLinks = [
@@ -46,11 +56,14 @@ export default function Footer() {
               </div>
               <div>
                 <p className="text-sm font-bold">PYRAMIDS</p>
-                <p className="text-xs opacity-75">ENGINEERS & ARCHITECTS</p>
+                <p className="text-xs opacity-75">
+                  CONSULTING ENGINEERS & ARCHITECTS
+                </p>
               </div>
             </div>
             <p className="text-sm opacity-75 leading-relaxed">
-              Designing the future with precision and innovation.
+              Engineering excellence and architectural innovation for spaces
+              that inspire and endure.
             </p>
           </div>
 

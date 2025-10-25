@@ -62,13 +62,15 @@ export default function Contact() {
           className="mb-16"
         >
           <span className="text-yellow-400 font-bold text-sm uppercase tracking-wider">
-            Get In Touch
+            CONSULT WITH EXPERTS
           </span>
           <h2 className="text-5xl lg:text-6xl font-serif font-bold text-black mt-4 mb-6">
-            Start Your Project
+            Begin Your Architectural Journey
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl">
-            Ready to bring your architectural vision to life? Contact us today.
+            Ready to transform your vision into exceptional architecture? Our
+            team of engineers and architects is prepared to bring precision and
+            innovation to your project.
           </p>
         </motion.div>
 
@@ -79,12 +81,20 @@ export default function Contact() {
           className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12"
         >
           {[
-            { icon: Mail, title: "Email", value: "hello@pyramids.com" },
-            { icon: Phone, title: "Phone", value: "+1 (555) 123-4567" },
+            {
+              icon: Mail,
+              title: "Professional Inquiry",
+              value: "contact@pyramidsconsulting.com",
+            },
+            {
+              icon: Phone,
+              title: "Project Consultation",
+              value: "+1 (555) 123-PYRAMID",
+            },
             {
               icon: MapPin,
-              title: "Address",
-              value: "123 Architecture Ave, Design City, DC 12345",
+              title: "Design Studio",
+              value: "123 Architecture Avenue, Design District, 10001",
             },
           ].map((contact, index) => {
             const Icon = contact.icon;
@@ -134,14 +144,14 @@ export default function Contact() {
             <input
               type="tel"
               name="phone"
-              placeholder="Phone Number"
+              placeholder="Contact Number"
               value={formData.phone}
               onChange={handleChange}
               className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 text-black placeholder-gray-500"
             />
             <textarea
               name="message"
-              placeholder="Tell us about your project..."
+              placeholder="Describe your architectural vision or project requirements..."
               value={formData.message}
               onChange={handleChange}
               required
@@ -152,7 +162,7 @@ export default function Contact() {
               type="submit"
               className="w-full px-6 py-3 bg-yellow-400 text-black font-bold rounded-lg hover:bg-yellow-500 transition-all duration-300 transform hover:scale-105"
             >
-              Send Message
+              Request Professional Consultation
             </button>
           </form>
         </motion.div>

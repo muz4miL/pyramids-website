@@ -13,21 +13,21 @@ export default function About() {
   const sections = [
     {
       label: "WHO WE ARE",
-      title: "SHAPING FUTURE LANDSCAPES",
+      title: "ARCHITECTURAL EXCELLENCE MEETS ENGINEERING PRECISION",
       description:
-        "Pyramids is dedicated to creating innovative, sustainable, and impactful solutions.",
+        "Pyramids Consulting Engineers & Architects is a full-service design and engineering firm that blends creative vision with structural integrity to deliver spaces that inspire and endure.",
     },
     {
       label: "OUR MISSION",
-      title: "BUILDING BEYOND EXPECTATIONS",
+      title: "ENGINEERING TOMORROW'S LANDMARKS TODAY",
       description:
-        "We aim to exceed client expectations by reliable construction projects with precision.",
+        "We deliver exceptional architectural solutions through meticulous planning, sustainable practices, and client-focused collaboration from concept to completion.",
     },
     {
       label: "OUR VALUE",
-      title: "INTEGRITY AND INNOVATION",
+      title: "PRECISION IN EVERY DETAIL",
       description:
-        "Our core values are trust, quality, and innovation, driving excellence in every project we undertake.",
+        "Our commitment to quality, innovation, and sustainable design ensures every project exceeds expectations while building lasting value for communities.",
     },
   ];
 

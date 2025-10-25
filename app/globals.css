@@ -1,3 +1,6 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
 @import "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
@@ -120,4 +123,25 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.font-montserrat {
+  font-family: "Montserrat", sans-serif;
+}
+
+.nav-border-fade-top-bottom {
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  border-image: linear-gradient(
+      90deg,
+      transparent 100px,
+      #e5e5e5 100px,
+      #e5e5e5 calc(100% - 130px),
+      transparent calc(100% - 200px)
+    )
+    1;
+}
+
+.font-poppins {
+  font-family: "Poppins", sans-serif;
 }

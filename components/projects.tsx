@@ -12,33 +12,33 @@ export default function Projects() {
 
   const projects = [
     {
-      title: "Metropolitan Tower",
-      category: "Commercial",
+      title: "Metropolitan Corporate Tower",
+      category: "Commercial Architecture",
       image: "/modern-skyscraper-tower.jpg",
     },
     {
-      title: "Riverside Residences",
-      category: "Residential",
+      title: "Riverside Luxury Residences",
+      category: "Residential Design",
       image: "/luxury-residential-building.jpg",
     },
     {
-      title: "Innovation Hub",
-      category: "Mixed-Use",
+      title: "Innovation Technology Hub",
+      category: "Mixed-Use Development",
       image: "/modern-office-building.png",
     },
     {
-      title: "Cultural Center",
-      category: "Public",
+      title: "Contemporary Arts Center",
+      category: "Public Architecture",
       image: "/contemporary-cultural-building.jpg",
     },
     {
-      title: "Tech Campus",
-      category: "Corporate",
+      title: "Sustainable Tech Campus",
+      category: "Corporate Architecture",
       image: "/modern-tech-campus.jpg",
     },
     {
-      title: "Wellness Resort",
-      category: "Hospitality",
+      title: "Wellness & Resort Complex",
+      category: "Hospitality Design",
       image: "/luxury-resort-architecture.jpg",
     },
   ];
@@ -72,13 +72,14 @@ export default function Projects() {
           className="mb-16"
         >
           <span className="text-yellow-400 font-bold text-sm uppercase tracking-wider">
-            Portfolio
+            OUR PORTFOLIO
           </span>
           <h2 className="text-5xl lg:text-6xl font-serif font-bold text-black mt-4 mb-6">
-            Featured Projects
+            ARCHITECTURAL EXCELLENCE
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl">
-            Explore our diverse portfolio of completed architectural projects.
+            Discover our portfolio of innovative architectural and engineering
+            projects that showcase precision design and structural mastery.
           </p>
         </motion.div>
 
@@ -107,7 +108,7 @@ export default function Projects() {
                   {project.category}
                 </p>
                 <div className="flex items-center gap-2 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <span className="text-sm font-medium">View Project</span>
+                  <span className="text-sm font-medium">Explore Design</span>
                   <ArrowRight size={16} />
                 </div>
               </div>
@@ -122,7 +123,7 @@ export default function Projects() {
           className="text-center mt-12"
         >
           <button className="px-8 py-3 border-2 border-black text-black font-bold rounded-lg hover:bg-black hover:text-white transition-all duration-300">
-            View All Projects
+            Explore Full Portfolio
           </button>
         </motion.div>
       </div>
