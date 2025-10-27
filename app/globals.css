@@ -129,6 +129,19 @@
   font-family: "Montserrat", sans-serif;
 }
 
+/* .nav-border-fade-top-bottom {
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  border-image: linear-gradient(
+      90deg,
+      transparent 100px,
+      #e5e5e5 100px,
+      #e5e5e5 calc(100% - 130px),
+      transparent calc(100% - 200px)
+    )
+    1;
+} */
+
 .nav-border-fade-top-bottom {
   border-top: 1px solid;
   border-bottom: 1px solid;
@@ -144,4 +157,15 @@
 
 .font-poppins {
   font-family: "Poppins", sans-serif;
+}
+
+/* Mobile bottom border - NUCLEAR OPTION */
+@media (max-width: 767px) {
+  nav.static.nav-border-fade-top-bottom {
+    border: none !important;
+    border-bottom: 1px solid #e5e5e5 !important;
+    border-image: unset !important;
+    -webkit-border-image: unset !important;
+    -moz-border-image: unset !important;
+  }
 }

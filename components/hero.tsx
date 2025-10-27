@@ -5,23 +5,23 @@ import { ArrowRight } from "lucide-react";
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen pt-32 pb-20 flex items-center justify-center overflow-hidden bg-white">
+    <section className="relative min-h-screen pt-20 md:pt-32 pb-12 md:pb-20 flex items-center justify-center overflow-hidden bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Left Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
+          {/* Left Content - Responsive but desktop unchanged */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="space-y-8"
+            className="space-y-6 md:space-y-8"
           >
             <div>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-black leading-tight tracking-tight uppercase">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold text-black leading-tight tracking-tight uppercase">
                 <span className="whitespace-nowrap">BUILDING FUTURES WITH</span>
                 <br />
-                STRUCTURAL EXCELLENCE
+                <span className="whitespace-nowrap">STRUCTURAL EXCELLENCE</span>
               </h1>
-              <p className="text-lg text-gray-600 leading-relaxed mt-6">
+              <p className="text-base sm:text-lg md:text-lg text-gray-600 leading-relaxed mt-4 md:mt-6 max-w-2xl">
                 We are your trusted partners in construction and engineering
                 consultancy — delivering smart, sustainable, and cost-effective
                 solutions for every project.
@@ -32,62 +32,62 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="flex flex-col md:flex-row items-center gap-12 md:gap-16"
+              className="flex flex-col sm:flex-row items-center gap-6 md:gap-8 lg:gap-16"
             >
               {/* Left Text Block */}
-              <p className="font-bold text-lg text-black leading-snug uppercase text-left whitespace-nowrap">
+              <p className="font-bold text-base sm:text-lg md:text-lg text-black leading-snug uppercase text-center sm:text-left whitespace-nowrap">
                 START YOUR <br />
                 PROJECT TODAY <br />
                 WITH US
               </p>
 
               {/* Middle Paragraph */}
-              <p className="text-gray-600 text-base leading-relaxed max-w-xs text-left">
+              <p className="text-gray-600 text-sm sm:text-base leading-relaxed max-w-xs text-center sm:text-left">
                 We are a <br /> professional <br /> solution for every <br />
                 build.
               </p>
 
               {/* Right Button */}
-              <button className="px-8 py-4 bg-yellow-400 text-black font-medium rounded-none hover:bg-black hover:text-yellow-400 transition-all duration-300 transform hover:scale-105 flex items-center gap-2 whitespace-nowrap">
+              <button className="px-6 sm:px-8 py-3 sm:py-4 bg-yellow-400 text-black font-medium rounded-none hover:bg-black hover:text-yellow-400 transition-all duration-300 transform hover:scale-105 flex items-center gap-2 whitespace-nowrap text-sm sm:text-base">
                 Get Started
-                <ArrowRight size={20} />
+                <ArrowRight size={18} className="hidden sm:block" />
               </button>
             </motion.div>
           </motion.div>
 
-          {/* Right Stats Box - Your custom box stays exactly the same */}
+          {/* Right Stats Box - Responsive positioning */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative flex justify-center items-center -mr-50 mb-40"
+            className="relative flex justify-center items-center mt-8 lg:mt-0 lg:-mr-48 lg:-mb-18"
           >
-            <div className="relative w-full max-w-lg">
+            <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg">
               <img
                 src="/blackbox-removebg-preview.png"
                 alt="Engineering Excellence"
                 className="w-full h-auto"
               />
 
-              <div className="absolute inset-0 flex flex-col justify-center items-end text-white p-8 ml-32 mt-10">
-                <h3 className="text-4xl font-extrabold mb-8 text-center font-serif font-montserrat">
+              <div className="absolute inset-0 flex flex-col justify-center items-center lg:items-end text-white p-4 sm:p-6 md:p-8 lg:ml-32 lg:mt-10">
+                <h3 className="text-lg sm:text-xl md:text-2xl lg:text-4xl font-extrabold mb-4 sm:mb-6 md:mb-8 text-center font-montserrat leading-tight">
                   ENGINEERING EXCELLENCE:
                   <br /> OUR LEGACY
                 </h3>
-                <div className="grid grid-cols-2 gap-6 w-full mt-12 mr-16">
+                <div className="grid grid-cols-2 gap-4 sm:gap-6 w-full max-w-xs sm:max-w-sm mt-6 sm:mt-8 md:mt-12 lg:mr-16">
                   <div className="text-center">
-                    <p className="text-6xl font-bold text-white font-serif">
+                    <p className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white font-montserrat">
                       250+
                     </p>
-                    <p className="text-sm text-gray-200 mt-2">
+                    <p className="text-xs sm:text-sm text-gray-200 mt-1 sm:mt-2">
                       Architectural Projects
                     </p>
                   </div>
                   <div className="text-center">
-                    <p className="text-6xl font-bold text-white font-serif">
+                    <p className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white font-montserrat">
                       25+
                     </p>
-                    <p className="text-sm text-gray-200 mt-2">
+                    <p className="text-xs sm:text-sm text-gray-200 mt-1 sm:mt-2">
                       Years of Excellence
                     </p>
                   </div>
