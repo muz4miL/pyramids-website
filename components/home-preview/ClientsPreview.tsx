@@ -176,6 +176,7 @@ export default function AboutPreview() {
         </motion.div>
 
         {/* Quick Stats Bar */}
+
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}

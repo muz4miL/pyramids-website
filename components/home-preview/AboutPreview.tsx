@@ -78,6 +78,7 @@ export default function AboutPreview() {
           </div>
 
           {/* Right Stats */}
+
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={inView ? { opacity: 1, scale: 1 } : {}}
