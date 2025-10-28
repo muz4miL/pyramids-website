@@ -31,6 +31,7 @@ export default function AboutPreview() {
           className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
         >
           {/* Left Content */}
+
           <div className="space-y-6">
             <div className="flex items-center gap-3">
               <div className="w-3 h-3 bg-yellow-400" />

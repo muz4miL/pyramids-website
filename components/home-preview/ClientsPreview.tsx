@@ -151,6 +151,7 @@ export default function AboutPreview() {
             </div>
 
             {/* Additional Achievement Badges */}
+
             <motion.div
               initial={{ opacity: 0 }}
               animate={inView ? { opacity: 1 } : {}}
