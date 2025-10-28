@@ -169,3 +169,27 @@
     -moz-border-image: unset !important;
   }
 }
+
+/* Add this to your globals.css file */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-160px * 8 * -1));
+  }
+}
+
+.animate-scroll {
+  animation: scroll 40s linear infinite;
+  display: flex;
+  width: max-content;
+}
+
+.pause {
+  animation-play-state: paused;
+}
+
+.hover\:pause:hover {
+  animation-play-state: paused;
+}

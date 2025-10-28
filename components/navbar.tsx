@@ -11,17 +11,17 @@ export default function Navbar() {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const navLinks = [
-    { href: "#home", label: "Home" },
-    { href: "#about", label: "About" },
-    { href: "#expertise", label: "Expertise" },
-    { href: "#projects", label: "Projects" },
-    { href: "#contact", label: "Contact" },
+    { href: "/", label: "Home" },
+    { href: "/about", label: "About" },
+    { href: "/expertise", label: "Expertise" },
+    { href: "/projects", label: "Projects" },
+    { href: "/contact", label: "Contact" },
   ];
 
   const otherLinks = [
-    { href: "#clients", label: "Clients" },
-    { href: "#team", label: "Team" },
-    { href: "#future", label: "Future" },
+    { href: "/others/clients", label: "Clients" },
+    { href: "/others/team", label: "Team" },
+    { href: "/others/future", label: "Future" },
   ];
 
   // Close dropdown when clicking outside
