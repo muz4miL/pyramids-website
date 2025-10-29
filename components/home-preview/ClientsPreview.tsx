@@ -9,6 +9,41 @@ import ClientRetentionIcon from "@/components/icons/ClientRetentionIcon";
 import InternationalPartnersIcon from "@/components/icons/InternationalPartnersIcon";
 import GovernmentAgenciesIcon from "@/components/icons/GovernmentAgenciesIcon";
 
+// Define TypeScript interfaces
+interface ClientLogo {
+  name: string;
+  logo: string;
+  type: "horizontal" | "vertical";
+  featured?: boolean;
+  customSize?: {
+    container: string;
+    image: string;
+  };
+}
+
+interface SizeConfig {
+  container: {
+    horizontal: string;
+    vertical: string;
+  };
+  image: {
+    horizontal: string;
+    vertical: string;
+  };
+  mobile: {
+    container: string;
+    image: string;
+  };
+}
+
+interface ClientStat {
+  number: string;
+  label: string;
+  description: string;
+  icon: React.ComponentType<{ className?: string }>;
+  gradient: string;
+}
+
 export default function ClientsPreview() {
   const { ref, inView } = useInView({
     triggerOnce: true,
@@ -32,7 +67,7 @@ export default function ClientsPreview() {
   // 🎯 ENHANCED SIZE CONTROL WITH MOBILE OPTIMIZATION
   const sizeOption = "xl";
 
-  const sizeConfig = {
+  const sizeConfig: Record<string, SizeConfig> = {
     sm: {
       container: { horizontal: "w-32 h-20", vertical: "w-28 h-24" },
       image: { horizontal: "w-24 h-12", vertical: "w-20 h-16" },
@@ -62,7 +97,7 @@ export default function ClientsPreview() {
 
   const sizes = sizeConfig[sizeOption];
 
-  const clientLogos = [
+  const clientLogos: ClientLogo[] = [
     {
       name: "Danish Red Cross",
       logo: "/clients/danish.png",
@@ -124,7 +159,7 @@ export default function ClientsPreview() {
   const duplicatedLogos = [...featuredClients, ...featuredClients];
 
   // 🎯 PREMIUM STATS DATA WITH CUSTOM ICONS
-  const clientStats = [
+  const clientStats: ClientStat[] = [
     {
       number: "50+",
       label: "Satisfied Clients",
@@ -259,12 +294,15 @@ export default function ClientsPreview() {
               }}
             >
               {duplicatedLogos.map((client, index) => {
+                // Fix TypeScript error by ensuring type is either "horizontal" or "vertical"
+                const logoType = client.type as "horizontal" | "vertical";
+
                 const containerSize = isMobile
                   ? sizes.mobile.container
-                  : sizes.container[client.type];
+                  : sizes.container[logoType];
                 const imageSize = isMobile
                   ? sizes.mobile.image
-                  : sizes.image[client.type];
+                  : sizes.image[logoType];
 
                 return (
                   <motion.div
