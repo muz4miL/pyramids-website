@@ -140,18 +140,18 @@ export default function ClientsPreview() {
       type: "horizontal",
       featured: false,
     },
-    {
-      name: "UN Agencies",
-      logo: "/clients/un-logo.png",
-      type: "horizontal",
-      featured: true,
-    },
-    {
-      name: "Punjab Government",
-      logo: "/clients/punjab-govt.png",
-      type: "vertical",
-      featured: true,
-    },
+    // {
+    //   name: "UN Agencies",
+    //   logo: "/clients/un-logo.png",
+    //   type: "horizontal",
+    //   featured: true,
+    // },
+    // {
+    //   name: "Punjab Government",
+    //   logo: "/clients/punjab-govt.png",
+    //   type: "vertical",
+    //   featured: true,
+    // },
   ];
 
   // Filter featured clients for better mobile experience
