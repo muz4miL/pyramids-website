@@ -1,4 +1,3 @@
-// components/home-preview/ProjectsPreview.tsx
 "use client";
 
 import { motion } from "framer-motion";
@@ -23,7 +22,7 @@ export default function ProjectsPreview() {
       image: "/SiafMall.PNG",
       progress: "Top super progress",
       aspect: "850/545",
-      progressValue: 85, // For progress bar
+      progressValue: 85,
       featured: true,
     },
     {
@@ -62,78 +61,96 @@ export default function ProjectsPreview() {
   ];
 
   return (
-    <section id="projects" className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Enhanced Header */}
+    <section id="projects" className="py-24 sm:py-28 lg:py-32 bg-gray-50">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+        {/* Header */}
         <motion.div
           ref={ref}
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          className="text-center mb-16"
+          transition={{ duration: 0.8 }}
+          className="text-center mb-20"
         >
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="w-3 h-3 bg-yellow-400 rounded-full" />
-            <span className="text-sm font-bold text-yellow-400 tracking-wider uppercase">
+          <motion.div
+            initial={{ opacity: 0, scale: 0 }}
+            animate={inView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="flex items-center justify-center gap-4 mb-6"
+          >
+            <div className="w-8 h-0.5 bg-yellow-400"></div>
+            <span className="text-sm font-bold text-yellow-400 tracking-widest uppercase">
               Featured Projects
             </span>
-            <div className="w-3 h-3 bg-yellow-400 rounded-full" />
-          </div>
-          <h2 className="text-4xl lg:text-5xl font-bold text-black mb-6">
+            <div className="w-8 h-0.5 bg-yellow-400"></div>
+          </motion.div>
+
+          <h2 className="text-5xl lg:text-6xl font-bold text-black mb-6 leading-tight">
             Engineering <span className="text-yellow-400">Excellence</span> in
             Action
           </h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="w-24 h-1 bg-yellow-400 mx-auto mb-8"
+          ></motion.div>
+
+          <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
             From commercial malls to residential towers, discover our portfolio
             of landmark projects that redefine Pakistan's skyline with
             structural precision and architectural innovation.
           </p>
         </motion.div>
 
-        {/* Enhanced Stats */}
+        {/* Stats */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.2 }}
-          className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-16"
+          className="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-20"
         >
           {projectStats.map((stat, index) => (
-            <div
+            <motion.div
               key={index}
-              className="text-center p-6 bg-gradient-to-br from-gray-50 to-white rounded-xl border border-gray-100 hover:border-yellow-400/30 transition-all duration-300 group"
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
+              className="text-center p-8 bg-white rounded-xl border border-gray-200 hover:border-yellow-400 transition-all duration-500"
             >
-              <div className="text-2xl lg:text-3xl font-bold text-black mb-2 group-hover:text-yellow-400 transition-colors">
+              <div className="text-4xl font-bold text-black mb-3">
                 {stat.number}
               </div>
-              <div className="text-sm text-gray-600 font-medium">
+              <div className="text-lg font-semibold text-gray-700">
                 {stat.label}
               </div>
-            </div>
+            </motion.div>
           ))}
         </motion.div>
 
-        {/* Enhanced Projects Grid */}
+        {/* Projects Grid */}
         <motion.div
           initial="hidden"
           animate={inView ? "visible" : {}}
           variants={{
             visible: {
               transition: {
-                staggerChildren: 0.2,
+                staggerChildren: 0.15,
               },
             },
           }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16"
         >
           {featuredProjects.map((project, index) => (
             <motion.div
               key={index}
               variants={{
-                hidden: { opacity: 0, y: 30, scale: 0.95 },
-                visible: { opacity: 1, y: 0, scale: 1 },
+                hidden: { opacity: 0, y: 30 },
+                visible: { opacity: 1, y: 0 },
               }}
-              className="group bg-white/95 backdrop-blur-sm rounded-2xl border border-gray-200/80 hover:border-yellow-400/50 hover:shadow-2xl hover:shadow-yellow-400/10 transition-all duration-500 overflow-hidden cursor-pointer hover:-translate-y-2"
+              className="group bg-white rounded-xl border border-gray-200 hover:border-yellow-400 transition-all duration-500 overflow-hidden cursor-pointer hover:-translate-y-2"
             >
-              {/* Enhanced Project Image */}
+              {/* Project Image */}
               <div
                 className="relative overflow-hidden"
                 style={{ aspectRatio: project.aspect }}
@@ -147,81 +164,61 @@ export default function ProjectsPreview() {
                   priority={index === 0}
                 />
 
-                {/* Enhanced Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-                {/* Premium Status Badge */}
+                {/* Status Badge */}
                 <div className="absolute top-4 right-4">
-                  <span className="text-xs font-bold bg-gradient-to-r from-yellow-400 to-yellow-500 text-black px-3 py-1.5 rounded-full shadow-lg border border-yellow-300">
-                    ⭐ FEATURED
-                  </span>
-                </div>
-
-                {/* Project Type Badge */}
-                <div className="absolute top-4 left-4">
-                  <span className="text-xs font-medium bg-black/80 text-white px-2 py-1 rounded-full backdrop-blur-sm">
-                    {project.stories.split(" ")[0]}+ STORIES
+                  <span className="text-xs font-bold bg-yellow-400 text-black px-3 py-1.5 rounded-full border border-yellow-300">
+                    FEATURED
                   </span>
                 </div>
               </div>
 
-              {/* Enhanced Project Details */}
+              {/* Project Details */}
               <div className="p-6">
                 <div className="mb-4">
-                  <h3 className="text-xl font-bold text-black group-hover:text-yellow-400 transition-colors mb-2 leading-tight">
+                  <h3 className="text-xl font-bold text-black mb-2 leading-tight">
                     {project.name}
                   </h3>
-                  <p className="text-gray-600 text-sm flex items-center gap-2 font-medium">
+                  <p className="text-gray-600 text-sm flex items-center gap-2">
                     <span className="w-1.5 h-1.5 bg-yellow-400 rounded-full"></span>
                     {project.location}
                   </p>
                 </div>
 
-                {/* Enhanced Project Metrics */}
+                {/* Project Metrics */}
                 <div className="space-y-3 mb-4">
                   <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-500 font-medium">Area</span>
-                    <span className="font-bold text-black">{project.area}</span>
+                    <span className="text-gray-500">Area</span>
+                    <span className="font-semibold text-black">
+                      {project.area}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-500 font-medium">
-                      Project Cost
+                    <span className="text-gray-500">Stories</span>
+                    <span className="font-semibold text-black">
+                      {project.stories}
                     </span>
-                    <span className="font-bold text-green-600">
+                  </div>
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="text-gray-500">Cost</span>
+                    <span className="font-semibold text-black">
                       {project.cost}
                     </span>
                   </div>
-
-                  {/* Progress Bar */}
-                  <div className="pt-2">
-                    <div className="flex justify-between text-xs mb-1.5">
-                      <span className="text-gray-500">
-                        Construction Progress
-                      </span>
-                      <span className="font-bold text-yellow-400">
-                        {project.progressValue}%
-                      </span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-1.5">
-                      <div
-                        className="bg-gradient-to-r from-yellow-400 to-yellow-500 h-1.5 rounded-full transition-all duration-1000 ease-out"
-                        style={{ width: `${project.progressValue}%` }}
-                      ></div>
-                    </div>
-                  </div>
                 </div>
 
-                {/* Enhanced CTA */}
-                <div className="pt-4 border-t border-gray-100/80">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-gray-600 group-hover:text-yellow-400 transition-colors">
-                      Explore Project
+                {/* Progress Bar */}
+                <div className="pt-3 border-t border-gray-100">
+                  <div className="flex justify-between text-xs mb-2">
+                    <span className="text-gray-500">Progress</span>
+                    <span className="font-semibold text-yellow-400">
+                      {project.progressValue}%
                     </span>
-                    <div className="w-8 h-8 bg-black group-hover:bg-yellow-400 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-45">
-                      <span className="text-white group-hover:text-black text-sm font-bold transition-colors">
-                        →
-                      </span>
-                    </div>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-1.5">
+                    <div
+                      className="bg-yellow-400 h-1.5 rounded-full transition-all duration-1000"
+                      style={{ width: `${project.progressValue}%` }}
+                    ></div>
                   </div>
                 </div>
               </div>
@@ -229,7 +226,7 @@ export default function ProjectsPreview() {
           ))}
         </motion.div>
 
-        {/* Enhanced CTA Button */}
+        {/* CTA */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -237,12 +234,14 @@ export default function ProjectsPreview() {
           className="text-center"
         >
           <Link href="/projects">
-            <button className="px-8 py-4 bg-black text-white font-bold rounded-xl hover:bg-yellow-400 hover:text-black transition-all duration-300 transform hover:scale-105 flex items-center gap-3 mx-auto shadow-lg hover:shadow-yellow-400/20 border-2 border-black hover:border-yellow-400">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="inline-flex items-center gap-3 px-8 py-4 bg-black text-white font-bold text-lg rounded-none hover:bg-yellow-400 hover:text-black transition-all duration-300 border-2 border-black"
+            >
               Explore Full Project Portfolio
-              <span className="text-lg group-hover:translate-x-1 transition-transform">
-                →
-              </span>
-            </button>
+              <span className="text-lg">→</span>
+            </motion.button>
           </Link>
         </motion.div>
       </div>
