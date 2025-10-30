@@ -9,7 +9,13 @@ import { TownPlanningIcon } from "@/components/icons/TownPlanningIcon";
 import { WaterSupplyIcon } from "@/components/icons/WaterSupplyIcon";
 import { RenewableEnergyIcon } from "@/components/icons/RenewableEnergyIcon";
 
-export default function ExpertisePreview() {
+export default function ExpertisePreview({
+  showHeadline = true,
+  showCTA = true,
+}: {
+  showHeadline?: boolean;
+  showCTA?: boolean;
+}) {
   const { ref, inView } = useInView({
     triggerOnce: true,
     threshold: 0.1,
@@ -73,53 +79,52 @@ export default function ExpertisePreview() {
   ];
 
   return (
-    <section
-      id="expertise"
-      className="py-24 bg-gradient-to-br from-black via-[#0a0a0a] to-[#1a1a1a] text-white relative overflow-hidden"
-    >
+    <section className="py-24 bg-gradient-to-br from-black via-[#0a0a0a] to-[#1a1a1a] text-white relative overflow-hidden">
       {/* Subtle background accent */}
       <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(circle_at_center,_#facc15_0%,_transparent_60%)]" />
 
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
-        {/* Header */}
-        <motion.div
-          ref={ref}
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-20"
-        >
+        {/* Header - Conditional */}
+        {showHeadline && (
           <motion.div
-            initial={{ opacity: 0, scale: 0 }}
-            animate={inView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="flex items-center justify-center gap-4 mb-6"
-          >
-            <div className="w-8 h-0.5 bg-yellow-400"></div>
-            <span className="text-sm font-bold text-yellow-400 tracking-widest uppercase">
-              Our Core Expertise
-            </span>
-            <div className="w-8 h-0.5 bg-yellow-400"></div>
-          </motion.div>
-
-          <h2 className="text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-            Engineering <span className="text-yellow-400">Excellence</span>{" "}
-            Across Disciplines
-          </h2>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            ref={ref}
+            initial={{ opacity: 0, y: 30 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="w-24 h-1 bg-yellow-400 mx-auto mb-8"
-          ></motion.div>
+            transition={{ duration: 0.8 }}
+            className="text-center mb-20"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0 }}
+              animate={inView ? { opacity: 1, scale: 1 } : {}}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="flex items-center justify-center gap-4 mb-6"
+            >
+              <div className="w-8 h-0.5 bg-yellow-400"></div>
+              <span className="text-sm font-bold text-yellow-400 tracking-widest uppercase">
+                Our Core Expertise
+              </span>
+              <div className="w-8 h-0.5 bg-yellow-400"></div>
+            </motion.div>
 
-          <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
-            Specialized multidisciplinary engineering services delivering
-            innovative solutions across Pakistan's infrastructure landscape with
-            25+ years of proven expertise and 250+ successful projects.
-          </p>
-        </motion.div>
+            <h2 className="text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+              Engineering <span className="text-yellow-400">Excellence</span>{" "}
+              Across Disciplines
+            </h2>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="w-24 h-1 bg-yellow-400 mx-auto mb-8"
+            ></motion.div>
+
+            <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
+              Specialized multidisciplinary engineering services delivering
+              innovative solutions across Pakistan's infrastructure landscape
+              with 25+ years of proven expertise and 250+ successful projects.
+            </p>
+          </motion.div>
+        )}
 
         {/* Expertise Cards */}
         <motion.div
@@ -183,32 +188,34 @@ export default function ExpertisePreview() {
           })}
         </motion.div>
 
-        {/* CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.8 }}
-          className="text-center mt-20"
-        >
-          <div className="bg-gradient-to-r from-yellow-400/10 to-transparent border border-yellow-400/20 rounded-lg p-12 text-white relative overflow-hidden">
-            <h3 className="text-3xl font-bold mb-4">
-              Ready to Engineer Your Vision?
-            </h3>
-            <p className="text-gray-300 text-lg mb-8 max-w-2xl mx-auto">
-              Leverage our multidisciplinary expertise for your next engineering
-              challenge. From concept to completion, we deliver excellence
-              across all project phases.
-            </p>
-            <div className="flex flex-wrap justify-center gap-6">
-              <button className="px-8 py-4 bg-yellow-400 text-black font-bold rounded-none hover:bg-white hover:text-black transition-all duration-300 border-2 border-yellow-400 transform hover:scale-105">
-                Consult Our Experts
-              </button>
-              <button className="px-8 py-4 border-2 border-yellow-400 text-yellow-400 font-bold rounded-none hover:bg-yellow-400 hover:text-black transition-all duration-300">
-                View Full Services
-              </button>
+        {/* CTA - Conditional */}
+        {showCTA && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.8 }}
+            className="text-center mt-20"
+          >
+            <div className="bg-gradient-to-r from-yellow-400/10 to-transparent border border-yellow-400/20 rounded-lg p-12 text-white relative overflow-hidden">
+              <h3 className="text-3xl font-bold mb-4">
+                Ready to Engineer Your Vision?
+              </h3>
+              <p className="text-gray-300 text-lg mb-8 max-w-2xl mx-auto">
+                Leverage our multidisciplinary expertise for your next
+                engineering challenge. From concept to completion, we deliver
+                excellence across all project phases.
+              </p>
+              <div className="flex flex-wrap justify-center gap-6">
+                <button className="px-8 py-4 bg-yellow-400 text-black font-bold rounded-none hover:bg-white hover:text-black transition-all duration-300 border-2 border-yellow-400 transform hover:scale-105">
+                  Consult Our Experts
+                </button>
+                <button className="px-8 py-4 border-2 border-yellow-400 text-yellow-400 font-bold rounded-none hover:bg-yellow-400 hover:text-black transition-all duration-300">
+                  View Full Services
+                </button>
+              </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        )}
       </div>
     </section>
   );

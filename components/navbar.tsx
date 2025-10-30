@@ -53,7 +53,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="static md:fixed top-0 w-full bg-white/95 backdrop-blur-sm z-50 nav-border-fade-top-bottom mt-px">
+      <nav className="static md:fixed top-0 w-full bg-white/80 backdrop-blur-md z-50 nav-border-fade-top-bottom">
         <div className="md:hidden absolute bottom-0 left-0 w-full h-px bg-gray-300"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16 md:h-20">
@@ -97,13 +97,13 @@ export default function Navbar() {
                   <div
                     onMouseEnter={() => setIsOthersOpen(true)}
                     onMouseLeave={() => setIsOthersOpen(false)}
-                    className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg py-2 min-w-[120px] z-50"
+                    className="absolute top-full left-1/2 -translate-x-1/2 mt-0 bg-gray-100 border border-gray-300 py-2 w-48 z-50"
                   >
                     {otherLinks.map((link) => (
                       <Link
                         key={link.href}
                         href={link.href}
-                        className="block px-4 py-2 text-sm text-foreground hover:bg-gray-50 hover:text-blue-400 transition-colors font-poppins"
+                        className="block px-4 py-3 text-base text-foreground hover:bg-gray-200 transition-colors font-poppins"
                         onClick={() => setIsOthersOpen(false)}
                       >
                         {link.label}
