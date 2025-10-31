@@ -2,9 +2,8 @@
 
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { ArrowRight, Calendar, Award, Users, Building } from "lucide-react";
+import { ArrowRight, Building, Award, Users } from "lucide-react";
 import Link from "next/link";
-
 export default function AboutPreview() {
   const { ref, inView } = useInView({
     triggerOnce: true,
@@ -13,14 +12,15 @@ export default function AboutPreview() {
 
   return (
     <section id="about" className="relative bg-white overflow-hidden">
-      {/* Background Structural Elements */}
+      {/* Background Structural Elements (Unchanged) */}
       <div className="absolute inset-0">
         <div className="absolute top-0 left-0 w-1 h-32 bg-yellow-400 opacity-20"></div>
         <div className="absolute bottom-0 right-0 w-1 h-32 bg-yellow-400 opacity-20"></div>
         <div className="absolute top-1/4 right-1/4 w-64 h-64 border border-yellow-400 opacity-5 rounded-full"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-24 lg:py-32">
+      {/* === MODIFICATION: Reduced vertical padding py-24/32 to py-16/20 === */}
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-16 lg:py-20">
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 40 }}
@@ -28,8 +28,8 @@ export default function AboutPreview() {
           transition={{ duration: 0.8 }}
           className="relative"
         >
-          {/* Premium Header */}
-          <div className="text-center mb-20">
+          {/* Premium Header - === MODIFICATION: Reduced mb-20 to mb-12 === */}
+          <div className="text-center mb-12">
             <motion.div
               initial={{ opacity: 0, scale: 0 }}
               animate={inView ? { opacity: 1, scale: 1 } : {}}
@@ -43,30 +43,34 @@ export default function AboutPreview() {
               <div className="w-8 h-0.5 bg-yellow-400"></div>
             </motion.div>
 
-            <h2 className="text-5xl lg:text-6xl font-bold text-black mb-6 leading-tight">
+            {/* === MODIFICATION: Reduced font size from 6xl to 5xl === */}
+            <h2 className="text-4xl lg:text-5xl font-bold text-black mb-6 leading-tight">
               STRUCTURAL <span className="text-yellow-400">EXCELLENCE</span>
               <br />
               ENGINEERED TO PERFECTION
             </h2>
 
+            {/* === MODIFICATION: Reduced mb-8 to mb-10 (slight adjust) === */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="w-24 h-1 bg-yellow-400 mx-auto mb-8"
+              className="w-24 h-1 bg-yellow-400 mx-auto mb-10"
             ></motion.div>
           </div>
 
-          {/* Main Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+          {/* Main Content Grid - === MODIFICATION: Reduced gap-16 to gap-12 === */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             {/* Left - Premium Text Content */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={inView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.6 }}
-              className="space-y-8"
+              // === MODIFICATION: Reduced space-y-8 to space-y-6 ===
+              className="space-y-6"
             >
-              <p className="text-2xl lg:text-3xl font-light text-gray-800 leading-relaxed">
+              {/* === MODIFICATION: Reduced font size from 3xl to 2xl === */}
+              <p className="text-xl lg:text-2xl font-light text-gray-800 leading-relaxed">
                 A dynamic, fast-growing multidimensional organization providing
                 comprehensive
                 <span className="font-semibold text-black">
@@ -76,7 +80,8 @@ export default function AboutPreview() {
                 with a legacy built on precision and innovation.
               </p>
 
-              <div className="space-y-6">
+              {/* === MODIFICATION: Reduced space-y-6 to space-y-5 === */}
+              <div className="space-y-5">
                 <div className="flex items-start gap-4">
                   <Building className="w-6 h-6 text-yellow-400 mt-1 flex-shrink-0" />
                   <div>
@@ -120,7 +125,8 @@ export default function AboutPreview() {
               <motion.div
                 whileHover={{ x: 10 }}
                 transition={{ duration: 0.3 }}
-                className="pt-8"
+                // === MODIFICATION: Reduced pt-8 to pt-6 ===
+                className="pt-6"
               >
                 <Link href="/about">
                   <button className="group inline-flex items-center gap-4 px-8 py-4 bg-black text-white font-bold text-lg hover:bg-yellow-400 hover:text-black transition-all duration-500 border-2 border-black">
@@ -139,9 +145,10 @@ export default function AboutPreview() {
               initial={{ opacity: 0, x: 30 }}
               animate={inView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.8 }}
-              className="bg-black text-white p-12 relative overflow-hidden"
+              // === MODIFICATION: Reduced padding p-12 to p-8 lg:p-10 ===
+              className="bg-black text-white p-8 lg:p-10 relative overflow-hidden"
             >
-              {/* Accent Corner */}
+              {/* Accent Corner (Unchanged) */}
               <div className="absolute top-0 right-0 w-24 h-24 bg-yellow-400 transform translate-x-12 -translate-y-12 rotate-45"></div>
 
               <div className="relative z-10">
@@ -149,39 +156,43 @@ export default function AboutPreview() {
                   PYRAMIDS CONSULTING
                 </h3>
 
-                <div className="space-y-8">
-                  <div className="border-b border-gray-700 pb-6">
-                    <div className="text-5xl font-bold text-yellow-400 mb-2">
+                {/* === MODIFICATION: Reduced space-y-8 to space-y-6 === */}
+                <div className="space-y-6">
+                  {/* === MODIFICATION: Reduced pb-6 to pb-4 === */}
+                  <div className="border-b border-gray-700 pb-4">
+                    {/* === MODIFICATION: Reduced font size from 5xl to 4xl/5xl === */}
+                    <div className="text-4xl lg:text-5xl font-bold text-yellow-400 mb-2">
                       18+
                     </div>
-                    <p className="text-gray-300 text-lg">
+                    {/* === MODIFICATION: Reduced font size from lg to base === */}
+                    <p className="text-gray-300 text-base">
                       Story Commercial Complexes
                     </p>
                   </div>
 
-                  <div className="border-b border-gray-700 pb-6">
-                    <div className="text-5xl font-bold text-yellow-400 mb-2">
+                  <div className="border-b border-gray-700 pb-4">
+                    <div className="text-4xl lg:text-5xl font-bold text-yellow-400 mb-2">
                       84 MW
                     </div>
-                    <p className="text-gray-300 text-lg">
+                    <p className="text-gray-300 text-base">
                       Hydro Power Capacity
                     </p>
                   </div>
 
-                  <div className="border-b border-gray-700 pb-6">
-                    <div className="text-5xl font-bold text-yellow-400 mb-2">
+                  <div className="border-b border-gray-700 pb-4">
+                    <div className="text-4xl lg:text-5xl font-bold text-yellow-400 mb-2">
                       40M
                     </div>
-                    <p className="text-gray-300 text-lg">
+                    <p className="text-gray-300 text-base">
                       Bridge Span Expertise
                     </p>
                   </div>
 
                   <div>
-                    <div className="text-5xl font-bold text-yellow-400 mb-2">
+                    <div className="text-4xl lg:text-5xl font-bold text-yellow-400 mb-2">
                       25+
                     </div>
-                    <p className="text-gray-300 text-lg">
+                    <p className="text-gray-300 text-base">
                       Years Engineering Excellence
                     </p>
                   </div>

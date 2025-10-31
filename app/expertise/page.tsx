@@ -19,31 +19,55 @@ export default function Expertise() {
       <ExpertiseHero />
       <PhilosophySection />
       <EnhancedExpertiseGrid />
-      <TeamSection />
-      <EnhancedCTASection />
+      {/* <TeamSection /> */}
+      <FullScopeSection />
+      <ExpertiseCTASection />
       <Footer />
     </main>
   );
 }
 
 function ExpertiseHero() {
-  return (
-    <section className="relative bg-black overflow-hidden md:mt-20">
-      {/* Hero Image - Responsive */}
-      <img
-        src="/expertiseImage.png"
-        alt="Our Engineering Expertise"
-        className="w-full h-auto object-cover md:h-full"
-      />
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  });
 
+  return (
+    <section className="relative bg-black overflow-hidden min-h-[60vh] md:min-h-[80vh]">
+      {/* === PYRAMID LINE ART BACKGROUND (Copied from perfected AboutHero) === */}
+      {/* This is the same, visible art from the perfected AboutHero */}
+      <div className="absolute inset-0 opacity-75" ref={ref}>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ duration: 1.5 }}
+        >
+          {/* Faint Grid */}
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:40px_40px]" />
+
+          {/* Pyramid Wireframe (Brighter Lines) */}
+          <div className="absolute top-1/4 left-1/2 w-px h-[60vh] bg-gray-600 transform origin-top rotate-[-20deg]" />
+          <div className="absolute top-1/4 left-1/2 w-px h-[60vh] bg-gray-600 transform origin-top rotate-[20deg]" />
+          <div className="absolute top-1/4 left-1/2 w-px h-[50vh] bg-gray-600 transform origin-top rotate-[-12deg]" />
+          <div className="absolute top-1/4 left-1/2 w-px h-[50vh] bg-gray-600 transform origin-top rotate-[12deg]" />
+          <div className="absolute top-1/4 left-1/2 w-px h-[50vh] bg-gray-600" />
+          <div className="absolute top-1/2 left-1/2 w-[25%] h-px bg-gray-600 -translate-x-1/2 -translate-y-1/2" />
+          <div className="absolute top-2/3 left-1/2 w-[40%] h-px bg-gray-600 -translate-x-1/2 -translate-y-1/2" />
+          <div className="absolute top-3/4 left-1/2 w-[55%] h-px bg-gray-600 -translate-x-1/2 -translate-y-1/2" />
+        </motion.div>
+      </div>
+      {/* === END OF PYRAMID ART === */}
+
+      {/* === MAIN CONTENT (This is all from ExpertiseHero) === */}
       {/* Main Content Container */}
       <div className="absolute inset-0">
         {/* Left Side - Headline */}
         <div className="absolute top-4 left-4 md:top-[120px] md:left-[80px]">
           {/* OUR EXPERTISE label */}
           <div className="flex items-center mb-2 md:mb-3">
-            <div className="w-3 h-3 bg-yellow-400 md:w-2 md:h-2 mr-3"></div>
-            <span className="text-yellow-400 font-bold text-sm tracking-widest uppercase font-montserrat-alternates md:text-base md:tracking-wide">
+            <div className="w-3 h-3 bg-[#facc15] md:w-2 md:h-2 mr-3" />
+            <span className="text-[#facc15] font-bold text-sm tracking-widest uppercase font-montserrat-alternates md:text-base md:tracking-wide">
               OUR EXPERTISE
             </span>
           </div>
@@ -56,7 +80,7 @@ function ExpertiseHero() {
           </h1>
         </div>
 
-        {/* Right Side - Descriptive Text - Hidden on mobile, shown on desktop */}
+        {/* Right Side - Descriptive Text */}
         <div className="hidden md:block absolute bottom-16 right-8 md:bottom-20 md:right-30">
           <p className="text-gray-300 text-sm leading-relaxed max-w-xs md:max-w-sm font-normal text-left">
             Experience integrated mastery across all disciplines.
@@ -68,8 +92,8 @@ function ExpertiseHero() {
         </div>
       </div>
 
-      {/* Mobile Descriptive Text - Below the image */}
-      <div className="md:hidden bg-gray-900 p-6">
+      {/* Mobile Descriptive Text */}
+      <div className="md:hidden bg-black p-6 absolute bottom-0 left-0 right-0 border-t border-gray-800">
         <p className="text-gray-300 text-sm leading-relaxed font-normal text-left">
           Experience integrated mastery across all disciplines. We deliver
           end-to-end solutions managed with{" "}
@@ -77,6 +101,84 @@ function ExpertiseHero() {
           <strong className="text-white">innovation</strong>, and a relentless
           focus on <strong className="text-white">your success</strong>.
         </p>
+      </div>
+    </section>
+  );
+}
+
+// 5. Enhanced CTA Section - FIXED VERSION
+function ExpertiseCTASection() {
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  });
+
+  return (
+    <section className="relative overflow-hidden bg-black py-20 lg:py-24">
+      {/* Background Architectural Lines - Blueprint Border */}
+      <div className="absolute inset-0">
+        {/* Main Border Frame */}
+        <div className="absolute top-8 left-8 right-8 bottom-8 border border-gray-700 rounded-lg" />
+
+        {/* Corner Accents */}
+        <div className="absolute top-8 left-8 w-4 h-4 border-t border-l border-gray-600" />
+        <div className="absolute top-8 right-8 w-4 h-4 border-t border-r border-gray-600" />
+        <div className="absolute bottom-8 left-8 w-4 h-4 border-b border-l border-gray-600" />
+        <div className="absolute bottom-8 right-8 w-4 h-4 border-b border-r border-gray-600" />
+
+        {/* Grid Pattern Overlay */}
+        <div className="absolute inset-0 opacity-30">
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px]" />
+        </div>
+      </div>
+
+      {/* Content Container */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <motion.div
+          ref={ref}
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8 }}
+          className="max-w-4xl mx-auto text-center"
+        >
+          {/* Main Headline */}
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-4xl md:text-5xl font-extrabold text-white uppercase mb-6"
+          >
+            READY TO ENGINEER YOUR VISION?
+          </motion.h2>
+
+          {/* Subtitle */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="text-lg md:text-xl text-gray-300 font-light max-w-3xl mx-auto mb-10 leading-relaxed"
+          >
+            Leverage our multidisciplinary expertise for your next engineering
+            challenge. From concept to completion, we deliver excellence.
+          </motion.p>
+
+          {/* Main Button */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={inView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ duration: 0.6, delay: 0.6 }}
+            className="flex justify-center"
+          >
+            <motion.a
+              href="/contact"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-[#facc15] text-black font-extrabold uppercase px-10 py-4 rounded-lg shadow-lg hover:bg-white transition-colors duration-300 cursor-pointer"
+            >
+              CONSULT OUR EXPERTS
+            </motion.a>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );
@@ -320,303 +422,129 @@ function EnhancedExpertiseGrid() {
   );
 }
 
-// 4. Team Section
-function TeamSection() {
+function FullScopeSection() {
   const { ref, inView } = useInView({
     triggerOnce: true,
     threshold: 0.1,
   });
 
-  const teamMembers = [
+  const serviceColumns = [
     {
-      name: "Imran Siddique",
-      title: "Chief Executive Officer",
-      detail: "25 Years Experience",
+      title: "Planning & Feasibility",
+      items: [
+        "Feasibility Studies",
+        "PC-1 FORMS Preparation",
+        "Social, Financial & Economic Analysis",
+        "Site Landscaping & Planning",
+        "Base Line Surveys",
+      ],
     },
     {
-      name: "Dr. Qaiser Ali",
-      title: "Structure Engineer",
-      detail: "25 Years Experience",
+      title: "Design & Engineering",
+      items: [
+        "Full Architectural Design",
+        "Complete Interior Design",
+        "3D Visualization & Animation",
+        "Structural, HVAC & Electrical Design",
+        "Water, Sewerage & Drainage Design",
+        "Telecommunication Tower Design",
+      ],
     },
     {
-      name: "Yasar Durani",
-      title: "Chief Architect",
-      detail: "10 Years Experience",
-    },
-    {
-      name: "Ajaz Shah",
-      title: "Chief Surveyor",
-      detail: "32 Years Experience",
+      title: "Management & Execution",
+      items: [
+        "Project & Contract Management",
+        "Tender Documentation & Evaluation",
+        "Detailed Construction Drawings",
+        "Construction Supervision",
+        "Quality Control & Assurance",
+      ],
     },
   ];
 
   return (
-    <section className="py-16 lg:py-24 bg-white">
+    <section className="bg-white py-20 lg:py-24">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header Section - Aligned with other sections */}
+        {/* Header Block */}
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
-          className="max-w-6xl mx-auto mb-16 lg:mb-20 md:ml-20"
+          className="text-center mb-16"
         >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
-            {/* Left Side - Headline */}
-            <div>
-              {/* OUR COLLECTIVE EXPERTISE label with square - GRAY COLOR */}
-              <div className="flex items-center mb-3">
-                <div className="w-3 h-3 bg-gray-500 md:w-2 md:h-2 mr-3"></div>
-                <span className="text-gray-500 font-bold text-sm tracking-widest uppercase font-montserrat-alternates md:text-base md:tracking-wide">
-                  OUR COLLECTIVE EXPERTISE
-                </span>
-              </div>
-
-              <h2 className="text-4xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
-                MEET OUR
-                <br />
-                LEADERSHIP TEAM
-              </h2>
-            </div>
-
-            {/* Right Side - Description */}
-            <div className="flex items-start md:ml-42 md:mt-10">
-              <p className="text-[#545454] text-sm leading-relaxed max-w-md font-normal text-left md:mt-4">
-                Our strength is our team of 15+ dedicated professionals. Led by
-                CEO Imran Siddique (25 Yrs Exp) and a core group of PhD-level
-                structural engineers, chief architects, and surveyors, we bring
-                decades of combined experience to your project.
-              </p>
-            </div>
-          </div>
+          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 uppercase">
+            FROM CONCEPT TO COMPLETION
+          </h2>
+          <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mt-4">
+            A full spectrum of services to ensure your project's success at
+            every stage.
+          </p>
         </motion.div>
 
-        {/* Team Grid */}
+        {/* Services Grid */}
         <motion.div
           initial="hidden"
           animate={inView ? "visible" : {}}
           variants={{
-            visible: { transition: { staggerChildren: 0.1 } },
+            visible: { transition: { staggerChildren: 0.2 } },
           }}
-          className="max-w-6xl mx-auto md:ml-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12"
         >
-          {teamMembers.map((member, index) => (
+          {serviceColumns.map((column, columnIndex) => (
             <motion.div
-              key={index}
+              key={columnIndex}
               variants={{
                 hidden: { opacity: 0, y: 30 },
                 visible: { opacity: 1, y: 0 },
               }}
               transition={{ duration: 0.6 }}
-              className="bg-gray-50 border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-all duration-300 hover:translate-y-[-4px]"
+              whileHover={{ y: -8 }}
+              className="bg-white rounded-xl shadow-xl shadow-gray-200/50 border border-gray-100 p-8 lg:p-10 hover:shadow-2xl hover:shadow-gray-300/50 transition-all duration-300"
             >
-              {/* Profile Content */}
-              <div className="text-center">
-                {/* Icon Placeholder */}
-                <div className="w-12 h-12 bg-yellow-400/20 text-yellow-600 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-6 h-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A1.875 1.875 0 0 1 18.126 22.5H5.874a1.875 1.875 0 0 1-1.373-2.382Z"
-                    />
-                  </svg>
-                </div>
-
-                {/* Name - Updated styling */}
-                <h3 className="text-xl font-bold text-gray-900 mb-1">
-                  {member.name}
-                </h3>
-
-                {/* Title - Updated styling */}
-                <p className="text-base text-gray-600 mb-3">{member.title}</p>
-
-                {/* Detail - Yellow Accent */}
-                <p className="text-yellow-500 font-bold text-lg">
-                  {member.detail}
-                </p>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
-    </section>
-  );
-}
-
-// 5. Enhanced CTA Section (FINAL VERSION)
-function EnhancedCTASection() {
-  const { ref, inView } = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
-
-  return (
-    <section className="relative overflow-hidden bg-black">
-      {/* === LAYER 1: NEW Custom Background Image (Bottom) === */}
-      {/* !!! IMPORTANT !!!
-        REPLACE THE 'src' BELOW WITH YOUR NEW FILENAME
-      */}
-      <img
-        src="/ctaExpertise.png" // <-- PASTE YOUR NEW FILENAME HERE
-        alt="Pyramids architectural background"
-        className="absolute inset-0 w-full h-full object-cover z-0"
-      />
-
-      {/* === LAYER 2: Abstract Line Art (Watermark) === */}
-
-      <img
-        src="/expertiseImage.png"
-        alt="Pyramids expertise"
-        className="absolute inset-0 w-full h-full object-cover z-10 opacity-20" // Watermark opacity
-      />
-
-      {/* === LAYER 3: Content (Top) === */}
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
-        <motion.div
-          ref={ref}
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="max-w-4xl mx-auto text-center py-20 lg:py-28" // Added padding here
-        >
-          {/* Pre-title with dimmed lines */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0 }}
-            animate={inView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="flex items-center justify-center gap-4 mb-6"
-          >
-            <div className="w-12 h-0.5 bg-yellow-400/50"></div>{" "}
-            {/* Dimmed line */}
-            <span className="text-sm font-bold text-yellow-400 tracking-widest uppercase">
-              GET IN TOUCH
-            </span>
-            <div className="w-12 h-0.5 bg-yellow-400/50"></div>{" "}
-            {/* Dimmed line */}
-          </motion.div>
-
-          {/* Main Headline */}
-          <h2 className="text-4xl md:text-5xl font-black text-white uppercase leading-tight">
-            READY TO START YOUR PROJECT?
-          </h2>
-
-          {/* Sub-headline */}
-          <p className="text-xl md:text-2xl font-bold text-gray-300 uppercase mt-4 mb-10">
-            CONTACT US FOR EXPERT SOLUTIONS
-          </p>
-
-          {/* Single Button - Updated to match navbar */}
-          <div className="flex justify-center">
-            <motion.a
-              href="/contact"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-6 py-2.5 bg-yellow-400 text-[#333] font-medium whitespace-nowrap rounded-none hover:bg-black hover:text-yellow-400 transition-all duration-300 transform hover:scale-105 flex items-center gap-2 font-poppins"
-            >
-              Get Started
-              <ArrowRight size={16} />
-            </motion.a>
-          </div>
-        </motion.div>
-      </div>
-    </section>
-  );
-}
-
-// OurJourneySection function component - Add this to your app/about/page.tsx
-function OurJourneySection() {
-  const { ref, inView } = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
-
-  const statisticsData = [
-    { value: "300+", label: "Projects Completed" },
-    { value: "25+", label: "Years Experience" },
-    { value: "75+", label: "Skilled Professionals" },
-    { value: "98%", label: "Client Satisfaction" },
-    { value: "6+", label: "Sectors Served" },
-  ];
-
-  return (
-    <section className="py-16 lg:py-24 bg-white">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header Section - Aligned with hero left position */}
-        <motion.div
-          ref={ref}
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="max-w-6xl mx-auto mb-16 lg:mb-20 md:ml-20"
-        >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
-            {/* Left Side - Headline */}
-            <div>
-              {/* OUR JOURNEY label with square - GRAY COLOR */}
-              <div className="flex items-center mb-3">
-                <div className="w-3 h-3 bg-gray-500 md:w-2 md:h-2 mr-3"></div>
-                <span className="text-gray-500 font-bold text-sm tracking-widest uppercase font-montserrat-alternates md:text-base md:tracking-wide">
-                  OUR JOURNEY
-                </span>
-              </div>
-
-              <h2 className="text-4xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
-                OVER 25 YEARS OF
-                <br />
-                ENGINEERING EXCELLENCE
-                <br />
-                AND INNOVATION
-              </h2>
-            </div>
-
-            {/* Right Side - Description */}
-            <div className="flex items-start md:ml-42 md:mt-10">
-              <p className="text-[#545454] text-sm leading-relaxed max-w-md font-normal text-left">
-                Our legacy is defined by over two decades of unwavering
-                dedication, technical prowess, and a relentless pursuit of
-                engineering perfection. From initial concept to project
-                completion, we consistently deliver solutions that stand the
-                test of time.
-              </p>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Statistics Grid - 3 columns */}
-        <motion.div
-          initial="hidden"
-          animate={inView ? "visible" : {}}
-          variants={{
-            visible: { transition: { staggerChildren: 0.15 } },
-          }}
-          className="max-w-6xl mx-auto md:ml-20 grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-12"
-        >
-          {statisticsData.map((stat, index) => (
-            <motion.div
-              key={index}
-              variants={{
-                hidden: { opacity: 0, y: 30 },
-                visible: { opacity: 1, y: 0 },
-              }}
-              className="text-center"
-            >
-              {/* Large Number - Yellow Accent */}
-              <div className="text-6xl md:text-7xl lg:text-8xl font-extrabold text-yellow-500 mb-4">
-                {stat.value}
-              </div>
-
-              {/* Statistic Label */}
-              <h3 className="text-xl md:text-2xl font-bold uppercase tracking-wider text-gray-900 mb-3">
-                {stat.label}
+              {/* Column Title */}
+              <h3 className="text-2xl font-extrabold text-black mb-4">
+                {column.title}
               </h3>
+
+              {/* Services List */}
+              <motion.ul
+                className="space-y-3"
+                variants={{
+                  visible: { transition: { staggerChildren: 0.1 } },
+                }}
+              >
+                {column.items.map((item, itemIndex) => (
+                  <motion.li
+                    key={itemIndex}
+                    variants={{
+                      hidden: { opacity: 0, x: -10 },
+                      visible: { opacity: 1, x: 0 },
+                    }}
+                    className="flex items-start"
+                  >
+                    {/* Check Icon */}
+                    <svg
+                      className="w-5 h-5 text-[#facc15] flex-shrink-0 mr-3 mt-0.5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={3}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+
+                    {/* Service Text */}
+                    <span className="text-base text-gray-700 font-semibold">
+                      {item}
+                    </span>
+                  </motion.li>
+                ))}
+              </motion.ul>
             </motion.div>
           ))}
         </motion.div>

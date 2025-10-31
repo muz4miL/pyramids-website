@@ -14,8 +14,8 @@ export default function AboutPage() {
       <AboutHero />
       <OurJourneySection />
       {/* <AboutPreview />  */}
-      <FullTeamSection />
-      <CredentialsAndClients />
+      <LeadershipTeamSection />
+      <AccreditationSection />
       <AboutCTASection />
       <Footer />
     </main>
@@ -23,23 +23,55 @@ export default function AboutPage() {
 }
 
 function AboutHero() {
-  return (
-    <section className="relative bg-black overflow-hidden md:mt-20">
-      {/* Hero Image - Same as ExpertiseHero */}
-      <img
-        src="/pyramid-About.png"
-        alt="About Pyramids Engineering"
-        className="w-full h-[60vh] md:h-[80vh] object-cover"
-      />
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  });
 
-      {/* Main Content Container - Exact same as ExpertiseHero */}
+  return (
+    <section className="relative bg-black overflow-hidden min-h-[60vh] md:min-h-[80vh]">
+      {/* === PYRAMID LINE ART BACKGROUND (VISIBILITY FIXED) === */}
+      {/* FIX 1: Increased opacity from opacity-50 to opacity-75
+        FIX 2: Changed line color from gray-700 to a brighter gray-600
+      */}
+      <div className="absolute inset-0 opacity-75" ref={ref}>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ duration: 1.5 }}
+        >
+          {/* Faint Grid (Kept subtle) */}
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:40px_40px]" />
+
+          {/* Pyramid Wireframe (Brighter Lines) */}
+          {/* Main Outer Lines (from Apex) */}
+          <div className="absolute top-1/4 left-1/2 w-px h-[60vh] bg-gray-600 transform origin-top rotate-[-20deg]" />
+          <div className="absolute top-1/4 left-1/2 w-px h-[60vh] bg-gray-600 transform origin-top rotate-[20deg]" />
+
+          {/* Inner "3D" Lines (from Apex) */}
+          <div className="absolute top-1/4 left-1/2 w-px h-[50vh] bg-gray-600 transform origin-top rotate-[-12deg]" />
+          <div className="absolute top-1/4 left-1/2 w-px h-[50vh] bg-gray-600 transform origin-top rotate-[12deg]" />
+
+          {/* Central Vertical Line */}
+          <div className="absolute top-1/4 left-1/2 w-px h-[50vh] bg-gray-600" />
+
+          {/* Horizontal Cross-Lines */}
+          <div className="absolute top-1/2 left-1/2 w-[25%] h-px bg-gray-600 -translate-x-1/2 -translate-y-1/2" />
+          <div className="absolute top-2/3 left-1/2 w-[40%] h-px bg-gray-600 -translate-x-1/2 -translate-y-1/2" />
+          <div className="absolute top-3/4 left-1/2 w-[55%] h-px bg-gray-600 -translate-x-1/2 -translate-y-1/2" />
+        </motion.div>
+      </div>
+      {/* === END OF PYRAMID ART === */}
+
+      {/* === MAIN CONTENT (Unchanged) === */}
+      {/* Main Content Container */}
       <div className="absolute inset-0">
         {/* Left Side - Headline */}
         <div className="absolute top-4 left-4 md:top-[120px] md:left-[80px]">
           {/* ABOUT PYRAMIDS label */}
           <div className="flex items-center mb-2 md:mb-3">
-            <div className="w-3 h-3 bg-yellow-400 md:w-2 md:h-2 mr-3"></div>
-            <span className="text-yellow-400 font-bold text-sm tracking-widest uppercase font-montserrat-alternates md:text-base md:tracking-wide">
+            <div className="w-3 h-3 bg-[#facc15] md:w-2 md:h-2 mr-3" />
+            <span className="text-[#facc15] font-bold text-sm tracking-widest uppercase font-montserrat-alternates md:text-base md:tracking-wide">
               ABOUT PYRAMIDS
             </span>
           </div>
@@ -65,7 +97,7 @@ function AboutHero() {
       </div>
 
       {/* Mobile Descriptive Text - Below the image */}
-      <div className="md:hidden bg-gray-900 p-6">
+      <div className="md:hidden bg-gray-900 p-6 absolute bottom-0 left-0 right-0 border-t border-gray-800">
         <p className="text-gray-300 text-sm leading-relaxed font-normal text-left">
           Established in 2006, Pyramids is a dynamic, fast-growing organization
           providing multidimensional engineering and architectural services,
@@ -76,8 +108,7 @@ function AboutHero() {
   );
 }
 
-// Step 3: Full Team Section (White)
-function FullTeamSection() {
+function LeadershipTeamSection() {
   const { ref, inView } = useInView({
     triggerOnce: true,
     threshold: 0.1,
@@ -104,99 +135,44 @@ function FullTeamSection() {
       title: "Chief Surveyor",
       detail: "32 Years Experience",
     },
-    {
-      name: "M. Asif Khan",
-      title: "Senior Civil Engineer",
-      detail: "15 Years Experience",
-    },
-    {
-      name: "Sara Ahmed",
-      title: "Project Manager",
-      detail: "8 Years Experience",
-    },
-    {
-      name: "Ali Raza",
-      title: "Electrical Engineer",
-      detail: "12 Years Experience",
-    },
-    {
-      name: "Fatima Noor",
-      title: "Interior Designer",
-      detail: "6 Years Experience",
-    },
-    {
-      name: "Bilal Khan",
-      title: "Site Engineer",
-      detail: "7 Years Experience",
-    },
-    {
-      name: "Zainab Malik",
-      title: "Structural Designer",
-      detail: "5 Years Experience",
-    },
-    {
-      name: "Omar Farooq",
-      title: "MEP Engineer",
-      detail: "10 Years Experience",
-    },
-    {
-      name: "Hina Shahid",
-      title: "Quantity Surveyor",
-      detail: "8 Years Experience",
-    },
-    {
-      name: "Kamran Ali",
-      title: "Draftsman",
-      detail: "15 Years Experience",
-    },
-    {
-      name: "Ayesha Khan",
-      title: "Architectural Designer",
-      detail: "4 Years Experience",
-    },
-    {
-      name: "Rashid Mahmood",
-      title: "Construction Manager",
-      detail: "20 Years Experience",
-    },
   ];
 
   return (
     <section className="py-16 lg:py-24 bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header Section */}
+        {/* Header Section - Aligned with other sections */}
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
-          className="max-w-6xl mx-auto mb-16 lg:mb-20"
+          className="max-w-6xl mx-auto mb-16 lg:mb-20 md:ml-20"
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
             {/* Left Side - Headline */}
             <div>
-              {/* OUR TEAM label */}
+              {/* OUR COLLECTIVE EXPERTISE label with square - GRAY COLOR */}
               <div className="flex items-center mb-3">
-                <div className="w-3 h-3 bg-gray-500 md:w-4 md:h-4 mr-3"></div>
-                <span className="text-gray-500 font-bold text-sm tracking-widest uppercase font-montserrat-alternates md:text-base">
-                  OUR TEAM
+                <div className="w-3 h-3 bg-gray-500 md:w-2 md:h-2 mr-3"></div>
+                <span className="text-gray-500 font-bold text-sm tracking-widest uppercase font-montserrat-alternates md:text-base md:tracking-wide">
+                  OUR COLLECTIVE EXPERTISE
                 </span>
               </div>
 
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
-                OUR DEDICATED
+              <h2 className="text-4xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+                MEET OUR
                 <br />
-                PROFESSIONALS
+                LEADERSHIP TEAM
               </h2>
             </div>
 
             {/* Right Side - Description */}
-            <div className="flex items-start">
-              <p className="text-[#545454] text-lg leading-relaxed max-w-md font-normal">
-                Our firm's most valuable asset is our team. We engage
-                outstanding professionals in all activities to tap the full
-                potential of every employee, ensuring excellence across all our
-                engineering and architectural projects.
+            <div className="flex items-start md:ml-42 md:mt-10">
+              <p className="text-[#545454] text-sm leading-relaxed max-w-md font-normal text-left md:mt-4">
+                Our strength is our team of 15+ dedicated professionals. Led by
+                CEO Imran Siddique (25 Yrs Exp) and a core group of PhD-level
+                structural engineers, chief architects, and surveyors, we bring
+                decades of combined experience to your project.
               </p>
             </div>
           </div>
@@ -209,7 +185,7 @@ function FullTeamSection() {
           variants={{
             visible: { transition: { staggerChildren: 0.1 } },
           }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6"
+          className="max-w-6xl mx-auto md:ml-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
         >
           {teamMembers.map((member, index) => (
             <motion.div
@@ -241,16 +217,16 @@ function FullTeamSection() {
                   </svg>
                 </div>
 
-                {/* Name */}
-                <h3 className="text-lg font-bold text-gray-900 mb-1">
+                {/* Name - Updated styling */}
+                <h3 className="text-xl font-bold text-gray-900 mb-1">
                   {member.name}
                 </h3>
 
-                {/* Title */}
-                <p className="text-gray-600 mb-3 text-sm">{member.title}</p>
+                {/* Title - Updated styling */}
+                <p className="text-base text-gray-600 mb-3">{member.title}</p>
 
-                {/* Experience */}
-                <p className="text-yellow-500 font-bold text-sm">
+                {/* Detail - Yellow Accent */}
+                <p className="text-yellow-500 font-bold text-lg">
                   {member.detail}
                 </p>
               </div>
@@ -262,99 +238,127 @@ function FullTeamSection() {
   );
 }
 
-// Step 4: Credentials & Clients (Dark)
-function CredentialsAndClients() {
+function AccreditationSection() {
   const { ref, inView } = useInView({
     triggerOnce: true,
     threshold: 0.1,
   });
 
   const clients = [
-    { name: "DHA Peshawar", logo: "/clients/dha.png" },
-    { name: "Danish Red Cross", logo: "/clients/danish-red-cross.png" },
-    { name: "Canadian Red Cross", logo: "/clients/canadian-red-cross.png" },
-    { name: "German Red Cross", logo: "/clients/german-red-cross.png" },
-    { name: "Rabbani Associates", logo: "/clients/rabbani.png" },
-    { name: "Saif Associates", logo: "/clients/saif.png" },
-    { name: "Medair", logo: "/clients/medair.png" },
+    { name: "DHA Peshawar" },
+    { name: "Danish Red Cross" },
+    { name: "Canadian Red Cross" },
+    { name: "German Red Cross" },
+    { name: "Rabbani Associates" },
+    { name: "Saif Associates" },
+    { name: "Medair" },
   ];
 
   return (
-    <section className="py-16 lg:py-24 bg-gray-900">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="relative overflow-hidden bg-black py-20 lg:py-24">
+      {/* === Background Architectural Lines - FIXED (Full Scale) === */}
+      {/* This uses the same, large-scale art from the perfected AboutHero */}
+      <div className="absolute inset-0 opacity-75" ref={ref}>
         <motion.div
-          ref={ref}
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ duration: 1.5 }}
+        >
+          {/* Faint Grid */}
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:40px_40px]" />
+
+          {/* Pyramid Wireframe (Brighter & Larger) */}
+          <div className="absolute top-1/4 left-1/2 w-px h-[60vh] bg-gray-600 transform origin-top rotate-[-20deg]" />
+          <div className="absolute top-1/4 left-1/2 w-px h-[60vh] bg-gray-600 transform origin-top rotate-[20deg]" />
+          <div className="absolute top-1/4 left-1/2 w-px h-[50vh] bg-gray-600 transform origin-top rotate-[-12deg]" />
+          <div className="absolute top-1/4 left-1/2 w-px h-[50vh] bg-gray-600 transform origin-top rotate-[12deg]" />
+          <div className="absolute top-1/4 left-1/2 w-px h-[50vh] bg-gray-600" />
+          <div className="absolute top-1/2 left-1/2 w-[25%] h-px bg-gray-600 -translate-x-1/2 -translate-y-1/2" />
+          <div className="absolute top-2/3 left-1/2 w-[40%] h-px bg-gray-600 -translate-x-1/2 -translate-y-1/2" />
+          <div className="absolute top-3/4 left-1/2 w-[55%] h-px bg-gray-600 -translate-x-1/2 -translate-y-1/2" />
+        </motion.div>
+      </div>
+      {/* === END OF BACKGROUND ART === */}
+
+      {/* Content Container (Now sits on top of the art) */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
           className="max-w-6xl mx-auto"
         >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
-            {/* Left Column - Credentials */}
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+            {/* Left Column - Official Accreditation */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={inView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <h2 className="text-3xl font-extrabold text-white mb-6">
                 OFFICIAL ACCREDITATION
               </h2>
 
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-2xl font-bold text-yellow-400 mb-2">
+                  <h3 className="text-2xl font-bold text-[#facc15] mb-4">
                     Pakistan Engineering Council
                   </h3>
-                  <p className="text-xl text-gray-300 font-semibold">
-                    Registration: CONSULT/1205
-                  </p>
-                </div>
-
-                <div className="space-y-3">
-                  <p className="text-gray-300">
-                    <span className="font-semibold text-white">
-                      Year of Registration:
-                    </span>{" "}
-                    2006
-                  </p>
-                  <p className="text-gray-300">
-                    <span className="font-semibold text-white">CEO:</span> Mr.
-                    Imran Siddique
-                  </p>
-                  <p className="text-gray-300">
-                    <span className="font-semibold text-white">Status:</span>{" "}
-                    Active Member
-                  </p>
-                  <p className="text-gray-300">
-                    <span className="font-semibold text-white">
-                      Specialization:
-                    </span>{" "}
-                    Multidisciplinary Engineering Services
-                  </p>
+                  <div className="space-y-3">
+                    <p className="text-gray-300">
+                      <strong className="text-white">Registration:</strong>{" "}
+                      CONSULT/1205
+                    </p>
+                    <p className="text-gray-300">
+                      <strong className="text-white">
+                        Year of Registration:
+                      </strong>{" "}
+                      2006
+                    </p>
+                    <p className="text-gray-300">
+                      <strong className="text-white">CEO:</strong> Mr. Imran
+                      Siddique
+                    </p>
+                    <p className="text-gray-300">
+                      <strong className="text-white">Status:</strong> Active
+                      Member
+                    </p>
+                    <p className="text-gray-300">
+                      <strong className="text-white">Specialization:</strong>{" "}
+                      Multidisciplinary Engineering Services
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            {/* Right Column - Clients */}
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-8">
+            {/* Right Column - Our Valued Clients */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={inView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.4 }}
+            >
+              <h2 className="text-3xl font-extrabold text-white mb-6">
                 OUR VALUED CLIENTS
               </h2>
 
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {clients.map((client, index) => (
                   <motion.div
                     key={index}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={inView ? { opacity: 1, scale: 1 } : {}}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="bg-gray-800 border border-gray-700 rounded-lg p-6 flex items-center justify-center h-24 hover:shadow-md transition-all duration-300"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={inView ? { opacity: 1, y: 0 } : {}}
+                    transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
+                    whileHover={{ y: -8 }}
+                    className="bg-white rounded-xl shadow-xl shadow-gray-200/50 border border-gray-100 p-6 hover:shadow-2xl hover:shadow-gray-300/50 transition-all duration-300 flex items-center justify-center min-h-[100px]"
                   >
-                    <div className="text-center">
-                      <span className="text-gray-300 font-semibold text-sm">
-                        {client.name}
-                      </span>
-                    </div>
+                    <span className="text-gray-700 font-semibold text-center">
+                      {client.name}
+                    </span>
                   </motion.div>
                 ))}
               </div>
-            </div>
+            </motion.div>
           </div>
         </motion.div>
       </div>
@@ -362,7 +366,6 @@ function CredentialsAndClients() {
   );
 }
 
-// Step 5: Final CTA (Dark)
 function AboutCTASection() {
   const { ref, inView } = useInView({
     triggerOnce: true,
@@ -370,66 +373,70 @@ function AboutCTASection() {
   });
 
   return (
-    <section className="relative overflow-hidden bg-black">
-      {/* Background Image */}
-      <img
-        src="/ctaExpertise.png"
-        alt="Pyramids architectural background"
-        className="absolute inset-0 w-full h-full object-cover z-0"
-      />
+    <section className="relative overflow-hidden bg-black py-20 lg:py-24">
+      {/* Background Architectural Lines - Blueprint Border */}
+      <div className="absolute inset-0">
+        {/* Main Border Frame */}
+        <div className="absolute top-8 left-8 right-8 bottom-8 border border-gray-700 rounded-lg" />
 
-      {/* Watermark */}
-      <img
-        src="/pyramid-About.png"
-        alt="Pyramids expertise"
-        className="absolute inset-0 w-full h-full object-cover z-10 opacity-20"
-      />
+        {/* Corner Accents */}
+        <div className="absolute top-8 left-8 w-4 h-4 border-t border-l border-gray-600" />
+        <div className="absolute top-8 right-8 w-4 h-4 border-t border-r border-gray-600" />
+        <div className="absolute bottom-8 left-8 w-4 h-4 border-b border-l border-gray-600" />
+        <div className="absolute bottom-8 right-8 w-4 h-4 border-b border-r border-gray-600" />
 
-      {/* Content */}
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
+        {/* Grid Pattern Overlay */}
+        <div className="absolute inset-0 opacity-30">
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px]" />
+        </div>
+      </div>
+
+      {/* Content Container */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           ref={ref}
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
-          className="max-w-4xl mx-auto text-center py-20 lg:py-28"
+          className="max-w-4xl mx-auto text-center"
         >
-          {/* Pre-title with dimmed lines */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0 }}
-            animate={inView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="flex items-center justify-center gap-4 mb-6"
-          >
-            <div className="w-12 h-0.5 bg-yellow-400/50"></div>
-            <span className="text-sm font-bold text-yellow-400 tracking-widest uppercase">
-              GET IN TOUCH
-            </span>
-            <div className="w-12 h-0.5 bg-yellow-400/50"></div>
-          </motion.div>
-
           {/* Main Headline */}
-          <h2 className="text-4xl md:text-5xl font-black text-white uppercase leading-tight">
-            READY TO START YOUR PROJECT?
-          </h2>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-4xl md:text-5xl font-extrabold text-white uppercase mb-6"
+          >
+            READY TO ENGINEER YOUR VISION?
+          </motion.h2>
 
-          {/* Sub-headline */}
-          <p className="text-xl md:text-2xl font-bold text-gray-300 uppercase mt-4 mb-10">
-            CONTACT US FOR EXPERT SOLUTIONS
-          </p>
+          {/* Subtitle */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="text-lg md:text-xl text-gray-300 font-light max-w-3xl mx-auto mb-10 leading-relaxed"
+          >
+            Leverage our multidisciplinary expertise for your next engineering
+            challenge. From concept to completion, we deliver excellence.
+          </motion.p>
 
-          {/* Single Button */}
-          <div className="flex justify-center">
+          {/* Main Button */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={inView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ duration: 0.6, delay: 0.6 }}
+            className="flex justify-center"
+          >
             <motion.a
               href="/contact"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-6 py-2.5 bg-yellow-400 text-[#333] font-medium whitespace-nowrap rounded-none hover:bg-black hover:text-yellow-400 transition-all duration-300 transform hover:scale-105 flex items-center gap-2 font-poppins"
+              className="bg-[#facc15] text-black font-extrabold uppercase px-10 py-4 rounded-lg shadow-lg hover:bg-white transition-colors duration-300 cursor-pointer"
             >
-              Get Started
-              <ArrowRight size={16} />
+              CONSULT OUR EXPERTS
             </motion.a>
-          </div>
+          </motion.div>
         </motion.div>
       </div>
     </section>
@@ -485,7 +492,7 @@ function OurJourneySection() {
   const statisticsData = [
     { value: "300+", label: "Projects Completed" },
     { value: "25+", label: "Years Experience" },
-    { value: "75+", label: "Skilled Professionals" },
+    { value: "15+", label: "Skilled Professionals" },
     { value: "98%", label: "Client Satisfaction" },
     { value: "6+", label: "Sectors Served" },
   ];
@@ -580,12 +587,13 @@ function OurJourneySection() {
           </div>
         </div>
 
-        {/* Enhanced Statistics Bar Section */}
+        {/* === MODIFIED STATISTICS BAR (Monochromatic & COMPACT) === */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="w-full bg-gray-900 rounded-2xl py-12 lg:py-16"
+          // CHANGED: Reduced padding from py-10/12 to py-8
+          className="w-full bg-black py-8"
         >
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 lg:gap-8">
@@ -597,13 +605,13 @@ function OurJourneySection() {
                   transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
                   className="text-center"
                 >
-                  {/* Large Number - Enhanced Typography */}
-                  <div className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-yellow-400 mb-2">
+                  {/* Large Number - CHANGED: Reduced font size */}
+                  <div className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-2">
                     {stat.value}
                   </div>
 
-                  {/* Label - Enhanced Typography */}
-                  <div className="text-base md:text-lg font-extrabold uppercase text-white tracking-wide">
+                  {/* Label - CHANGED: Reduced font size and lighter weight */}
+                  <div className="text-xs md:text-sm font-light uppercase text-gray-300 tracking-wider">
                     {stat.label}
                   </div>
                 </motion.div>
