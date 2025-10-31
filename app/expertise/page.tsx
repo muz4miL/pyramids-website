@@ -471,6 +471,7 @@ function EnhancedCTASection() {
       />
 
       {/* === LAYER 2: Abstract Line Art (Watermark) === */}
+
       <img
         src="/expertiseImage.png"
         alt="Pyramids expertise"
@@ -524,6 +525,100 @@ function EnhancedCTASection() {
               <ArrowRight size={16} />
             </motion.a>
           </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+// OurJourneySection function component - Add this to your app/about/page.tsx
+function OurJourneySection() {
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  });
+
+  const statisticsData = [
+    { value: "300+", label: "Projects Completed" },
+    { value: "25+", label: "Years Experience" },
+    { value: "75+", label: "Skilled Professionals" },
+    { value: "98%", label: "Client Satisfaction" },
+    { value: "6+", label: "Sectors Served" },
+  ];
+
+  return (
+    <section className="py-16 lg:py-24 bg-white">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header Section - Aligned with hero left position */}
+        <motion.div
+          ref={ref}
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8 }}
+          className="max-w-6xl mx-auto mb-16 lg:mb-20 md:ml-20"
+        >
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
+            {/* Left Side - Headline */}
+            <div>
+              {/* OUR JOURNEY label with square - GRAY COLOR */}
+              <div className="flex items-center mb-3">
+                <div className="w-3 h-3 bg-gray-500 md:w-2 md:h-2 mr-3"></div>
+                <span className="text-gray-500 font-bold text-sm tracking-widest uppercase font-montserrat-alternates md:text-base md:tracking-wide">
+                  OUR JOURNEY
+                </span>
+              </div>
+
+              <h2 className="text-4xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+                OVER 25 YEARS OF
+                <br />
+                ENGINEERING EXCELLENCE
+                <br />
+                AND INNOVATION
+              </h2>
+            </div>
+
+            {/* Right Side - Description */}
+            <div className="flex items-start md:ml-42 md:mt-10">
+              <p className="text-[#545454] text-sm leading-relaxed max-w-md font-normal text-left">
+                Our legacy is defined by over two decades of unwavering
+                dedication, technical prowess, and a relentless pursuit of
+                engineering perfection. From initial concept to project
+                completion, we consistently deliver solutions that stand the
+                test of time.
+              </p>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Statistics Grid - 3 columns */}
+        <motion.div
+          initial="hidden"
+          animate={inView ? "visible" : {}}
+          variants={{
+            visible: { transition: { staggerChildren: 0.15 } },
+          }}
+          className="max-w-6xl mx-auto md:ml-20 grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-12"
+        >
+          {statisticsData.map((stat, index) => (
+            <motion.div
+              key={index}
+              variants={{
+                hidden: { opacity: 0, y: 30 },
+                visible: { opacity: 1, y: 0 },
+              }}
+              className="text-center"
+            >
+              {/* Large Number - Yellow Accent */}
+              <div className="text-6xl md:text-7xl lg:text-8xl font-extrabold text-yellow-500 mb-4">
+                {stat.value}
+              </div>
+
+              {/* Statistic Label */}
+              <h3 className="text-xl md:text-2xl font-bold uppercase tracking-wider text-gray-900 mb-3">
+                {stat.label}
+              </h3>
+            </motion.div>
+          ))}
         </motion.div>
       </div>
     </section>
