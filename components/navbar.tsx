@@ -117,8 +117,8 @@ export default function Navbar() {
             {/* Vertical line and CTA Button */}
             <div className="hidden md:flex items-center gap-6">
               <div className="h-20 w-px bg-gray-300 ml-4"></div>
-              <button className="px-6 py-2.5 bg-accent text-[#333] font-medium whitespace-nowrap rounded-none hover:bg-black hover:text-yellow-400 transition-all duration-300 transform hover:scale-105 flex items-center gap-2 font-poppins ml-4">
-                Get Started
+              <button className="px-6 py-2.5 bg-orange-500 text-white font-medium whitespace-nowrap rounded-none hover:bg-orange-600 transition-all duration-300 transform hover:scale-105 flex items-center gap-2 font-poppins ml-4">
+                Get In Touch
                 <ArrowRight size={16} />
               </button>
             </div>
@@ -178,8 +178,8 @@ export default function Navbar() {
             ))}
 
             <div className="pt-4">
-              <button className="w-full px-6 py-3 bg-accent text-[#333] font-semibold rounded-lg hover:bg-black hover:text-yellow-400 transition-all duration-300 flex items-center justify-center gap-2 font-poppins">
-                Get Started
+              <button className="w-full px-6 py-3 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600 transition-all duration-300 flex items-center justify-center gap-2 font-poppins">
+                Get In Touch
                 <ArrowRight size={18} />
               </button>
             </div>

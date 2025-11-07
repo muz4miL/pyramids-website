@@ -1,38 +1,31 @@
-import type React from "react";
 import type { Metadata } from "next";
-import { Playfair_Display, Inter } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
-const playfairDisplay = Playfair_Display({
-  subsets: ["latin"],
-  variable: "--font-serif",
-});
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Pyramids Consulting Engineers & Architects",
   description:
-    "Designing the Future with Precision - Premium architectural consulting services",
-  generator: "v0.app",
+    "A dynamic, fast-growing and multidimensional organization providing Engineering & Architectural Services.",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
-      <body
-        className={`${playfairDisplay.variable} ${inter.variable} font-sans antialiased`}
-      >
-        {children}
-        <Analytics />
-      </body>
+      <head>
+        <link
+          rel="preload"
+          as="video"
+          href="/heroPreview.mp4"
+          type="video/mp4"
+        />
+      </head>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }
