@@ -2,107 +2,131 @@
 
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { Building, Trees, GalleryVerticalEnd, Map } from "lucide-react";
+import {
+  Building,
+  Trees,
+  GalleryVerticalEnd,
+  Map,
+  Cog,
+  Home,
+} from "lucide-react";
 
-const services = [
+// --- CUSTOM COMPOSITE ICON for Exterior Design ---
+const ExteriorDesignIcon = (props: any) => (
+  <div className="relative w-12 h-12">
+    <Home
+      className="absolute top-0 left-0 w-12 h-12"
+      strokeWidth={props.strokeWidth}
+    />
+    <Cog
+      className="absolute bottom-0 right-0 w-6 h-6 bg-neutral-900"
+      strokeWidth={props.strokeWidth}
+    />
+  </div>
+);
+
+// --- DATA ARRAY (YOUR ORIGINAL SERVICES) ---
+const specializationData = [
   {
+    icon: Building,
     title: "Architecture",
     description:
       "Development of innovative and functional architectural designs.",
-    icon: Building,
   },
   {
+    icon: Trees,
     title: "Landscape Design",
     description:
       "Creative and sustainable site landscaping and urban planning.",
-    icon: Trees,
   },
   {
+    icon: ExteriorDesignIcon,
     title: "Exterior Design",
     description: "Detailed facade planning and exterior aesthetic design.",
-    icon: GalleryVerticalEnd,
   },
   {
+    icon: Map,
     title: "Site Planning",
     description: "Comprehensive site work planning and service integration.",
-    icon: Map,
   },
 ];
 
+// --- ANIMATION VARIANTS ---
+const fadeIn = {
+  initial: { opacity: 0, y: 30 },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+};
+
+const staggerContainer = {
+  animate: {
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+// --- COMPONENT ---
 export default function SpecializationPreview() {
   const { ref, inView } = useInView({
     triggerOnce: true,
     threshold: 0.1,
   });
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        duration: 0.6,
-        staggerChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-      },
-    },
-  };
-
   return (
-    <section className="bg-black py-16 lg:py-24">
+    <section className="relative w-full bg-black py-16 lg:py-24">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center">
-          <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
-            Our Specialization
-          </h2>
-
-          {/* Orange Accent Line */}
-          <div className="w-24 h-1 bg-orange-500 mx-auto mt-6"></div>
-
-          <p className="text-lg text-gray-300 max-w-3xl mx-auto mt-8">
-            We strive to develop an organization having a strong team of
-            dedicated professionals with up to date and state of art techniques.
-          </p>
-        </div>
-
-        {/* Services Grid */}
-        <motion.div
+        <motion.h2
           ref={ref}
-          variants={containerVariants}
-          initial="hidden"
-          animate={inView ? "visible" : "hidden"}
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12"
+          variants={fadeIn}
+          initial="initial"
+          animate={inView ? "animate" : "initial"}
+          className="text-3xl lg:text-4xl font-bold text-white uppercase tracking-wider mb-12"
         >
-          {services.map((service, index) => {
-            const IconComponent = service.icon;
+          Our Specialization
+        </motion.h2>
+
+        {/* --- GRID (CONSTRAINED TO 4XL) --- */}
+        <motion.div
+          variants={staggerContainer}
+          initial="initial"
+          animate={inView ? "animate" : "initial"}
+          className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto"
+        >
+          {specializationData.map((item, index) => {
+            const IconComponent = item.icon;
             return (
               <motion.div
                 key={index}
-                variants={itemVariants}
-                className="bg-gray-900 rounded-none shadow-md p-6 flex flex-col items-center text-center border border-gray-800 hover:-translate-y-1 hover:bg-gray-800 hover:border-orange-500 hover:shadow-xl hover:shadow-orange-500/10 transition-all duration-300 aspect-square"
+                variants={fadeIn}
+                // --- CARD STYLING WITH ORANGE BORDER ON FIRST CARD ---
+                className={`relative flex flex-col justify-between p-6 
+                           bg-neutral-900 rounded-xl 
+                           border 
+                           ${
+                             index === 0
+                               ? "border-orange-500"
+                               : "border-neutral-800"
+                           }
+                           transition-all duration-300 ease-in-out
+                           hover:-translate-y-1 hover:scale-[1.02] 
+                           hover:border-orange-500 
+                           hover:shadow-lg hover:shadow-orange-500/20`}
               >
-                {/* Icon */}
-                <div className="mb-4">
-                  <IconComponent className="w-12 h-12 text-orange-500" />
+                {/* --- ICON (LARGER & THINNER STROKE) --- */}
+                <IconComponent
+                  className="w-12 h-12 text-white"
+                  strokeWidth={1}
+                />
+
+                {/* --- TEXT CONTENT --- */}
+                <div className="text-left">
+                  <h3 className="text-lg font-semibold text-white uppercase mt-6">
+                    {item.title}
+                  </h3>
+                  <p className="text-sm font-normal text-neutral-400 leading-relaxed mt-2">
+                    {item.description}
+                  </p>
                 </div>
-
-                {/* Service Title */}
-                <h3 className="text-lg font-bold text-white mb-2">
-                  {service.title}
-                </h3>
-
-                {/* Service Description */}
-                <p className="text-sm text-gray-400">{service.description}</p>
               </motion.div>
             );
           })}
