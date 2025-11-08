@@ -222,9 +222,9 @@
 }
 
 /* Smooth scroll behavior */
-html {
+/* html {
   scroll-behavior: smooth;
-}
+} */
 
 /* Structural Engineering Grid */
 .structural-grid {
