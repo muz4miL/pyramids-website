@@ -2,25 +2,35 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { useEffect, useRef } from "react";
 
 export default function HeroPreview() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.play().catch((error) => {
+        console.error("Video play() was rejected:", error);
+      });
+    }
+  }, []);
+
   return (
     <section className="relative h-screen w-full overflow-hidden bg-black">
-      {/* Video Background - FIXED VERSION */}
       <video
+        ref={videoRef}
         autoPlay
         loop
         muted
         playsInline
-        preload="auto" // CHANGED FROM "none" to "auto"
+        preload="auto"
         className="absolute inset-0 w-full h-full object-cover z-0"
-        onCanPlayThrough={() => console.log("Video ready to play")}
       >
         <source src="/heroPreview.mp4" type="video/mp4" />
       </video>
-      {/* Adjusted Gradient Overlay - Stronger on left, lighter in center */}
+
       <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/80 via-black/20 to-transparent" />
-      {/* Text Content - Positioned to avoid the central building */}
+
       <div className="relative z-20 flex flex-col justify-center h-full px-6 sm:px-8 lg:px-16 xl:px-24">
         <motion.div
           initial={{ opacity: 0, x: -30 }}
@@ -28,22 +38,19 @@ export default function HeroPreview() {
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="flex flex-col items-start text-left max-w-md lg:max-w-lg space-y-6"
         >
-          {/* Compact Headline */}
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white leading-tight">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white leading-tight font-heading uppercase">
             PYRAMIDS CONSULTING ENGINEERS & ARCHITECTS
           </h1>
 
-          {/* Compact Sub-headline */}
-          <p className="text-sm sm:text-base text-gray-200 leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-200 leading-relaxed font-sans">
             A dynamic, fast-growing and multidimensional organization providing
             Engineering & Architectural Services.
           </p>
 
-          {/* Button */}
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="px-6 py-2.5 bg-orange-500 text-white font-medium rounded-lg hover:bg-orange-600 transition-all duration-300 flex items-center gap-2"
+            className="px-8 py-3 bg-orange-500 text-white font-bold text-lg rounded-none uppercase tracking-wider transform transition-all duration-300 hover:bg-orange-600 flex items-center gap-2 font-heading"
           >
             Get In Touch
             <ArrowRight size={18} />
