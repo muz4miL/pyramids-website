@@ -11,16 +11,15 @@ import {
   Home,
 } from "lucide-react";
 
-// --- CUSTOM COMPOSITE ICON for Exterior Design ---
-const ExteriorDesignIcon = (props: any) => (
+const ExteriorDesignIcon = (props: { strokeWidth?: number }) => (
   <div className="relative w-12 h-12">
     <Home
-      className="absolute top-0 left-0 w-12 h-12"
-      strokeWidth={props.strokeWidth}
+      className="absolute top-0 left-0 w-12 h-12 text-white"
+      strokeWidth={props.strokeWidth || 1}
     />
     <Cog
-      className="absolute bottom-0 right-0 w-6 h-6 bg-neutral-900"
-      strokeWidth={props.strokeWidth}
+      className="absolute bottom-0 right-0 w-6 h-6 text-white"
+      strokeWidth={props.strokeWidth || 1}
     />
   </div>
 );
@@ -54,7 +53,7 @@ const specializationData = [
 // --- ANIMATION VARIANTS ---
 const fadeIn = {
   initial: { opacity: 0, y: 30 },
-  animate: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+  animate: { opacity: 1, y: 0 },
 };
 
 const staggerContainer = {
@@ -80,6 +79,7 @@ export default function SpecializationPreview() {
           variants={fadeIn}
           initial="initial"
           animate={inView ? "animate" : "initial"}
+          transition={{ duration: 0.6, ease: "easeOut" }} // ADD THIS
           className="text-3xl lg:text-4xl font-bold text-white uppercase tracking-wider mb-12"
         >
           Our Specialization
@@ -90,6 +90,7 @@ export default function SpecializationPreview() {
           variants={staggerContainer}
           initial="initial"
           animate={inView ? "animate" : "initial"}
+          transition={{ duration: 0.6 }} // ADD THIS
           className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto"
         >
           {specializationData.map((item, index) => {
@@ -98,6 +99,7 @@ export default function SpecializationPreview() {
               <motion.div
                 key={index}
                 variants={fadeIn}
+                transition={{ duration: 0.6, ease: "easeOut" }}
                 // --- CARD STYLING WITH ORANGE BORDER ON FIRST CARD ---
                 className={`relative flex flex-col justify-between p-6 
                            bg-neutral-900 rounded-xl 
