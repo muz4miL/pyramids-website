@@ -6,17 +6,15 @@ import { ArrowRight } from "lucide-react";
 export default function HeroPreview() {
   return (
     <section className="relative h-screen w-full overflow-hidden bg-black">
-      {/* Video Background */}
-      // In your HeroPreview.tsx - Replace the video section with this:
+      {/* Video Background - FIXED VERSION */}
       <video
         autoPlay
         loop
         muted
         playsInline
-        preload="none" // Critical - don't preload the video
-        poster="/hero-poster.jpg" // Make sure this exists and is optimized
+        preload="auto" // CHANGED FROM "none" to "auto"
         className="absolute inset-0 w-full h-full object-cover z-0"
-        onLoadedData={() => console.log("Video loaded")}
+        onCanPlayThrough={() => console.log("Video ready to play")}
       >
         <source src="/heroPreview.mp4" type="video/mp4" />
       </video>

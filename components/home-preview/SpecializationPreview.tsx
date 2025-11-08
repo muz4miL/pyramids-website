@@ -41,7 +41,8 @@ const specializationData = [
   {
     icon: ExteriorDesignIcon,
     title: "Exterior Design",
-    description: "Detailed facade planning and exterior aesthetic design.",
+    description:
+      "Detailed facade planning and exterior aesthetic design **with structural precision.",
   },
   {
     icon: Map,
