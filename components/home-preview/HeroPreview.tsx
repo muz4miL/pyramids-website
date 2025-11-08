@@ -7,21 +7,21 @@ export default function HeroPreview() {
   return (
     <section className="relative h-screen w-full overflow-hidden bg-black">
       {/* Video Background */}
+      // In your HeroPreview.tsx - Replace the video section with this:
       <video
         autoPlay
         loop
         muted
         playsInline
-        poster="/hero-poster.jpg"
+        preload="none" // Critical - don't preload the video
+        poster="/hero-poster.jpg" // Make sure this exists and is optimized
         className="absolute inset-0 w-full h-full object-cover z-0"
+        onLoadedData={() => console.log("Video loaded")}
       >
         <source src="/heroPreview.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
       </video>
-
       {/* Adjusted Gradient Overlay - Stronger on left, lighter in center */}
       <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/80 via-black/20 to-transparent" />
-
       {/* Text Content - Positioned to avoid the central building */}
       <div className="relative z-20 flex flex-col justify-center h-full px-6 sm:px-8 lg:px-16 xl:px-24">
         <motion.div

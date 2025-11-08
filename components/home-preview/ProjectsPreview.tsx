@@ -1,9 +1,11 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import Link from "next/link";
 import Image from "next/image";
+import { useState, useEffect, useCallback } from "react";
+import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 
 export default function ProjectsPreview() {
   const { ref, inView } = useInView({
@@ -11,236 +13,292 @@ export default function ProjectsPreview() {
     threshold: 0.1,
   });
 
+  const [currentProject, setCurrentProject] = useState(0);
+  const [direction, setDirection] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAnimating, setIsAnimating] = useState(false);
+
   const featuredProjects = [
     {
       name: "Saif Mall & Residency",
       location: "Peshawar",
-      stories: "18 Stories",
-      area: "525,000 Sq.ft",
-      status: "Design Completed",
-      cost: "1,680 Million",
       image: "/SiafMall.PNG",
-      progress: "Top super progress",
       aspect: "850/545",
-      progressValue: 85,
-      featured: true,
     },
     {
       name: "Diamond Mall",
       location: "Peshawar",
-      stories: "19 Stories",
-      area: "449,537 Sq.ft",
-      status: "Design Completed",
-      cost: "2,078 Million",
       image: "/DiamondMall-2.PNG",
-      progress: "Top super progress",
       aspect: "850/545",
-      progressValue: 80,
-      featured: true,
     },
     {
       name: "Capital Grand Heights",
       location: "Islamabad",
-      stories: "17 Stories",
-      area: "600,000 Sq.ft",
-      status: "Design Completed",
-      cost: "1,200 Million",
       image: "/CapitalHeights.PNG",
-      progress: "Top super progress",
       aspect: "850/545",
-      progressValue: 75,
-      featured: true,
     },
   ];
 
-  const projectStats = [
-    { number: "250+", label: "Projects Completed" },
-    { number: "20", label: "Stories Highest" },
-    { number: "650K", label: "Largest Area (Sq.ft)" },
-    { number: "2.5B", label: "Largest Project Cost" },
-  ];
+  // Optimized auto-play with animation protection
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!isAnimating) {
+        setDirection(1);
+        setCurrentProject((prev) => (prev + 1) % featuredProjects.length);
+      }
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [featuredProjects.length, isAnimating]);
+
+  const navigateProject = useCallback(
+    (newDirection: number) => {
+      if (isAnimating) return; // Prevent spam clicks
+
+      setIsAnimating(true);
+      setDirection(newDirection);
+      setCurrentProject((prev) => {
+        const newIndex =
+          (prev + newDirection + featuredProjects.length) %
+          featuredProjects.length;
+        return newIndex;
+      });
+
+      // Reset animation lock after transition
+      setTimeout(() => setIsAnimating(false), 500);
+    },
+    [featuredProjects.length, isAnimating]
+  );
+
+  const nextProject = useCallback(() => navigateProject(1), [navigateProject]);
+  const prevProject = useCallback(() => navigateProject(-1), [navigateProject]);
+
+  // Ultra-smooth animation variants - FIXED TYPE
+  const slideVariants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? 50 : -50,
+      opacity: 0,
+      scale: 0.98,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+      scale: 1,
+    },
+    exit: (direction: number) => ({
+      x: direction < 0 ? 50 : -50,
+      opacity: 0,
+      scale: 0.98,
+    }),
+  };
 
   return (
-    <section id="projects" className="py-24 sm:py-28 lg:py-32 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-        {/* Header */}
+    <section id="projects" className="py-16 lg:py-28 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* 2-Column Layout */}
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
-          className="text-center mb-20"
+          className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start"
         >
+          {/* LEFT COLUMN - Text Only (No CTA) */}
           <motion.div
-            initial={{ opacity: 0, scale: 0 }}
-            animate={inView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="flex items-center justify-center gap-4 mb-6"
+            initial={{ opacity: 0, x: -30 }}
+            animate={inView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="space-y-6 lg:space-y-8 text-center lg:text-left"
           >
-            <div className="w-8 h-0.5 bg-yellow-400"></div>
-            <span className="text-sm font-bold text-yellow-400 tracking-widest uppercase">
-              Featured Projects
-            </span>
-            <div className="w-8 h-0.5 bg-yellow-400"></div>
-          </motion.div>
+            <div className="space-y-4 lg:space-y-6">
+              {/* FIX: Centered "Featured Projects" for both mobile and desktop */}
+              <div className="flex items-center justify-center gap-4">
+                <div className="w-6 lg:w-8 h-0.5 bg-orange-500"></div>
+                <span className="text-xs lg:text-sm font-bold text-orange-500 tracking-widest uppercase font-heading whitespace-nowrap">
+                  Featured Projects
+                </span>
+                <div className="w-6 lg:w-8 h-0.5 bg-orange-500"></div>
+              </div>
 
-          <h2 className="text-5xl lg:text-6xl font-bold text-black mb-6 leading-tight">
-            Engineering <span className="text-yellow-400">Excellence</span> in
-            Action
-          </h2>
+              <h2 className="text-3xl lg:text-5xl font-bold text-black leading-tight font-heading">
+                Engineering <span className="text-orange-500">Excellence</span>{" "}
+                in Action
+              </h2>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="w-24 h-1 bg-yellow-400 mx-auto mb-8"
-          ></motion.div>
+              <p className="text-base lg:text-lg text-gray-600 leading-relaxed font-sans max-w-2xl mx-auto lg:mx-0">
+                Discover our landmark architectural projects that redefine
+                Pakistan's skyline with structural precision and innovative
+                design.
+              </p>
+            </div>
 
-          <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-            From commercial malls to residential towers, discover our portfolio
-            of landmark projects that redefine Pakistan's skyline with
-            structural precision and architectural innovation.
-          </p>
-        </motion.div>
-
-        {/* Stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.2 }}
-          className="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-20"
-        >
-          {projectStats.map((stat, index) => (
+            {/* CTA Button - DESKTOP ONLY */}
             <motion.div
-              key={index}
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
-              className="text-center p-8 bg-white rounded-xl border border-gray-200 hover:border-yellow-400 transition-all duration-500"
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="hidden lg:block"
             >
-              <div className="text-4xl font-bold text-black mb-3">
-                {stat.number}
-              </div>
-              <div className="text-lg font-semibold text-gray-700">
-                {stat.label}
-              </div>
+              <Link href="/projects">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="inline-flex items-center gap-3 px-8 py-4 bg-black text-white font-bold text-lg rounded-none hover:bg-orange-500 hover:text-black transition-all duration-300 border-2 border-black font-heading tracking-wide"
+                >
+                  Explore Full Portfolio
+                  <ArrowRight
+                    size={20}
+                    className="transition-transform duration-300 group-hover:translate-x-1"
+                  />
+                </motion.button>
+              </Link>
             </motion.div>
-          ))}
-        </motion.div>
+          </motion.div>
 
-        {/* Projects Grid */}
-        <motion.div
-          initial="hidden"
-          animate={inView ? "visible" : {}}
-          variants={{
-            visible: {
-              transition: {
-                staggerChildren: 0.15,
-              },
-            },
-          }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16"
-        >
-          {featuredProjects.map((project, index) => (
-            <motion.div
-              key={index}
-              variants={{
-                hidden: { opacity: 0, y: 30 },
-                visible: { opacity: 1, y: 0 },
-              }}
-              className="group bg-white rounded-xl border border-gray-200 hover:border-yellow-400 transition-all duration-500 overflow-hidden cursor-pointer hover:-translate-y-2"
+          {/* RIGHT COLUMN - Optimized Carousel */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={inView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="relative"
+          >
+            {/* Carousel Container - FIX 2: Added black background to prevent white flash */}
+            <div
+              className="relative bg-black rounded-none border-2 border-gray-800 overflow-hidden group hover:border-orange-500 transition-all duration-500 h-[300px] sm:h-[350px] lg:h-[400px]"
+              role="region"
+              aria-label="Featured projects carousel"
             >
-              {/* Project Image */}
-              <div
-                className="relative overflow-hidden"
-                style={{ aspectRatio: project.aspect }}
+              {/* FIX 2: Optimized AnimatePresence with proper mode */}
+              <AnimatePresence
+                initial={false}
+                custom={direction}
+                mode="popLayout"
               >
-                <Image
-                  src={project.image}
-                  alt={project.name}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-700"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  priority={index === 0}
-                />
+                <motion.div
+                  key={currentProject}
+                  custom={direction}
+                  variants={slideVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 30,
+                    duration: 0.5,
+                  }}
+                  className="absolute inset-0"
+                >
+                  {/* Project Image with Preloading */}
+                  <div
+                    className="relative overflow-hidden w-full h-full"
+                    style={{
+                      aspectRatio: featuredProjects[currentProject].aspect,
+                    }}
+                  >
+                    {isLoading && (
+                      <div className="absolute inset-0 bg-gray-900 animate-pulse flex items-center justify-center">
+                        <div className="w-8 h-8 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+                      </div>
+                    )}
+                    <Image
+                      src={featuredProjects[currentProject].image}
+                      alt={featuredProjects[currentProject].name}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      priority={currentProject === 0}
+                      onLoad={() => setIsLoading(false)}
+                      onError={() => setIsLoading(false)}
+                    />
 
-                {/* Status Badge */}
-                <div className="absolute top-4 right-4">
-                  <span className="text-xs font-bold bg-yellow-400 text-black px-3 py-1.5 rounded-full border border-yellow-300">
-                    FEATURED
-                  </span>
-                </div>
+                    {/* Clean Dark Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+
+                    {/* Clean Text Overlay */}
+                    <div className="absolute bottom-0 left-0 right-0 p-4 lg:p-6 text-white">
+                      <div className="mb-2">
+                        <h3 className="text-xl lg:text-3xl font-bold mb-2 lg:mb-3 leading-tight font-heading">
+                          {featuredProjects[currentProject].name}
+                        </h3>
+                        <p className="text-gray-200 text-sm lg:text-lg flex items-center gap-2 font-sans">
+                          <span className="w-2 h-2 bg-orange-500 rounded-none"></span>
+                          {featuredProjects[currentProject].location}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            {/* Premium Navigation Buttons */}
+            <div className="flex justify-between items-center mt-4 lg:mt-6">
+              <motion.button
+                onClick={prevProject}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                disabled={isAnimating}
+                className="w-10 h-10 lg:w-12 lg:h-12 bg-black text-white rounded-none border-2 border-black hover:bg-orange-500 hover:border-orange-500 transition-all duration-300 flex items-center justify-center shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                aria-label="Previous project"
+              >
+                <ChevronLeft size={18} className="lg:w-5 lg:h-5" />
+              </motion.button>
+
+              {/* Dots Indicator */}
+              <div className="flex gap-2 lg:gap-3">
+                {featuredProjects.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => {
+                      if (!isAnimating) {
+                        setDirection(index > currentProject ? 1 : -1);
+                        setCurrentProject(index);
+                      }
+                    }}
+                    disabled={isAnimating}
+                    className={`w-2 h-2 lg:w-3 lg:h-3 rounded-none transition-all duration-300 ${
+                      index === currentProject
+                        ? "bg-orange-500 scale-125"
+                        : "bg-gray-300 hover:bg-gray-400"
+                    } ${isAnimating ? "opacity-50 cursor-not-allowed" : ""}`}
+                    aria-label={`View project ${index + 1}`}
+                    aria-current={index === currentProject ? "true" : "false"}
+                  />
+                ))}
               </div>
 
-              {/* Project Details */}
-              <div className="p-6">
-                <div className="mb-4">
-                  <h3 className="text-xl font-bold text-black mb-2 leading-tight">
-                    {project.name}
-                  </h3>
-                  <p className="text-gray-600 text-sm flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 bg-yellow-400 rounded-full"></span>
-                    {project.location}
-                  </p>
-                </div>
-
-                {/* Project Metrics */}
-                <div className="space-y-3 mb-4">
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-500">Area</span>
-                    <span className="font-semibold text-black">
-                      {project.area}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-500">Stories</span>
-                    <span className="font-semibold text-black">
-                      {project.stories}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-500">Cost</span>
-                    <span className="font-semibold text-black">
-                      {project.cost}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Progress Bar */}
-                <div className="pt-3 border-t border-gray-100">
-                  <div className="flex justify-between text-xs mb-2">
-                    <span className="text-gray-500">Progress</span>
-                    <span className="font-semibold text-yellow-400">
-                      {project.progressValue}%
-                    </span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-1.5">
-                    <div
-                      className="bg-yellow-400 h-1.5 rounded-full transition-all duration-1000"
-                      style={{ width: `${project.progressValue}%` }}
-                    ></div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+              <motion.button
+                onClick={nextProject}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                disabled={isAnimating}
+                className="w-10 h-10 lg:w-12 lg:h-12 bg-black text-white rounded-none border-2 border-black hover:bg-orange-500 hover:border-orange-500 transition-all duration-300 flex items-center justify-center shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                aria-label="Next project"
+              >
+                <ChevronRight size={18} className="lg:w-5 lg:h-5" />
+              </motion.button>
+            </div>
+          </motion.div>
         </motion.div>
 
-        {/* CTA */}
+        {/* CTA Button - MOBILE ONLY */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.8 }}
-          className="text-center"
+          transition={{ duration: 0.8, delay: 0.6 }}
+          className="lg:hidden mt-8 text-center"
         >
           <Link href="/projects">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center gap-3 px-8 py-4 bg-black text-white font-bold text-lg rounded-none hover:bg-yellow-400 hover:text-black transition-all duration-300 border-2 border-black"
+              className="inline-flex items-center gap-3 px-8 py-4 bg-black text-white font-bold text-lg rounded-none hover:bg-orange-500 hover:text-black transition-all duration-300 border-2 border-black font-heading tracking-wide w-full justify-center"
             >
-              Explore Full Project Portfolio
-              <span className="text-lg">→</span>
+              Explore Full Portfolio
+              <ArrowRight
+                size={20}
+                className="transition-transform duration-300 group-hover:translate-x-1"
+              />
             </motion.button>
           </Link>
         </motion.div>
