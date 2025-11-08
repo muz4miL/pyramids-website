@@ -7,16 +7,48 @@ import { useEffect, useRef } from "react";
 export default function HeroPreview() {
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  // Nuclear option - just make the fucking video play
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.play().catch((error) => {
-        console.error("Video play() was rejected:", error);
-      });
-    }
+    const playVideo = () => {
+      if (videoRef.current) {
+        videoRef.current.play().catch(() => {
+          // If it fails, try again after a short delay
+          setTimeout(() => {
+            videoRef.current?.play();
+          }, 500);
+        });
+      }
+    };
+
+    // Try immediately
+    playVideo();
+
+    // Try again when page becomes visible
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) {
+        playVideo();
+      }
+    });
+
+    // Try on any user interaction
+    const handleUserInteraction = () => {
+      playVideo();
+      document.removeEventListener("click", handleUserInteraction);
+      document.removeEventListener("touchstart", handleUserInteraction);
+    };
+
+    document.addEventListener("click", handleUserInteraction);
+    document.addEventListener("touchstart", handleUserInteraction);
+
+    return () => {
+      document.removeEventListener("click", handleUserInteraction);
+      document.removeEventListener("touchstart", handleUserInteraction);
+    };
   }, []);
 
   return (
     <section className="relative h-screen w-full overflow-hidden bg-black">
+      {/* NO PLAY BUTTONS, NO MOBILE DETECTION, JUST THE FUCKING VIDEO */}
       <video
         ref={videoRef}
         autoPlay
