@@ -52,7 +52,7 @@ export default function ProjectsPreview() {
 
   const navigateProject = useCallback(
     (newDirection: number) => {
-      if (isAnimating) return; // Prevent spam clicks
+      if (isAnimating) return;
 
       setIsAnimating(true);
       setDirection(newDirection);
@@ -63,7 +63,6 @@ export default function ProjectsPreview() {
         return newIndex;
       });
 
-      // Reset animation lock after transition
       setTimeout(() => setIsAnimating(false), 500);
     },
     [featuredProjects.length, isAnimating]
@@ -72,7 +71,6 @@ export default function ProjectsPreview() {
   const nextProject = useCallback(() => navigateProject(1), [navigateProject]);
   const prevProject = useCallback(() => navigateProject(-1), [navigateProject]);
 
-  // Ultra-smooth animation variants - FIXED TYPE
   const slideVariants = {
     enter: (direction: number) => ({
       x: direction > 0 ? 50 : -50,
@@ -102,7 +100,7 @@ export default function ProjectsPreview() {
           transition={{ duration: 0.8 }}
           className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start"
         >
-          {/* LEFT COLUMN - Text Only (No CTA) */}
+          {/* LEFT COLUMN - Text Content */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
@@ -110,7 +108,6 @@ export default function ProjectsPreview() {
             className="space-y-6 lg:space-y-8 text-center lg:text-left"
           >
             <div className="space-y-4 lg:space-y-6">
-              {/* FIX: Centered "Featured Projects" for both mobile and desktop */}
               <div className="flex items-center justify-center gap-4">
                 <div className="w-6 lg:w-8 h-0.5 bg-orange-500"></div>
                 <span className="text-xs lg:text-sm font-bold text-orange-500 tracking-widest uppercase font-heading whitespace-nowrap">
@@ -154,20 +151,19 @@ export default function ProjectsPreview() {
             </motion.div>
           </motion.div>
 
-          {/* RIGHT COLUMN - Optimized Carousel */}
+          {/* RIGHT COLUMN - PREMIUM IMAGE CAROUSEL */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.3 }}
             className="relative"
           >
-            {/* Carousel Container - FIX 2: Added black background to prevent white flash */}
+            {/* Carousel Container */}
             <div
               className="relative bg-black rounded-none border-2 border-gray-800 overflow-hidden group hover:border-orange-500 transition-all duration-500 h-[300px] sm:h-[350px] lg:h-[400px]"
               role="region"
               aria-label="Featured projects carousel"
             >
-              {/* FIX 2: Optimized AnimatePresence with proper mode */}
               <AnimatePresence
                 initial={false}
                 custom={direction}
@@ -188,7 +184,7 @@ export default function ProjectsPreview() {
                   }}
                   className="absolute inset-0"
                 >
-                  {/* Project Image with Preloading */}
+                  {/* Project Image with PREMIUM ENHANCEMENTS */}
                   <div
                     className="relative overflow-hidden w-full h-full"
                     style={{
@@ -200,27 +196,30 @@ export default function ProjectsPreview() {
                         <div className="w-8 h-8 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
                       </div>
                     )}
+
+                    {/* PREMIUM IMAGE - REMOVED DULL EFFECTS */}
                     <Image
                       src={featuredProjects[currentProject].image}
                       alt={featuredProjects[currentProject].name}
                       fill
-                      className="object-cover"
+                      className="object-cover brightness-105 saturate-110 contrast-105" // ENHANCED: Added brightness, saturation, contrast
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       priority={currentProject === 0}
+                      quality={90} // ENHANCED: Better quality
                       onLoad={() => setIsLoading(false)}
                       onError={() => setIsLoading(false)}
                     />
 
-                    {/* Clean Dark Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                    {/* LIGHTER GRADIENT OVERLAY - Reduced opacity for brighter images */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
 
                     {/* Clean Text Overlay */}
                     <div className="absolute bottom-0 left-0 right-0 p-4 lg:p-6 text-white">
                       <div className="mb-2">
-                        <h3 className="text-xl lg:text-3xl font-bold mb-2 lg:mb-3 leading-tight font-heading">
+                        <h3 className="text-xl lg:text-3xl font-bold mb-2 lg:mb-3 leading-tight font-heading drop-shadow-lg">
                           {featuredProjects[currentProject].name}
                         </h3>
-                        <p className="text-gray-200 text-sm lg:text-lg flex items-center gap-2 font-sans">
+                        <p className="text-gray-200 text-sm lg:text-lg flex items-center gap-2 font-sans drop-shadow-md">
                           <span className="w-2 h-2 bg-orange-500 rounded-none"></span>
                           {featuredProjects[currentProject].location}
                         </p>

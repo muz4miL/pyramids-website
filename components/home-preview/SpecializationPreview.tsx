@@ -11,6 +11,7 @@ import {
   Home,
 } from "lucide-react";
 
+// --- CUSTOM COMPOSITE ICON ---
 const ExteriorDesignIcon = (props: { strokeWidth?: number }) => (
   <div className="relative w-12 h-12">
     <Home
@@ -18,13 +19,13 @@ const ExteriorDesignIcon = (props: { strokeWidth?: number }) => (
       strokeWidth={props.strokeWidth || 1}
     />
     <Cog
-      className="absolute bottom-0 right-0 w-6 h-6 text-white"
+      className="absolute bottom-0 right-0 w-6 h-6 bg-neutral-900 text-white"
       strokeWidth={props.strokeWidth || 1}
     />
   </div>
 );
 
-// --- DATA ARRAY (YOUR ORIGINAL SERVICES) ---
+// --- DATA ARRAY ---
 const specializationData = [
   {
     icon: Building,
@@ -42,7 +43,7 @@ const specializationData = [
     icon: ExteriorDesignIcon,
     title: "Exterior Design",
     description:
-      "Detailed facade planning and exterior aesthetic design **with structural precision.",
+      "Detailed facade planning and exterior aesthetic design with structural precision.",
   },
   {
     icon: Map,
@@ -73,6 +74,7 @@ export default function SpecializationPreview() {
   });
 
   return (
+    // REMOVED overflow-hidden
     <section className="relative w-full bg-black py-16 lg:py-24">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <motion.h2
@@ -80,18 +82,17 @@ export default function SpecializationPreview() {
           variants={fadeIn}
           initial="initial"
           animate={inView ? "animate" : "initial"}
-          transition={{ duration: 0.6, ease: "easeOut" }} // ADD THIS
+          transition={{ duration: 0.6, ease: "easeOut" }}
           className="text-3xl lg:text-4xl font-bold text-white uppercase tracking-wider mb-12"
         >
           Our Specialization
         </motion.h2>
 
-        {/* --- GRID (CONSTRAINED TO 4XL) --- */}
         <motion.div
           variants={staggerContainer}
           initial="initial"
           animate={inView ? "animate" : "initial"}
-          transition={{ duration: 0.6 }} // ADD THIS
+          transition={{ duration: 0.6 }}
           className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto"
         >
           {specializationData.map((item, index) => {
@@ -101,29 +102,26 @@ export default function SpecializationPreview() {
                 key={index}
                 variants={fadeIn}
                 transition={{ duration: 0.6, ease: "easeOut" }}
-                // --- CARD STYLING WITH ORANGE BORDER ON FIRST CARD ---
-                className={`relative flex flex-col justify-between p-6 
-                           bg-neutral-900 rounded-xl 
-                           border 
-                           ${
-                             index === 0
-                               ? "border-orange-500"
-                               : "border-neutral-800"
-                           }
-                           transition-all duration-300 ease-in-out
-                           hover:-translate-y-1 hover:scale-[1.02] 
-                           hover:border-orange-500 
-                           hover:shadow-lg hover:shadow-orange-500/20`}
+                className={`relative flex flex-col justify-start p-6 
+                            bg-neutral-900 rounded-xl 
+                            border 
+                            ${
+                              index === 0
+                                ? "border-orange-500"
+                                : "border-neutral-800"
+                            }
+                            transition-all duration-300 ease-in-out
+                            hover:-translate-y-1 hover:scale-[1.02] 
+                            hover:border-orange-500 
+                            hover:shadow-lg hover:shadow-orange-500/20`}
               >
-                {/* --- ICON (LARGER & THINNER STROKE) --- */}
                 <IconComponent
                   className="w-12 h-12 text-white"
                   strokeWidth={1}
                 />
 
-                {/* --- TEXT CONTENT --- */}
-                <div className="text-left">
-                  <h3 className="text-lg font-semibold text-white uppercase mt-6">
+                <div className="text-left mt-6">
+                  <h3 className="text-lg font-semibold text-white uppercase">
                     {item.title}
                   </h3>
                   <p className="text-sm font-normal text-neutral-400 leading-relaxed mt-2">
@@ -135,6 +133,8 @@ export default function SpecializationPreview() {
           })}
         </motion.div>
       </div>
+
+      {/* DIVIDER COMPLETELY REMOVED FROM HERE */}
     </section>
   );
 }

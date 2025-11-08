@@ -53,7 +53,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="static md:fixed top-0 w-full bg-white/80 backdrop-blur-md z-50 nav-border-fade-top-bottom">
+      <nav className="static md:fixed top-0 w-full bg-white md:bg-white/80 md:backdrop-blur-md z-50 nav-border-fade-top-bottom">
         <div className="md:hidden absolute bottom-0 left-0 w-full h-px bg-gray-300"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16 md:h-20">
@@ -74,7 +74,7 @@ export default function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-base font-medium text-foreground hover:text-primary transition-colors relative group font-poppins"
+                  className="text-base font-medium text-foreground hover:text-primary transition-colors relative group font-inter"
                 >
                   {link.label}
                   <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300" />
@@ -86,7 +86,7 @@ export default function Navbar() {
                 <button
                   onClick={() => setIsOthersOpen(!isOthersOpen)}
                   onMouseEnter={() => setIsOthersOpen(true)}
-                  className="text-base font-medium text-foreground hover:text-blue-500 transition-colors relative group flex items-center gap-1 font-poppins"
+                  className="text-base font-medium text-foreground hover:text-blue-500 transition-colors relative group flex items-center gap-1 font-inter"
                 >
                   Others
                   <ChevronDown size={20} />
@@ -103,7 +103,7 @@ export default function Navbar() {
                       <Link
                         key={link.href}
                         href={link.href}
-                        className="block px-4 py-3 text-base text-foreground hover:bg-gray-200 transition-colors font-poppins"
+                        className="block px-4 py-3 text-base text-foreground hover:bg-gray-200 transition-colors font-inter"
                         onClick={() => setIsOthersOpen(false)}
                       >
                         {link.label}
@@ -117,7 +117,7 @@ export default function Navbar() {
             {/* Vertical line and CTA Button */}
             <div className="hidden md:flex items-center gap-6">
               <div className="h-20 w-px bg-gray-300 ml-4"></div>
-              <button className="px-6 py-2.5 bg-orange-500 text-white font-medium whitespace-nowrap rounded-none hover:bg-orange-600 transition-all duration-300 transform hover:scale-105 flex items-center gap-2 font-poppins ml-4">
+              <button className="px-6 py-2.5 bg-orange-500 text-white font-medium whitespace-nowrap rounded-none hover:bg-orange-600 transition-all duration-300 transform hover:scale-105 flex items-center gap-2 font-oswald ml-4">
                 Get In Touch
                 <ArrowRight size={16} />
               </button>
@@ -150,7 +150,7 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="block text-center px-4 py-3 text-lg font-medium text-gray-800 hover:bg-gray-50 rounded-lg transition-colors font-poppins"
+                className="block text-center px-4 py-3 text-lg font-medium text-gray-800 hover:bg-gray-50 rounded-lg transition-colors font-inter"
                 onClick={() => setIsOpen(false)}
               >
                 {link.label}
@@ -170,7 +170,7 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="block text-center px-4 py-3 text-base font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors font-poppins"
+                className="block text-center px-4 py-3 text-base font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors font-inter"
                 onClick={() => setIsOpen(false)}
               >
                 {link.label}
@@ -178,7 +178,7 @@ export default function Navbar() {
             ))}
 
             <div className="pt-4">
-              <button className="w-full px-6 py-3 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600 transition-all duration-300 flex items-center justify-center gap-2 font-poppins">
+              <button className="w-full px-6 py-3 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600 transition-all duration-300 flex items-center justify-center gap-2 font-oswald">
                 Get In Touch
                 <ArrowRight size={18} />
               </button>
