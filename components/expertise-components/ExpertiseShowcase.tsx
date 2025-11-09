@@ -1,10 +1,11 @@
 "use client";
 
+import React from "react";
 import { motion, Variants } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import Image from "next/image";
 
-const expertiseProjects = [
+const expertiseProjects: { title: string; image: string; fallback?: string; span: string }[] = [
   {
     title: "Saif Defence Mall, DHA Peshawar",
     image: "/expertise-images/SaifDefence.png",
@@ -12,7 +13,9 @@ const expertiseProjects = [
   },
   {
     title: "La Vita, Malam Jabba",
-    image: "/expertise-images/MalamJabbaLavita.svg",
+    // try the original PNG first (if present on the server). fall back to the svg placeholder we added.
+    image: "/expertise-images/MalamJabbaLavita.png",
+    fallback: "/expertise-images/MalamJabbaLavita.svg",
     span: "lg:col-span-2",
   },
   {
@@ -22,7 +25,8 @@ const expertiseProjects = [
   },
   {
     title: "AFI Tower, Peshawar",
-    image: "/expertise-images/AFITower.svg",
+    image: "/expertise-images/AFITower.png",
+    fallback: "/expertise-images/AFITower.svg",
     span: "lg:col-span-1",
   },
 ];
@@ -37,6 +41,9 @@ export default function ExpertiseShowcase() {
     triggerOnce: true,
     threshold: 0.1,
   });
+
+  // track which items failed to load their primary image and should use the fallback
+  const [failedImages, setFailedImages] = React.useState<Record<number, boolean>>({});
 
   return (
     <section className="relative w-full bg-white py-12" ref={ref}>
@@ -71,13 +78,18 @@ export default function ExpertiseShowcase() {
                           hover:shadow-xl hover:shadow-orange-500/20`}
             >
               <Image
-                src={project.image}
+                src={failedImages[index] && project.fallback ? project.fallback : project.image}
                 alt={project.title}
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 250px"
                 unoptimized={true}
                 priority={index === 0}
+                onError={() => {
+                  if (project.fallback && !failedImages[index]) {
+                    setFailedImages((prev) => ({ ...prev, [index]: true }));
+                  }
+                }}
               />
 
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex items-end p-4">
