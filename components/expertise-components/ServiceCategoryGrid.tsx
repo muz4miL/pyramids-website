@@ -8,28 +8,13 @@ import { WaterSupplyIcon } from "@/components/icons/WaterSupplyIcon";
 import { RenewableEnergyIcon } from "@/components/icons/RenewableEnergyIcon";
 import { useInView } from "react-intersection-observer";
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
 
 export default function ServiceCategoryGrid() {
-  const [isMobile, setIsMobile] = useState(false);
-
-  // Use a more reliable threshold that works on mobile
   const { ref, inView } = useInView({
-    threshold: isMobile ? 0.05 : 0.2, // Very low threshold for mobile
-    triggerOnce: false,
-    rootMargin: isMobile ? "-50px" : "-100px", // Adjust trigger point
+    threshold: 0.1,
+    triggerOnce: true,
+    rootMargin: "-50px",
   });
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
 
   const expertiseAreas = [
     {

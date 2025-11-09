@@ -47,7 +47,7 @@ const ExpertiseHero = () => {
         {/* Try to load the schematic image */}
         {!imageError ? (
           <Image
-            src="/expertise-Images/hero-Expertise.png"
+            src="/expertise-images/hero-Expertise.png"
             alt="Architectural Engineering Schematic"
             fill
             priority
