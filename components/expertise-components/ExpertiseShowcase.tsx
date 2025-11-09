@@ -19,7 +19,7 @@ const expertiseProjects: {
   {
     title: "La Vita, Malam Jabba",
     // try the original PNG first (if present on the server). fall back to the svg placeholder we added.
-    image: "/expertise-images/MalamJabbaLavita.png",
+    image: "/expertise-images/MalamJabbaLavita.PNG",
     fallback: "/expertise-images/MalamJabbaLavita.svg",
     span: "lg:col-span-2",
   },
@@ -30,7 +30,7 @@ const expertiseProjects: {
   },
   {
     title: "AFI Tower, Peshawar",
-    image: "/expertise-images/AFITower.png",
+    image: "/expertise-images/AfiTower.PNG",
     fallback: "/expertise-images/AFITower.svg",
     span: "lg:col-span-1",
   },
