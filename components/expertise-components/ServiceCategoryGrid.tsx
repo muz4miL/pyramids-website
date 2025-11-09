@@ -8,12 +8,28 @@ import { WaterSupplyIcon } from "@/components/icons/WaterSupplyIcon";
 import { RenewableEnergyIcon } from "@/components/icons/RenewableEnergyIcon";
 import { useInView } from "react-intersection-observer";
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
 
 export default function ServiceCategoryGrid() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Use a more reliable threshold that works on mobile
   const { ref, inView } = useInView({
-    threshold: 0.3,
+    threshold: isMobile ? 0.05 : 0.2, // Very low threshold for mobile
     triggerOnce: false,
+    rootMargin: isMobile ? "-50px" : "-100px", // Adjust trigger point
   });
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const expertiseAreas = [
     {
@@ -90,13 +106,13 @@ export default function ServiceCategoryGrid() {
         }`}
       />
 
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
-        {/* SECTION HEADING - Minimal & Premium */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* SECTION HEADING - With scroll effects */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-center mb-12" // Reduced margin from mb-16 to mb-12
+          className="text-center mb-8 md:mb-12"
         >
           <div className="flex items-center justify-center mb-4">
             <div
@@ -114,21 +130,17 @@ export default function ServiceCategoryGrid() {
           </div>
 
           <h2
-            className={`font-oswald text-4xl lg:text-5xl font-medium uppercase leading-tight transition-colors duration-1000 ${
+            className={`font-oswald text-3xl md:text-4xl lg:text-5xl font-medium uppercase leading-tight transition-colors duration-1000 ${
               inView ? "text-white" : "text-gray-900"
             }`}
           >
             Comprehensive Engineering
-            <br />& Architectural Services
+            <br className="hidden md:block" />& Architectural Services
           </h2>
-
-          {/* REMOVED the sub-heading text to reduce vertical space */}
         </motion.div>
 
-        {/* Expertise Cards - Premium Minimal Updates */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {" "}
-          {/* Reduced gap from gap-8 to gap-6 */}
+        {/* Expertise Cards - With scroll effects */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {expertiseAreas.map((expertise, index) => {
             const IconComponent = expertise.icon;
             return (
@@ -137,26 +149,22 @@ export default function ServiceCategoryGrid() {
                 initial={{ opacity: 0, y: 40 }}
                 animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
                 transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
-                className={`group relative rounded-2xl border p-7 transition-all duration-500 hover:-translate-y-1 cursor-pointer ${
+                className={`group relative rounded-2xl border p-6 md:p-7 transition-all duration-500 hover:-translate-y-1 cursor-pointer ${
                   inView
                     ? "bg-[#111111] border-gray-700 hover:border-orange-400/40 hover:shadow-[0_0_25px_-10px_rgba(249,115,22,0.3)]"
                     : "bg-white border-gray-300 hover:border-orange-500 hover:shadow-[0_0_25px_-10px_rgba(249,115,22,0.2)]"
                 }`}
-                style={{
-                  borderColor: inView ? "rgba(255,255,255,0.1)" : undefined,
-                }}
               >
-                {/* Icon - Updated with white icons for premium look */}
+                {/* Icon */}
                 <div
-                  className={`w-14 h-14 bg-gradient-to-r ${expertise.color} rounded-xl flex items-center justify-center mb-5 shadow-lg group-hover:scale-110 transition-transform duration-500`}
+                  className={`w-12 h-12 md:w-14 md:h-14 bg-gradient-to-r ${expertise.color} rounded-xl flex items-center justify-center mb-4 md:mb-5 shadow-lg group-hover:scale-110 transition-transform duration-500`}
                 >
-                  <IconComponent className="w-6 h-6 text-white" />{" "}
-                  {/* Changed to white icons */}
+                  <IconComponent className="w-5 h-5 md:w-6 md:h-6 text-white" />
                 </div>
 
                 {/* Text */}
                 <h3
-                  className={`text-lg font-bold mb-3 group-hover:text-orange-400 transition-colors duration-300 font-oswald ${
+                  className={`font-oswald text-lg md:text-xl font-bold mb-3 group-hover:text-orange-400 transition-colors duration-300 ${
                     inView ? "text-white" : "text-gray-900"
                   }`}
                 >
@@ -164,7 +172,7 @@ export default function ServiceCategoryGrid() {
                 </h3>
 
                 <p
-                  className={`text-sm leading-relaxed min-h-[60px] font-inter ${
+                  className={`font-inter text-sm leading-relaxed min-h-[60px] ${
                     inView ? "text-gray-400" : "text-gray-600"
                   }`}
                 >
@@ -172,20 +180,20 @@ export default function ServiceCategoryGrid() {
                 </p>
 
                 <div
-                  className={`flex items-center justify-between pt-4 border-t mt-5 ${
+                  className={`flex items-center justify-between pt-4 border-t mt-4 md:mt-5 ${
                     inView ? "border-gray-600" : "border-gray-200"
                   }`}
                 >
                   <div>
                     <div
-                      className={`text-xs uppercase tracking-wide font-inter ${
+                      className={`font-inter text-xs uppercase tracking-wide ${
                         inView ? "text-gray-500" : "text-gray-400"
                       }`}
                     >
                       Projects
                     </div>
                     <div
-                      className={`text-sm font-bold font-oswald ${
+                      className={`font-oswald text-sm font-bold ${
                         inView ? "text-white" : "text-gray-900"
                       }`}
                     >
@@ -194,21 +202,19 @@ export default function ServiceCategoryGrid() {
                   </div>
                   <div className="text-right">
                     <div
-                      className={`text-xs uppercase tracking-wide font-inter ${
+                      className={`font-inter text-xs uppercase tracking-wide ${
                         inView ? "text-gray-500" : "text-gray-400"
                       }`}
                     >
                       Highlight
                     </div>
-                    <div className="text-sm font-bold text-orange-500 font-oswald">
-                      {" "}
-                      {/* Changed from orange-400 to orange-500 */}
+                    <div className="font-oswald text-sm font-bold text-orange-500">
                       {expertise.highlight}
                     </div>
                   </div>
                 </div>
 
-                {/* Accent glow - made more subtle */}
+                {/* Accent glow */}
                 <div
                   className={`absolute inset-0 rounded-2xl bg-gradient-to-r from-orange-400/3 to-transparent transition-opacity duration-500 -z-10 ${
                     inView ? "opacity-0 group-hover:opacity-100" : "opacity-0"
