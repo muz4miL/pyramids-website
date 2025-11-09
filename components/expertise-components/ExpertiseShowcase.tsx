@@ -1,0 +1,94 @@
+"use client";
+
+import { motion, Variants } from "framer-motion";
+import { useInView } from "react-intersection-observer";
+import Image from "next/image";
+
+const expertiseProjects = [
+  {
+    title: "Saif Defence Mall, DHA Peshawar",
+    image: "/expertise-images/SaifDefence.png",
+    span: "lg:col-span-2 lg:row-span-2",
+  },
+  {
+    title: "La Vita, Malam Jabba",
+    image: "/expertise-images/MalamJabbaLavita.png",
+    span: "lg:col-span-2",
+  },
+  {
+    title: "Capital Heights, Islamabad",
+    image: "/CapitalHeights.PNG",
+    span: "lg:col-span-1",
+  },
+  {
+    title: "AFI Tower, Peshawar",
+    image: "/expertise-images/AFITower.png",
+    span: "lg:col-span-1",
+  },
+];
+
+const fadeIn: Variants = {
+  initial: { opacity: 0, y: 30 },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+};
+
+export default function ExpertiseShowcase() {
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  });
+
+  return (
+    <section className="relative w-full bg-white py-12" ref={ref}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          variants={fadeIn}
+          initial="initial"
+          animate={inView ? "animate" : "initial"}
+          className="text-center mb-10"
+        >
+          <h2 className="font-oswald text-4xl lg:text-5xl font-bold uppercase text-black leading-tight">
+            LANDMARK ARCHITECTURE & HIGH-RISE DESIGN
+          </h2>
+          <p className="font-inter text-lg text-gray-600 mt-2">
+            Showcasing our engineering excellence in landmark construction
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial="initial"
+          animate={inView ? "animate" : "initial"}
+          transition={{ duration: 0.6 }}
+          className="grid grid-cols-2 lg:grid-cols-4 gap-2 min-h-[80vh]"
+        >
+          {expertiseProjects.map((project, index) => (
+            <motion.div
+              key={project.title}
+              variants={fadeIn}
+              transition={{ delay: index * 0.1 }}
+              className={`${project.span} relative rounded-none overflow-hidden group border border-gray-100/50 
+                          transition-all duration-300 ease-in-out
+                          hover:shadow-xl hover:shadow-orange-500/20`}
+            >
+              <Image
+                src={project.image}
+                alt={project.title}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 250px"
+                unoptimized={true}
+                priority={index === 0}
+              />
+
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex items-end p-4">
+                <h3 className="font-oswald text-xl text-white uppercase leading-snug">
+                  {project.title}
+                </h3>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
