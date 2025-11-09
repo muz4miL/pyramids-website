@@ -12,7 +12,7 @@ const expertiseProjects = [
   },
   {
     title: "La Vita, Malam Jabba",
-    image: "/expertise-images/MalamJabbaLavita.png",
+    image: "/expertise-images/MalamJabbaLavita.svg",
     span: "lg:col-span-2",
   },
   {
@@ -22,7 +22,7 @@ const expertiseProjects = [
   },
   {
     title: "AFI Tower, Peshawar",
-    image: "/expertise-images/AFITower.png",
+    image: "/expertise-images/AFITower.svg",
     span: "lg:col-span-1",
   },
 ];
