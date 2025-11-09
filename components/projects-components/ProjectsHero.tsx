@@ -5,14 +5,19 @@ import { motion } from "framer-motion";
 export default function ProjectsHero() {
   return (
     <section className="relative h-screen bg-black flex items-center justify-center overflow-hidden">
-      {/* Background Image - Use your most impressive project render */}
+      {/* Background Image with enhanced brightness */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: 'url("/projects-hero-bg.jpg")', // Use AFI Tower or Saif Defence Mall
+          backgroundImage: 'url("/expertise-images/AfiTower.PNG")',
         }}
       />
-      <div className="absolute inset-0 bg-black/60" />
+
+      {/* Reduced overlay opacity from 60% to 40% */}
+      <div className="absolute inset-0 bg-black/40" />
+
+      {/* Additional brightness/contrast filter on the image */}
+      <div className="absolute inset-0 brightness-110 contrast-105" />
 
       {/* Content */}
       <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-6">

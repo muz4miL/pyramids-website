@@ -1,0 +1,182 @@
+"use client";
+
+import { useState } from "react";
+import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
+import { projects } from "@/data/projectData";
+
+export default function ProjectShowcase() {
+  const [currentProject, setCurrentProject] = useState(0);
+
+  const nextProject = () => {
+    setCurrentProject((prev) => (prev + 1) % projects.length);
+  };
+
+  const prevProject = () => {
+    setCurrentProject((prev) => (prev - 1 + projects.length) % projects.length);
+  };
+
+  const project = projects[currentProject];
+
+  // Filter out features that repeat the stat
+  const uniqueFeatures = project.features.filter(
+    (feature) =>
+      !feature.toLowerCase().includes(project.stat.toLowerCase().split(" ")[0])
+  );
+
+  return (
+    <section className="py-20 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section Header */}
+        <div className="text-center mb-16">
+          <div className="flex items-center justify-center mb-4">
+            <div className="w-4 h-4 bg-orange-500 mr-3" />
+            <span className="font-inter text-orange-500 font-medium text-sm tracking-widest uppercase">
+              FEATURED PROJECTS
+            </span>
+          </div>
+          <h2 className="font-oswald text-4xl md:text-5xl font-bold uppercase text-gray-900 mb-4">
+            OUR PORTFOLIO
+          </h2>
+          <p className="font-inter text-lg text-gray-600 max-w-2xl mx-auto">
+            Explore our landmark projects that define architectural excellence
+            and engineering innovation
+          </p>
+        </div>
+
+        {/* Project Showcase */}
+        <div className="relative bg-gray-50 rounded-3xl overflow-hidden">
+          {/* Navigation Arrows */}
+          <button
+            onClick={prevProject}
+            aria-label="Previous project"
+            className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 w-12 h-12 bg-white/90 hover:bg-white rounded-full shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
+          >
+            ←
+          </button>
+          <button
+            onClick={nextProject}
+            aria-label="Next project"
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 z-10 w-12 h-12 bg-white/90 hover:bg-white rounded-full shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
+          >
+            →
+          </button>
+
+          {/* Project Content */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentProject}
+              initial={{ opacity: 0, x: 100 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -100 }}
+              transition={{ duration: 0.5 }}
+              className="grid grid-cols-1 lg:grid-cols-2 min-h-[600px]"
+            >
+              {/* Project Image */}
+              <div className="relative h-64 lg:h-full">
+                <Image
+                  src={project.image}
+                  alt={project.title}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent lg:hidden" />
+              </div>
+
+              {/* Project Details */}
+              <div className="p-8 md:p-12 flex flex-col justify-center">
+                {/* Project Badge */}
+                <div className="flex flex-wrap gap-2 mb-6">
+                  <span className="bg-orange-500 text-white text-sm font-semibold px-4 py-2 rounded-full uppercase">
+                    {project.stat}
+                  </span>
+                  <span
+                    className={`text-sm font-semibold px-4 py-2 rounded-full uppercase ${
+                      project.status === "Completed"
+                        ? "bg-green-100 text-green-800"
+                        : project.status === "In Progress"
+                        ? "bg-blue-100 text-blue-800"
+                        : "bg-yellow-100 text-yellow-800"
+                    }`}
+                  >
+                    {project.status}
+                  </span>
+                </div>
+
+                {/* Project Title */}
+                <h3 className="font-oswald text-3xl md:text-4xl font-bold uppercase text-gray-900 mb-4">
+                  {project.title}
+                </h3>
+
+                {/* Project Description */}
+                <p className="font-inter text-gray-600 text-lg leading-relaxed mb-8">
+                  {project.description}
+                </p>
+
+                {/* Specifications Grid */}
+                <div className="grid grid-cols-2 gap-4 mb-8">
+                  <div>
+                    <div className="font-inter text-gray-500 text-sm uppercase tracking-wide">
+                      Location
+                    </div>
+                    <div className="font-inter font-semibold text-gray-900">
+                      {project.location}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="font-inter text-gray-500 text-sm uppercase tracking-wide">
+                      Area
+                    </div>
+                    <div className="font-inter font-semibold text-gray-900">
+                      {project.area}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="font-inter text-gray-500 text-sm uppercase tracking-wide">
+                      Year
+                    </div>
+                    <div className="font-inter font-semibold text-gray-900">
+                      {project.year}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="font-inter text-gray-500 text-sm uppercase tracking-wide">
+                      Category
+                    </div>
+                    <div className="font-inter font-semibold text-gray-900">
+                      {project.category}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Key Features - NOW WITH UNIQUE CONTENT */}
+                <div>
+                  <h4 className="font-oswald text-xl font-bold uppercase text-gray-900 mb-4">
+                    Key Features
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                    {uniqueFeatures.slice(0, 4).map((feature, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center font-inter text-gray-700"
+                      >
+                        <div className="w-2 h-2 bg-orange-500 rounded-full mr-3"></div>
+                        {feature}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+
+          {/* CLEAN PROJECT COUNTER (No dots - more premium) */}
+          <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-black/80 text-white px-4 py-2 rounded-full text-sm font-inter">
+            {currentProject + 1} / {projects.length}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
