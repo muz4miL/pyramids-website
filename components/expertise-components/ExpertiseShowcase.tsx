@@ -5,7 +5,12 @@ import { motion, Variants } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import Image from "next/image";
 
-const expertiseProjects: { title: string; image: string; fallback?: string; span: string }[] = [
+const expertiseProjects: {
+  title: string;
+  image: string;
+  fallback?: string;
+  span: string;
+}[] = [
   {
     title: "Saif Defence Mall, DHA Peshawar",
     image: "/expertise-images/SaifDefence.png",
@@ -43,7 +48,9 @@ export default function ExpertiseShowcase() {
   });
 
   // track which items failed to load their primary image and should use the fallback
-  const [failedImages, setFailedImages] = React.useState<Record<number, boolean>>({});
+  const [failedImages, setFailedImages] = React.useState<
+    Record<number, boolean>
+  >({});
 
   return (
     <section className="relative w-full bg-white py-12" ref={ref}>
@@ -78,7 +85,11 @@ export default function ExpertiseShowcase() {
                           hover:shadow-xl hover:shadow-orange-500/20`}
             >
               <Image
-                src={failedImages[index] && project.fallback ? project.fallback : project.image}
+                src={
+                  failedImages[index] && project.fallback
+                    ? project.fallback
+                    : project.image
+                }
                 alt={project.title}
                 fill
                 className="object-cover"
