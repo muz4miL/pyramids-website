@@ -3,7 +3,7 @@ import Footer from "@/components/footer";
 import HeroPreview from "@/components/home-preview/HeroPreview";
 import SpecializationPreview from "@/components/home-preview/SpecializationPreview";
 import ProjectsPreview from "@/components/home-preview/ProjectsPreview";
-import ClientsPreview from "@/components/home-preview/ClientsPreview"; // Now includes testimonials!
+import ClientsPreview from "@/components/home-preview/ClientsPreview";
 import ContactPreview from "@/components/home-preview/ContactPreview";
 import ArchitecturalDivider from "@/components/StructuralDivider";
 

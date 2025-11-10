@@ -18,18 +18,18 @@ export default function StructuralDivider({
     offset: ["start end", "end start"],
   });
 
-  // Enhanced architectural animations - more visible
+  // Enhanced animations for longer, more visible beams
   const constructionProgress = useTransform(
     scrollYProgress,
-    [0, 0.8], // Extended range for longer visibility
-    [120, 0]
+    [0, 0.9], // Extended range for much longer visibility
+    [150, 0] // Increased from 120 for slower animation
   );
-  const sectionReveal = useTransform(scrollYProgress, [0, 0.4], [0, 1]);
+  const sectionReveal = useTransform(scrollYProgress, [0, 0.5], [0, 1]);
 
-  // Enhanced structural elements - more prominent
-  const beamOpacity = useTransform(scrollYProgress, [0, 0.6], [0, 1]);
-  const beamGlow = useTransform(scrollYProgress, [0.2, 0.5], [0, 0.8]);
-  const gridOpacity = useTransform(scrollYProgress, [0, 0.3], [0, 0.08]);
+  // Enhanced structural elements - MUCH more prominent
+  const beamOpacity = useTransform(scrollYProgress, [0, 0.7], [0, 1]);
+  const beamGlow = useTransform(scrollYProgress, [0.1, 0.6], [0, 0.9]);
+  const gridOpacity = useTransform(scrollYProgress, [0, 0.2], [0, 0.05]);
 
   const isBlackToWhite = direction === "black-to-white";
   const bgColor = isBlackToWhite ? "bg-black" : "bg-white";
@@ -41,7 +41,7 @@ export default function StructuralDivider({
       ref={ref}
       className={`relative h-20 md:h-28 lg:h-36 z-30 overflow-hidden ${bgColor} ${className}`}
     >
-      {/* ENHANCED STRUCTURAL ENGINEERING GRID */}
+      {/* SUBTLE STRUCTURAL ENGINEERING GRID */}
       <motion.div
         style={{ opacity: gridOpacity }}
         className="absolute inset-0 structural-grid"
@@ -52,31 +52,31 @@ export default function StructuralDivider({
         style={{ opacity: sectionReveal }}
         className="relative h-full w-full"
       >
-        {/* ENHANCED ENGINEERING BEAM ANIMATION */}
+        {/* HIGHLY VISIBLE ENGINEERING BEAM ANIMATION */}
         <motion.svg
           className="absolute inset-0 w-full h-full pointer-events-none"
           preserveAspectRatio="none"
           viewBox="0 0 100 100"
           style={{ opacity: beamOpacity }}
         >
-          {/* PRIMARY STRUCTURAL BEAM - THICKER AND MORE VISIBLE */}
+          {/* PRIMARY STRUCTURAL BEAM - CLEAN AND VISIBLE */}
           <motion.path
             d={isBlackToWhite ? "M0,0 L100,100" : "M100,0 L0,100"}
-            stroke="rgb(249, 115, 22)"
-            strokeWidth="2.5" // Increased from 1.2
+            stroke="rgb(255, 115, 0)" // Brighter orange
+            strokeWidth="3"
             fill="none"
             strokeDasharray="141"
             strokeDashoffset={constructionProgress}
             style={{
-              filter: "drop-shadow(0 0 4px rgb(249, 115, 22, 0.7))",
+              filter: "drop-shadow(0 0 8px rgb(255, 115, 0, 0.8))",
             }}
           />
 
-          {/* SECONDARY GLOW BEAM FOR MORE IMPACT */}
+          {/* SECONDARY GLOW BEAM - MORE PROMINENT */}
           <motion.path
             d={isBlackToWhite ? "M0,0 L100,100" : "M100,0 L0,100"}
-            stroke="rgb(249, 115, 22)"
-            strokeWidth="4" // Glow effect
+            stroke="rgb(255, 140, 0)" // Even brighter orange
+            strokeWidth="5"
             fill="none"
             strokeDasharray="141"
             strokeDashoffset={constructionProgress}
@@ -85,24 +85,22 @@ export default function StructuralDivider({
               filter: "blur(3px)",
             }}
           />
+
+          {/* TERTIARY BEAM FOR MAXIMUM VISIBILITY */}
+          <motion.path
+            d={isBlackToWhite ? "M0,0 L100,100" : "M100,0 L0,100"}
+            stroke="rgb(249, 115, 22)"
+            strokeWidth="3"
+            fill="none"
+            strokeDasharray="141"
+            strokeDashoffset={constructionProgress}
+            style={{
+              opacity: 0.6,
+            }}
+          />
         </motion.svg>
 
-        {/* ENHANCED STRUCTURAL CONNECTION POINTS */}
-        <motion.div
-          style={{ opacity: beamOpacity }}
-          className="absolute top-0 left-0 w-3 h-3 bg-orange-500 transform -translate-x-1.5 -translate-y-1.5 rounded-sm shadow-lg shadow-orange-500/50"
-        />
-
-        <motion.div
-          style={{ opacity: beamOpacity }}
-          className="absolute bottom-0 right-0 w-3 h-3 bg-orange-500 transform translate-x-1.5 translate-y-1.5 rounded-sm shadow-lg shadow-orange-500/50"
-        />
-
-        {/* ADDITIONAL CONNECTION POINTS FOR MORE VISUAL INTEREST */}
-        <motion.div
-          style={{ opacity: beamOpacity }}
-          className="absolute top-1/2 left-1/2 w-2 h-2 bg-orange-400 transform -translate-x-1 -translate-y-1 rounded-full"
-        />
+        {/* REMOVED ALL THOSE CHEAP ORANGE CIRCLES - KEEPING ONLY CLEAN BEAMS */}
       </motion.div>
 
       {/* CLEAN GEOMETRIC DIVIDER */}
@@ -113,6 +111,22 @@ export default function StructuralDivider({
       >
         <polygon points={points} fill="currentColor" />
       </svg>
+
+      {/* PREMIUM ADDITION: SUBTLE PULSING GLOW */}
+      <motion.div
+        style={{ opacity: beamGlow }}
+        className="absolute inset-0 pointer-events-none"
+        animate={{
+          opacity: [0.3, 0.6, 0.3],
+        }}
+        transition={{
+          duration: 3,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      >
+        <div className="w-full h-full bg-gradient-to-r from-transparent via-orange-500/5 to-transparent" />
+      </motion.div>
     </div>
   );
 }

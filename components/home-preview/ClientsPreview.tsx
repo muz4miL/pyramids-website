@@ -205,7 +205,9 @@ export default function ClientsPreview() {
                     <div
                       className={`relative ${
                         isMobile ? "w-20 h-10" : "w-32 h-12"
-                      } grayscale group-hover:grayscale-0 transition-all duration-500`}
+                      } ${isMobile ? "grayscale-0" : "grayscale"} ${
+                        isMobile ? "" : "group-hover:grayscale-0"
+                      } transition-all duration-500`}
                     >
                       <Image
                         src={client.logo}
@@ -254,7 +256,7 @@ export default function ClientsPreview() {
           {/* TESTIMONIAL CARD - WITH GLASS EFFECT & CIRCULAR QUOTE */}
           <div className="bg-neutral-900 border border-white/10 rounded-none p-8 lg:p-12 relative overflow-hidden shadow-2xl">
             {/* CIRCULAR QUOTATION MARK - STANDS OUT PERFECTLY */}
-            <div className="absolute top-4 right-4 lg:top-1 lg:right-2 w-10 h-10 lg:w-12 lg:h-12 bg-orange-500 rounded-full flex items-center justify-center shadow-lg z-20">
+            <div className="absolute bottom-2 right-2 lg:top-1 lg:right-2 w-10 h-10 lg:w-12 lg:h-12 bg-orange-500 rounded-full flex items-center justify-center shadow-lg z-20">
               <span className="text-black text-lg lg:text-xl font-serif font-bold">
                 "
               </span>

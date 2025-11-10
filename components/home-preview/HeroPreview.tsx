@@ -7,77 +7,121 @@ import { useEffect, useRef, useState } from "react";
 export default function HeroPreview() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    // Detect mobile early
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+
     const video = videoRef.current;
     if (video) {
-      // Force video to play and handle any autoplay restrictions
-      const playVideo = async () => {
-        try {
-          await video.play();
-          setIsVideoLoaded(true);
-        } catch (error) {
-          // If autoplay fails, mute and try again (most browsers allow muted autoplay)
-          video.muted = true;
-          try {
-            await video.play();
-            setIsVideoLoaded(true);
-          } catch (err) {
-            console.log("Autoplay failed, user interaction required");
-          }
-        }
+      // CRITICAL: Set video attributes for performance
+      video.playsInline = true;
+      video.muted = true;
+      video.setAttribute("muted", "");
+      video.setAttribute("playsinline", "");
+
+      // Use metadata preload for faster initial load
+      video.preload = "metadata";
+
+      const handleCanPlay = () => {
+        // Video is ready to play without lag
+        setIsVideoLoaded(true);
       };
 
-      // Preload video for better performance
-      video.preload = "auto";
+      const handleLoadedData = () => {
+        // Some data is loaded, try to play
+        video
+          .play()
+          .then(() => {
+            setIsVideoLoaded(true);
+          })
+          .catch((error) => {
+            // If autoplay fails, still show video (it might play later)
+            console.log("Autoplay blocked, but video is loaded");
+            setIsVideoLoaded(true);
+          });
+      };
+
+      const handleWaiting = () => {
+        // Video is buffering - show fallback temporarily
+        setIsVideoLoaded(false);
+      };
+
+      const handlePlaying = () => {
+        // Video is playing smoothly
+        setIsVideoLoaded(true);
+      };
+
+      // Event listeners for smooth playback
+      video.addEventListener("canplay", handleCanPlay);
+      video.addEventListener("loadeddata", handleLoadedData);
+      video.addEventListener("waiting", handleWaiting);
+      video.addEventListener("playing", handlePlaying);
+
+      // Force load the video
       video.load();
 
-      // Try to play when video is ready
-      if (video.readyState >= 3) {
-        playVideo();
-      } else {
-        video.addEventListener("loadeddata", playVideo);
-      }
+      // Fallback timeout - if video takes too long, show fallback
+      const loadTimeout = setTimeout(() => {
+        if (!isVideoLoaded) {
+          console.log("Video loading timeout, using fallback");
+        }
+      }, 3000);
 
       return () => {
-        video.removeEventListener("loadeddata", playVideo);
+        video.removeEventListener("canplay", handleCanPlay);
+        video.removeEventListener("loadeddata", handleLoadedData);
+        video.removeEventListener("waiting", handleWaiting);
+        video.removeEventListener("playing", handlePlaying);
+        clearTimeout(loadTimeout);
       };
     }
   }, []);
 
   return (
     <section className="relative h-screen w-full overflow-hidden bg-black">
-      {/* Optimized Video Background */}
+      {/* LAG-PROOF VIDEO BACKGROUND */}
       <video
         ref={videoRef}
         autoPlay
         loop
         muted
         playsInline
-        preload="auto"
+        preload="metadata"
+        poster="/hero-fallback.jpg" // CRITICAL: Instant visual
         className="absolute inset-0 w-full h-full object-cover z-0"
+        // Hardware acceleration for smooth playback
         style={{
-          // Fallback background while video loads
-          backgroundColor: "#000",
+          transform: "translateZ(0)",
+          backfaceVisibility: "hidden",
         }}
       >
         <source src="/heroPreview.mp4" type="video/mp4" />
-        {/* Fallback for browsers that don't support video */}
         Your browser does not support the video tag.
       </video>
 
-      {/* Fallback image in case video fails */}
+      {/* INSTANT FALLBACK - Shows immediately while video loads */}
       {!isVideoLoaded && (
         <div
-          className="absolute inset-0 w-full h-full object-cover z-0 bg-cover bg-center"
+          className="absolute inset-0 w-full h-full object-cover z-5 bg-cover bg-center"
           style={{
-            backgroundImage: 'url("/hero-fallback.jpg")', // Add a fallback image
+            backgroundImage: 'url("/hero-fallback.jpg")',
           }}
         />
       )}
 
-      {/* Enhanced gradient overlay for better text readability */}
-      <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/90 via-black/50 to-black/30" />
+      {/* Performance-optimized gradient overlay */}
+      <div
+        className="absolute inset-0 z-10 bg-gradient-to-br from-black/85 via-black/45 to-black/25"
+        style={{
+          // Hardware accelerated overlay
+          transform: "translateZ(0)",
+        }}
+      />
 
       {/* Content */}
       <div className="relative z-20 flex flex-col justify-center h-full px-6 sm:px-8 lg:px-16 xl:px-24">
@@ -95,7 +139,7 @@ export default function HeroPreview() {
             </span>
           </div>
 
-          {/* Main Headline - Matches other pages */}
+          {/* Main Headline */}
           <motion.h1
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -119,7 +163,7 @@ export default function HeroPreview() {
             construction.
           </motion.p>
 
-          {/* CTA Button - SQUARISH ARCHITECTURAL STYLE */}
+          {/* CTA Button */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
