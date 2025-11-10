@@ -3,7 +3,7 @@ import Footer from "@/components/footer";
 import HeroPreview from "@/components/home-preview/HeroPreview";
 import SpecializationPreview from "@/components/home-preview/SpecializationPreview";
 import ProjectsPreview from "@/components/home-preview/ProjectsPreview";
-import ClientsPreview from "@/components/home-preview/ClientsPreview";
+import ClientsPreview from "@/components/home-preview/ClientsPreview"; // Now includes testimonials!
 import ContactPreview from "@/components/home-preview/ContactPreview";
 import ArchitecturalDivider from "@/components/StructuralDivider";
 
@@ -33,7 +33,7 @@ export default function Home() {
         {/* --- ARCHITECTURAL MASTERPIECE DIVIDER 2 --- */}
         <ArchitecturalDivider direction="white-to-black" />
 
-        {/* Clients Section (Black) */}
+        {/* Clients Section (Black) - NOW INCLUDES TESTIMONIALS */}
         <div className="bg-black">
           <ClientsPreview />
         </div>
