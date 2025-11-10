@@ -29,7 +29,7 @@ export const projects: Project[] = [
     title: "Saif Mall & Residency",
     category: "Buildings",
     stat: "18 Stories",
-    image: "/expertise-images/saifMall.PNG",
+    image: "/expertise-images/saifMall.png",
     description:
       "A landmark 18-story commercial and residential complex in Peshawar, featuring extensive retail space and luxury apartments.",
     location: "Peshawar, Pakistan",
