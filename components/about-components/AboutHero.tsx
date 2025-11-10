@@ -43,7 +43,7 @@ const AboutHero = () => {
       {/* LAYER 1: BACKGROUND IMAGE */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/SiafMall.PNG"
+          src="/expertise-images/saifMall.png"
           alt="Pyramids Architectural Project - Saif Mall & Residency"
           fill
           priority
