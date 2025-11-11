@@ -1,219 +1,183 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { ArrowRight, Play, Pause } from "lucide-react";
+import { useEffect, useRef, useState, useMemo, useCallback } from "react";
+
+// Import Swiper with TypeScript
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, EffectFade, Pagination, Navigation } from "swiper/modules";
+import type { Swiper as SwiperType } from "swiper";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/effect-fade";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+
+// Define the video slide type
+interface VideoSlide {
+  id: number;
+  video: string;
+  poster: string;
+  title: string;
+  subtitle: string;
+  description: string;
+}
 
 export default function HeroPreview() {
-  const videoRef = useRef<HTMLVideoElement>(null);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
-  const [shouldUseFallback, setShouldUseFallback] = useState(false);
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const videoRefs = useRef<HTMLVideoElement[]>([]);
+  const swiperRef = useRef<SwiperType | null>(null);
+
+  // Use useMemo to prevent recreation on every render
+  const videoSlides: VideoSlide[] = useMemo(
+    () => [
+      {
+        id: 1,
+        video: "/homepage-vids/1.mp4",
+        poster: "/homepage-vids/posters/1.png",
+        title: "BUILDING",
+        subtitle: "THE FUTURE",
+        description:
+          "A dynamic, fast-growing and multidimensional organization providing comprehensive services in architecture, engineering, and construction.",
+      },
+      {
+        id: 2,
+        video: "/homepage-vids/2.mp4",
+        poster: "/homepage-vids/posters/2.png",
+        title: "ENGINEERING",
+        subtitle: "EXCELLENCE",
+        description:
+          "Delivering innovative solutions with precision engineering and architectural mastery across all project scales.",
+      },
+      {
+        id: 3,
+        video: "/homepage-vids/3.mp4",
+        poster: "/homepage-vids/posters/3.png",
+        title: "DESIGNING",
+        subtitle: "LANDMARKS",
+        description:
+          "Creating iconic structures that define skylines and push the boundaries of modern architecture.",
+      },
+    ],
+    []
+  );
 
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    // Vercel & Cross-Platform Optimized Video Setup
-    const optimizeVideo = () => {
-      video.playsInline = true;
-      video.muted = true;
-      video.setAttribute("muted", "");
-      video.setAttribute("playsinline", "");
-      video.setAttribute("webkit-playsinline", "");
-      video.setAttribute("preload", "auto"); // More aggressive for instant load
-      video.setAttribute("crossOrigin", "anonymous"); // Critical for Vercel CDN
-
-      // Force immediate loading
+    // Preload videos for better performance
+    videoSlides.forEach((slide) => {
+      const video = document.createElement("video");
+      video.src = slide.video;
+      video.preload = "auto";
       video.load();
-    };
+    });
+  }, [videoSlides]);
 
-    optimizeVideo();
+  const handleVideoReady = (index: number) => {
+    setIsVideoLoaded(true);
+  };
 
-    // Event Handlers for Perfect Playback
-    const handleCanPlayThrough = () => {
-      // Video can play without interruption
-      console.log("Video ready to play through");
-      setIsVideoLoaded(true);
-      setShouldUseFallback(false);
-
-      // Force play on all devices
-      video.play().catch((e) => {
-        console.log("Autoplay blocked but video ready");
-        setIsVideoLoaded(true);
+  const handleSlideChange = (swiper: SwiperType) => {
+    setActiveSlide(swiper.realIndex);
+    // Ensure videos keep playing when sliding
+    if (isPlaying) {
+      videoRefs.current.forEach((video) => {
+        if (video) video.play().catch(() => {});
       });
-    };
+    }
+  };
 
-    const handleLoadedData = () => {
-      // Initial data loaded - good sign
-      console.log("Video data loaded");
-      setIsVideoLoaded(true);
-    };
+  const addVideoRef = (el: HTMLVideoElement | null, index: number) => {
+    if (el) {
+      videoRefs.current[index] = el;
+    }
+  };
 
-    const handleWaiting = () => {
-      // Buffering detected
-      console.log("Video buffering");
-      setShouldUseFallback(true);
-    };
-
-    const handlePlaying = () => {
-      // Smooth playback achieved
-      console.log("Video playing smoothly");
-      setShouldUseFallback(false);
-      setIsVideoLoaded(true);
-    };
-
-    const handleError = () => {
-      // Fallback to image on error
-      console.error("Video failed to load");
-      setShouldUseFallback(true);
-    };
-
-    const handleStalled = () => {
-      // Network issues
-      console.log("Video stalled, using fallback");
-      setShouldUseFallback(true);
-    };
-
-    // Add all performance event listeners
-    video.addEventListener("canplaythrough", handleCanPlayThrough);
-    video.addEventListener("loadeddata", handleLoadedData);
-    video.addEventListener("waiting", handleWaiting);
-    video.addEventListener("playing", handlePlaying);
-    video.addEventListener("error", handleError);
-    video.addEventListener("stalled", handleStalled);
-
-    // Progressive loading check
-    const checkBufferProgress = () => {
-      if (video.buffered.length > 0) {
-        const bufferedEnd = video.buffered.end(video.buffered.length - 1);
-        const currentTime = video.currentTime;
-
-        // If we have sufficient buffer, we're good
-        if (bufferedEnd - currentTime > 2) {
-          setShouldUseFallback(false);
-        }
+  // Fixed Play/Pause functionality with proper null checks
+  const togglePlayPause = useCallback(() => {
+    if (isPlaying) {
+      // Pause all videos
+      videoRefs.current.forEach((video) => {
+        if (video) video.pause();
+      });
+      // Pause autoplay - with null check
+      if (swiperRef.current?.autoplay) {
+        swiperRef.current.autoplay.stop();
       }
-    };
-
-    video.addEventListener("progress", checkBufferProgress);
-
-    // Smart timeout - different strategies for different scenarios
-    const loadTimeout = setTimeout(() => {
-      if (!isVideoLoaded) {
-        console.log(
-          "Smart timeout: Video taking too long, optimizing experience"
-        );
-        setShouldUseFallback(true);
-
-        // Still try to play if possible
-        video.play().catch(() => {
-          // If it fails, we already have fallback active
-        });
+    } else {
+      // Play all videos
+      videoRefs.current.forEach((video) => {
+        if (video) video.play().catch(() => {});
+      });
+      // Resume autoplay - with null check
+      if (swiperRef.current?.autoplay) {
+        swiperRef.current.autoplay.start();
       }
-    }, 2500); // Reduced timeout for faster fallback
+    }
+    setIsPlaying(!isPlaying);
+  }, [isPlaying]);
 
-    return () => {
-      // Cleanup all event listeners
-      video.removeEventListener("canplaythrough", handleCanPlayThrough);
-      video.removeEventListener("loadeddata", handleLoadedData);
-      video.removeEventListener("waiting", handleWaiting);
-      video.removeEventListener("playing", handlePlaying);
-      video.removeEventListener("error", handleError);
-      video.removeEventListener("stalled", handleStalled);
-      video.removeEventListener("progress", checkBufferProgress);
-      clearTimeout(loadTimeout);
-    };
-  }, []);
+  // Scroll to next section function
+  const handleScrollDown = () => {
+    const nextSection = document.getElementById("expertise");
+
+    if (nextSection) {
+      nextSection.scrollIntoView({ behavior: "smooth" });
+    } else {
+      window.scrollBy({
+        top: window.innerHeight,
+        behavior: "smooth",
+      });
+    }
+  };
 
   return (
-    <section className="relative h-screen w-full overflow-hidden bg-black">
-      {/* ULTRA-OPTIMIZED VIDEO BACKGROUND */}
-      <video
-        ref={videoRef}
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="auto"
-        crossOrigin="anonymous"
-        poster="/hero-fallback.jpg"
-        className="absolute inset-0 w-full h-full object-cover z-0"
-        style={{
-          transform: "translateZ(0)",
-          backfaceVisibility: "hidden",
-          perspective: 1000,
-          willChange: "transform",
-        }}
-      >
-        <source src="/heroPreview.mp4" type="video/mp4" />
-        {/* Consider adding WebM format for even better performance */}
-        {/* <source src="/heroPreview.webm" type="video/webm" /> */}
-        Your browser does not support the video tag.
-      </video>
-
-      {/* SMART FALLBACK SYSTEM */}
-      {(shouldUseFallback || !isVideoLoaded) && (
-        <div
-          className="absolute inset-0 w-full h-full object-cover z-5 bg-cover bg-center"
-          style={{
-            backgroundImage: 'url("/hero-fallback.jpg")',
-            // Ensure fallback is also hardware accelerated
-            transform: "translateZ(0)",
-            backfaceVisibility: "hidden",
-          }}
-        />
-      )}
-
-      {/* OPTIMIZED GRADIENT OVERLAY */}
-      <div
-        className="absolute inset-0 z-10 bg-gradient-to-br from-black/85 via-black/45 to-black/25"
-        style={{
-          transform: "translateZ(0)",
-          backfaceVisibility: "hidden",
-        }}
-      />
-
-      {/* CONTENT - Optimized for all screen sizes */}
-      <div className="relative z-20 flex flex-col justify-center h-full px-4 sm:px-6 md:px-8 lg:px-16 xl:px-24">
+    <div className="hero-container">
+      {/* 1. THE TEXT CONTENT BLOCK */}
+      <div className="hero-text-content">
         <motion.div
+          key={activeSlide}
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="flex flex-col items-start text-left max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg space-y-4 sm:space-y-5 md:space-y-6"
         >
-          {/* Tagline - Responsive */}
-          <div className="flex items-center">
+          {/* Tagline - Now with subtitle class for mobile fixes */}
+          <div className="flex items-center subtitle">
             <div className="w-3 h-3 sm:w-4 sm:h-4 bg-orange-500 mr-2 sm:mr-3" />
             <span className="font-inter text-orange-500 font-medium text-xs sm:text-sm tracking-widest uppercase">
               ENGINEERING EXCELLENCE
             </span>
           </div>
 
-          {/* Main Headline - Perfectly Responsive */}
+          {/* Main Headline */}
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.15 }}
-            className="font-oswald text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold uppercase leading-tight text-white"
+            className="font-oswald text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold uppercase leading-tight"
           >
-            BUILDING
+            {videoSlides[activeSlide]?.title}
             <br />
-            <span className="text-orange-500">THE FUTURE</span>
+            <span className="text-orange-500">
+              {videoSlides[activeSlide]?.subtitle}
+            </span>
           </motion.h1>
 
-          {/* Description - Responsive text */}
+          {/* Description */}
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="font-inter text-sm sm:text-base md:text-lg text-gray-200 leading-relaxed max-w-full"
+            className="font-inter text-sm sm:text-base md:text-lg leading-relaxed max-w-full"
           >
-            A dynamic, fast-growing and multidimensional organization providing
-            comprehensive services in architecture, engineering, and
-            construction.
+            {videoSlides[activeSlide]?.description}
           </motion.p>
 
-          {/* CTA Button - Responsive sizing */}
+          {/* CTA Button */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -232,25 +196,70 @@ export default function HeroPreview() {
         </motion.div>
       </div>
 
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-6 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-20">
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="text-white text-xs sm:text-sm font-inter text-center"
+      {/* 2. THE VIDEO SLIDER BLOCK */}
+      <div className="hero-swiper-wrapper">
+        <Swiper
+          onSwiper={(swiper) => {
+            swiperRef.current = swiper;
+          }}
+          className="hero-swiper"
+          modules={[Autoplay, EffectFade, Pagination, Navigation]}
+          effect="fade"
+          fadeEffect={{ crossFade: true }}
+          autoplay={{
+            delay: 5000,
+            disableOnInteraction: false,
+            waitForTransition: true,
+          }}
+          loop={true}
+          pagination={{
+            clickable: true,
+            el: ".swiper-pagination",
+          }}
+          navigation={true}
+          allowTouchMove={false}
+          speed={1000}
+          onSlideChange={handleSlideChange}
+          onInit={(swiper: SwiperType) => {
+            setActiveSlide(swiper.realIndex);
+          }}
         >
-          SCROLL TO EXPLORE
-        </motion.div>
-      </div>
+          {videoSlides.map((slide, index) => (
+            <SwiperSlide key={slide.id}>
+              <div className="video-slide">
+                <video
+                  ref={(el) => addVideoRef(el, index)}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  preload="auto"
+                  poster={slide.poster}
+                  className="hero-video"
+                  onCanPlayThrough={() => handleVideoReady(index)}
+                  onError={() =>
+                    console.error(`Video ${index + 1} failed to load`)
+                  }
+                >
+                  <source src={slide.video} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
 
-      {/* Performance Monitor (Development only) */}
-      {process.env.NODE_ENV === "development" && (
-        <div className="absolute top-4 right-4 z-30 bg-black/70 text-white text-xs p-2 rounded">
-          Video: {isVideoLoaded ? "✅ Loaded" : "🔄 Loading"}
-          <br />
-          Fallback: {shouldUseFallback ? "✅ Active" : "❌ Inactive"}
+        {/* Play/Pause Button */}
+        <div className="video-controls" onClick={togglePlayPause}>
+          {isPlaying ? <Pause /> : <Play />}
         </div>
-      )}
-    </section>
+
+        {/* Desktop-only overlay */}
+        <div className="desktop-overlay"></div>
+
+        {/* Custom Pagination Dots */}
+        <div className="swiper-pagination"></div>
+      </div>
+    </div>
   );
 }

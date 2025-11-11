@@ -19,10 +19,10 @@ export default function Home() {
 
       {/* Scrollable Content */}
       <div className="relative z-10 bg-transparent">
-        {/* Black background container */}
-        <div className="bg-black">
+        {/* Black background container - ADD ID HERE */}
+        <section id="expertise" className="bg-black">
           <SpecializationPreview />
-        </div>
+        </section>
 
         {/* --- ARCHITECTURAL MASTERPIECE DIVIDER 1 --- */}
         <ArchitecturalDivider direction="black-to-white" />

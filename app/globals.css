@@ -283,3 +283,569 @@
     scrollbar-color: #f97316 #0a0a0a;
   }
 }
+/* =======================================
+   PREMIUM SWIPER HERO STYLES - NORR.COM STYLE
+   ======================================= */
+
+/* --- Base Container --- */
+.hero-container {
+  width: 100%;
+  position: relative;
+  height: 100vh;
+  background-color: #000;
+}
+
+/* --- 1. The Text Content Block --- */
+.hero-text-content {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  color: #fff;
+}
+
+/* --- 2. The Video Slider Block --- */
+.hero-swiper-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-swiper,
+.video-slide,
+.hero-video {
+  width: 100%;
+  height: 100%;
+}
+
+/* Premium Video Filter - Cinematic Look */
+.hero-video {
+  object-fit: cover;
+  z-index: 1;
+  filter: brightness(75%) contrast(115%) saturate(110%);
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000;
+}
+
+/* Desktop-only Overlay */
+.desktop-overlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.2) 50%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+  pointer-events: none;
+}
+
+/* Desktop-only Scroll */
+.desktop-scroll {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.desktop-scroll:hover {
+  opacity: 1;
+}
+
+/* =======================================
+   SWIPER COMPONENT STYLING
+   ======================================= */
+
+/* Pagination Dots - Fix Blue Dot Issue */
+.hero-swiper .swiper-pagination {
+  position: absolute;
+  bottom: 80px !important;
+  left: 50% !important;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  z-index: 4;
+}
+
+.hero-swiper .swiper-pagination-bullet {
+  width: 10px;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0.7;
+}
+
+.hero-swiper .swiper-pagination-bullet-active {
+  background: #ffffff;
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+/* Navigation Arrows */
+.hero-swiper .swiper-button-next,
+.hero-swiper .swiper-button-prev {
+  color: #fff;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+  --swiper-navigation-size: 44px;
+}
+
+.hero-swiper .swiper-button-next:hover,
+.hero-swiper .swiper-button-prev:hover {
+  opacity: 1;
+}
+
+.hero-swiper .swiper-button-next:after,
+.hero-swiper .swiper-button-prev:after {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* =======================================
+   MOBILE RESPONSIVE - NORR.COM STYLE
+   ======================================= */
+@media (max-width: 768px) {
+  /* 1. Change to stacked layout */
+  .hero-container {
+    position: static;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* 2. Text block becomes white box */
+  .hero-text-content {
+    position: static;
+    height: auto;
+    background-color: #fff;
+    color: #111;
+    padding: 40px 20px;
+    order: 1;
+  }
+
+  .hero-text-content h1 {
+    color: #111;
+  }
+
+  .hero-text-content p {
+    color: #555;
+  }
+
+  /* 3. Video becomes second item */
+  .hero-swiper-wrapper {
+    position: static;
+    height: 60vh;
+    order: 2;
+  }
+
+  /* 4. Hide desktop-only elements */
+  .desktop-overlay,
+  .desktop-scroll {
+    display: none;
+  }
+
+  /* 5. Mobile-specific Swiper adjustments */
+  .hero-swiper .swiper-pagination {
+    bottom: 20px !important;
+  }
+
+  .hero-swiper .swiper-button-next,
+  .hero-swiper .swiper-button-prev {
+    --swiper-navigation-size: 32px;
+    display: none; /* Hide arrows on mobile for cleaner look */
+  }
+
+  /* Stronger video filter for mobile */
+  .hero-video {
+    filter: brightness(70%) contrast(120%) saturate(105%);
+  }
+}
+
+/* Text Shadows for Desktop */
+@media (min-width: 769px) {
+  .hero-text-content h1 {
+    filter: drop-shadow(0 25px 25px rgb(0 0 0 / 0.15));
+  }
+
+  .hero-text-content p {
+    filter: drop-shadow(0 10px 8px rgb(0 0 0 / 0.04))
+      drop-shadow(0 4px 3px rgb(0 0 0 / 0.1));
+  }
+}
+
+/* =======================================
+   MOBILE RESPONSIVE FIXES
+   ======================================= */
+@media (max-width: 768px) {
+  /* 1. Change to stacked layout */
+  .hero-container {
+    position: static;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* 2. Text block becomes white box */
+  .hero-text-content {
+    position: static;
+    height: auto;
+    background-color: #fff;
+    color: #111;
+    padding: 40px 20px;
+    order: 1;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* FIX: Subtitle stays on one line */
+  .hero-text-content .subtitle {
+    white-space: nowrap;
+    font-size: 0.75rem; /* Slightly smaller for mobile */
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+    display: block;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .hero-text-content h1 {
+    color: #111;
+    font-size: 2.5rem;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+
+  /* FIX: Paragraph uses full width */
+  .hero-text-content p {
+    color: #555;
+    max-width: 100% !important; /* Force full width */
+    width: 100%;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 24px;
+  }
+
+  /* 3. Video becomes second item with proper mobile nav */
+  .hero-swiper-wrapper {
+    position: relative;
+    height: 60vh;
+    order: 2;
+  }
+
+  /* 4. Hide desktop-only elements */
+  .desktop-overlay,
+  .desktop-scroll {
+    display: none;
+  }
+
+  /* 5. Mobile-specific Swiper adjustments */
+  .hero-swiper .swiper-pagination {
+    bottom: 60px !important; /* Move up to make space for play button */
+  }
+
+  .hero-swiper .swiper-pagination-bullet {
+    width: 8px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.6);
+  }
+
+  .hero-swiper .swiper-pagination-bullet-active {
+    background: #f97316; /* Orange active dot */
+    transform: scale(1.3);
+  }
+
+  .hero-swiper .swiper-button-next,
+  .hero-swiper .swiper-button-prev {
+    display: none; /* Hide arrows on mobile */
+  }
+
+  /* Stronger video filter for mobile */
+  .hero-video {
+    filter: brightness(70%) contrast(120%) saturate(105%);
+  }
+}
+
+/* =======================================
+   PLAY/PAUSE BUTTON STYLING
+   ======================================= */
+.video-controls {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.video-controls:hover {
+  background: rgba(0, 0, 0, 0.9);
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: scale(1.05);
+}
+
+.video-controls svg {
+  color: white;
+  width: 20px;
+  height: 20px;
+}
+
+/* Mobile specific play button */
+@media (max-width: 768px) {
+  .video-controls {
+    bottom: 70px; /* Position above pagination dots */
+    right: 15px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .video-controls svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* Desktop pagination dots - Make them orange */
+@media (min-width: 769px) {
+  .hero-swiper .swiper-pagination-bullet-active {
+    background: #f97316; /* Orange active dot for desktop */
+  }
+}
+
+/* =======================================
+   MOBILE RESPONSIVE FIXES - IMPROVED VISIBILITY
+   ======================================= */
+@media (max-width: 768px) {
+  /* 1. Change to stacked layout */
+  .hero-container {
+    position: static;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* 2. Text block becomes white box - Reduced height */
+  .hero-text-content {
+    position: static;
+    height: auto;
+    min-height: 45vh; /* Slightly more space for text */
+    background-color: #fff;
+    color: #111;
+    padding: 35px 20px;
+    order: 1;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* FIX: Subtitle stays on one line */
+  .hero-text-content .subtitle {
+    white-space: nowrap;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+    display: block;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .hero-text-content h1 {
+    color: #111;
+    font-size: 2.3rem;
+    line-height: 1.1;
+    margin-bottom: 15px;
+  }
+
+  /* FIX: Paragraph uses full width */
+  .hero-text-content p {
+    color: #555;
+    max-width: 100% !important;
+    width: 100%;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 25px;
+  }
+
+  /* 3. Video gets good space */
+  .hero-swiper-wrapper {
+    position: relative;
+    height: 55vh; /* Good balance between text and video */
+    order: 2;
+    background: #000;
+  }
+
+  /* 4. Hide desktop-only elements */
+  .desktop-overlay {
+    display: none;
+  }
+
+  /* 5. Mobile-specific Swiper adjustments - BETTER VISIBILITY */
+  .hero-swiper .swiper-pagination {
+    bottom: 55px !important; /* Perfect positioning */
+    z-index: 10 !important;
+  }
+
+  .hero-swiper .swiper-pagination-bullet {
+    width: 10px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.8);
+    opacity: 0.8;
+  }
+
+  .hero-swiper .swiper-pagination-bullet-active {
+    background: #f97316;
+    opacity: 1;
+    transform: scale(1.4);
+  }
+
+  .hero-swiper .swiper-button-next,
+  .hero-swiper .swiper-button-prev {
+    display: none;
+  }
+
+  /* Stronger video filter for mobile */
+  .hero-video {
+    filter: brightness(75%) contrast(120%) saturate(110%);
+  }
+}
+
+/* =======================================
+   PLAY/PAUSE BUTTON STYLING - SAFARI COMPATIBLE
+   ======================================= */
+.video-controls {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  z-index: 20;
+  background: rgba(0, 0, 0, 0.85); /* Darker instead of backdrop-filter */
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  /* Removed backdrop-filter for Safari compatibility */
+}
+
+.video-controls:hover {
+  background: rgba(0, 0, 0, 0.95);
+  border-color: #f97316;
+  transform: scale(1.05);
+}
+
+.video-controls svg {
+  color: white;
+  width: 20px;
+  height: 20px;
+}
+
+/* Mobile specific play button */
+@media (max-width: 768px) {
+  .video-controls {
+    bottom: 65px; /* Perfect positioning above dots */
+    right: 15px;
+    width: 42px;
+    height: 42px;
+    background: rgba(0, 0, 0, 0.9);
+  }
+
+  .video-controls svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* Desktop pagination dots */
+@media (min-width: 769px) {
+  .hero-swiper .swiper-pagination-bullet-active {
+    background: #f97316;
+  }
+
+  .hero-swiper .swiper-pagination {
+    bottom: 40px !important;
+  }
+}
+
+/* =======================================
+   EXTRA MOBILE OPTIMIZATIONS
+   ======================================= */
+@media (max-width: 480px) {
+  /* For very small phones */
+  .hero-text-content {
+    min-height: 40vh;
+    padding: 25px 15px;
+  }
+
+  .hero-text-content h1 {
+    font-size: 2rem;
+  }
+
+  .hero-text-content p {
+    font-size: 0.9rem;
+  }
+
+  .hero-swiper-wrapper {
+    height: 50vh;
+  }
+
+  .video-controls {
+    bottom: 60px;
+    right: 12px;
+    width: 38px;
+    height: 38px;
+  }
+
+  .video-controls svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* Ensure Swiper container is properly sized */
+.hero-swiper-wrapper {
+  position: relative;
+}
+
+.hero-swiper,
+.video-slide,
+.hero-video {
+  width: 100%;
+  height: 100%;
+}
+
+/* Make sure pagination is always visible */
+.swiper-pagination {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
