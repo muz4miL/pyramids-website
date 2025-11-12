@@ -4,18 +4,21 @@ import { motion } from "framer-motion";
 import { ArrowRight, Play, Pause } from "lucide-react";
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 
-// Import Swiper with TypeScript
+// Swiper imports
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectFade, Pagination, Navigation } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 
-// Import Swiper styles
+// Swiper CSS (important order)
 import "swiper/css";
 import "swiper/css/effect-fade";
+import "swiper/css/navigation"; /* For next/prev arrows */
 import "swiper/css/pagination";
-import "swiper/css/navigation";
 
-// Define the video slide type
+// Your global styles (this should include the .hero-swiper bullet overrides)
+import "@/app/globals.css";
+
+// Video slide type
 interface VideoSlide {
   id: number;
   video: string;
@@ -32,7 +35,7 @@ export default function HeroPreview() {
   const videoRefs = useRef<HTMLVideoElement[]>([]);
   const swiperRef = useRef<SwiperType | null>(null);
 
-  // Use useMemo to prevent recreation on every render
+  // Define video slides
   const videoSlides: VideoSlide[] = useMemo(
     () => [
       {
@@ -66,8 +69,8 @@ export default function HeroPreview() {
     []
   );
 
+  // Preload videos for smoother transitions
   useEffect(() => {
-    // Preload videos for better performance
     videoSlides.forEach((slide) => {
       const video = document.createElement("video");
       video.src = slide.video;
@@ -76,13 +79,12 @@ export default function HeroPreview() {
     });
   }, [videoSlides]);
 
-  const handleVideoReady = (index: number) => {
+  const handleVideoReady = () => {
     setIsVideoLoaded(true);
   };
 
   const handleSlideChange = (swiper: SwiperType) => {
     setActiveSlide(swiper.realIndex);
-    // Ensure videos keep playing when sliding
     if (isPlaying) {
       videoRefs.current.forEach((video) => {
         if (video) video.play().catch(() => {});
@@ -91,69 +93,45 @@ export default function HeroPreview() {
   };
 
   const addVideoRef = (el: HTMLVideoElement | null, index: number) => {
-    if (el) {
-      videoRefs.current[index] = el;
-    }
+    if (el) videoRefs.current[index] = el;
   };
 
-  // Fixed Play/Pause functionality with proper null checks
   const togglePlayPause = useCallback(() => {
     if (isPlaying) {
-      // Pause all videos
-      videoRefs.current.forEach((video) => {
-        if (video) video.pause();
-      });
-      // Pause autoplay - with null check
-      if (swiperRef.current?.autoplay) {
-        swiperRef.current.autoplay.stop();
-      }
+      videoRefs.current.forEach((v) => v?.pause());
+      swiperRef.current?.autoplay?.stop();
     } else {
-      // Play all videos
-      videoRefs.current.forEach((video) => {
-        if (video) video.play().catch(() => {});
-      });
-      // Resume autoplay - with null check
-      if (swiperRef.current?.autoplay) {
-        swiperRef.current.autoplay.start();
-      }
+      videoRefs.current.forEach((v) => v?.play().catch(() => {}));
+      swiperRef.current?.autoplay?.start();
     }
-    setIsPlaying(!isPlaying);
+    setIsPlaying((prev) => !prev);
   }, [isPlaying]);
 
-  // Scroll to next section function
   const handleScrollDown = () => {
     const nextSection = document.getElementById("expertise");
-
     if (nextSection) {
       nextSection.scrollIntoView({ behavior: "smooth" });
     } else {
-      window.scrollBy({
-        top: window.innerHeight,
-        behavior: "smooth",
-      });
+      window.scrollBy({ top: window.innerHeight, behavior: "smooth" });
     }
   };
 
   return (
     <div className="hero-container">
-      {/* 1. THE TEXT CONTENT BLOCK */}
+      {/* --- TEXT SECTION --- */}
       <div className="hero-text-content">
         <motion.div
           key={activeSlide}
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="flex flex-col items-start text-left max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg space-y-4 sm:space-y-5 md:space-y-6"
+          //
+          // --- FIX 1: UPDATED CLASSNAME FOR PARENT DIV ---
+          // Swapped 'max-w-xs' for 'w-full' (mobile) and 'md:max-w-md' (desktop)
+          //
+          className="flex flex-col items-start text-left w-full md:max-w-md lg:max-w-lg space-y-4 sm:space-y-5 md:space-y-6"
         >
-          {/* Tagline - Now with subtitle class for mobile fixes */}
-          <div className="flex items-center subtitle">
-            <div className="w-3 h-3 sm:w-4 sm:h-4 bg-orange-500 mr-2 sm:mr-3" />
-            <span className="font-inter text-orange-500 font-medium text-xs sm:text-sm tracking-widest uppercase">
-              ENGINEERING EXCELLENCE
-            </span>
-          </div>
-
-          {/* Main Headline */}
+          {/* Headline */}
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -161,7 +139,12 @@ export default function HeroPreview() {
             className="font-oswald text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold uppercase leading-tight"
           >
             {videoSlides[activeSlide]?.title}
-            <br />
+            {/* // --- FIX 2: HIDE <br> ON MOBILE ---
+            // 'hidden' = hidden by default (mobile)
+            // 'md:block' = display:block on medium screens and up (desktop)
+            //
+            */}
+            <br className="hidden md:block" />{" "}
             <span className="text-orange-500">
               {videoSlides[activeSlide]?.subtitle}
             </span>
@@ -172,7 +155,8 @@ export default function HeroPreview() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="font-inter text-sm sm:text-base md:text-lg leading-relaxed max-w-full"
+            // This class is correct now and will work with the parent fix
+            className="font-inter text-sm sm:text-base md:text-lg leading-relaxed max-w-full md:max-w-lg"
           >
             {videoSlides[activeSlide]?.description}
           </motion.p>
@@ -196,12 +180,10 @@ export default function HeroPreview() {
         </motion.div>
       </div>
 
-      {/* 2. THE VIDEO SLIDER BLOCK */}
+      {/* --- VIDEO SWIPER SECTION --- */}
       <div className="hero-swiper-wrapper">
         <Swiper
-          onSwiper={(swiper) => {
-            swiperRef.current = swiper;
-          }}
+          onSwiper={(swiper) => (swiperRef.current = swiper)}
           className="hero-swiper"
           modules={[Autoplay, EffectFade, Pagination, Navigation]}
           effect="fade"
@@ -212,17 +194,12 @@ export default function HeroPreview() {
             waitForTransition: true,
           }}
           loop={true}
-          pagination={{
-            clickable: true,
-            el: ".swiper-pagination",
-          }}
+          pagination={{ clickable: true, el: ".swiper-pagination" }}
           navigation={true}
           allowTouchMove={false}
           speed={1000}
           onSlideChange={handleSlideChange}
-          onInit={(swiper: SwiperType) => {
-            setActiveSlide(swiper.realIndex);
-          }}
+          onInit={(swiper) => setActiveSlide(swiper.realIndex)}
         >
           {videoSlides.map((slide, index) => (
             <SwiperSlide key={slide.id}>
@@ -236,7 +213,7 @@ export default function HeroPreview() {
                   preload="auto"
                   poster={slide.poster}
                   className="hero-video"
-                  onCanPlayThrough={() => handleVideoReady(index)}
+                  onCanPlayThrough={handleVideoReady}
                   onError={() =>
                     console.error(`Video ${index + 1} failed to load`)
                   }
@@ -255,10 +232,10 @@ export default function HeroPreview() {
         </div>
 
         {/* Desktop-only overlay */}
-        <div className="desktop-overlay"></div>
+        <div className="desktop-overlay" />
 
-        {/* Custom Pagination Dots */}
-        <div className="swiper-pagination"></div>
+        {/* Swiper pagination container */}
+        <div className="swiper-pagination" />
       </div>
     </div>
   );
