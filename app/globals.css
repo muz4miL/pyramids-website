@@ -878,3 +878,46 @@
     display: none;
   }
 }
+
+/* Fix mobile hero video aspect ratio */
+@media (max-width: 767px) {
+  .hero-swiper-wrapper {
+    height: 100vh !important;
+    position: relative;
+  }
+
+  .video-slide {
+    height: 100vh !important;
+    width: 100% !important;
+    background: black; /* Match video background */
+  }
+
+  .hero-video {
+    width: 100% !important;
+    height: auto !important; /* Change from 100% to auto */
+    max-height: 100vh !important;
+    object-fit: contain !important;
+    object-position: center center !important;
+  }
+
+  .hero-swiper {
+    height: 100vh !important;
+    background: black; /* Ensure black background */
+  }
+
+  .swiper-slide {
+    height: 100vh !important;
+    background: black; /* Ensure black background */
+  }
+
+  /* Hide pagination dots on mobile */
+  .swiper-pagination {
+    display: none !important;
+  }
+
+  /* Ensure text content stays visible */
+  .hero-text-content {
+    z-index: 20;
+    position: relative;
+  }
+}

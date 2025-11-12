@@ -239,7 +239,11 @@ export default function HeroPreview() {
         >
           {videoSlides.map((slide, index) => (
             <SwiperSlide key={slide.id}>
-              <div className="video-slide">
+              <div
+                className={`video-slide ${
+                  isMobile ? "mobile-video-slide" : ""
+                }`}
+              >
                 <video
                   ref={(el) => addVideoRef(el, index)}
                   autoPlay
@@ -248,7 +252,9 @@ export default function HeroPreview() {
                   playsInline
                   preload={isMobile ? "metadata" : "auto"}
                   poster={slide.poster}
-                  className="hero-video"
+                  className={`hero-video ${
+                    isMobile ? "object-contain w-full h-full" : "object-cover"
+                  }`}
                   onCanPlayThrough={handleVideoReady}
                   onError={() =>
                     console.error(`Video ${index + 1} failed to load`)
