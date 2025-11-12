@@ -1,11 +1,11 @@
-// /app/contact/page.tsx
-
 "use client";
 
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+// --- 1. IMPORT THE NEW ICONS ---
+import { Building2, Phone, Mail, Clock } from "lucide-react";
 
 export default function ContactPage() {
   const { ref: formRef, inView: formInView } = useInView({
@@ -189,9 +189,10 @@ export default function ContactPage() {
                   </h3>
 
                   <div className="space-y-4">
+                    {/* --- 2. UPDATED ICON (ISLAMABAD) --- */}
                     <div className="flex items-start">
-                      <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center mr-4 mt-1 flex-shrink-0">
-                        <span className="text-white text-xs">🏢</span>
+                      <div className="mr-4 mt-1 flex-shrink-0">
+                        <Building2 size={24} className="text-orange-500" />
                       </div>
                       <div>
                         <h4 className="font-inter font-semibold text-gray-900">
@@ -207,9 +208,10 @@ export default function ContactPage() {
                       </div>
                     </div>
 
+                    {/* --- 3. UPDATED ICON (PESHAWAR) --- */}
                     <div className="flex items-start">
-                      <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center mr-4 mt-1 flex-shrink-0">
-                        <span className="text-white text-xs">🏢</span>
+                      <div className="mr-4 mt-1 flex-shrink-0">
+                        <Building2 size={24} className="text-orange-500" />
                       </div>
                       <div>
                         <h4 className="font-inter font-semibold text-gray-900">
@@ -230,9 +232,10 @@ export default function ContactPage() {
                   </h3>
 
                   <div className="space-y-4">
+                    {/* --- 4. UPDATED ICON (PHONE) --- */}
                     <div className="flex items-center">
-                      <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
-                        <span className="text-white text-xs">📞</span>
+                      <div className="mr-4 flex-shrink-0">
+                        <Phone size={24} className="text-orange-500" />
                       </div>
                       <div>
                         <p className="font-inter text-gray-600">
@@ -242,9 +245,10 @@ export default function ContactPage() {
                       </div>
                     </div>
 
+                    {/* --- 5. UPDATED ICON (EMAIL) --- */}
                     <div className="flex items-center">
-                      <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
-                        <span className="text-white text-xs">✉️</span>
+                      <div className="mr-4 flex-shrink-0">
+                        <Mail size={24} className="text-orange-500" />
                       </div>
                       <div>
                         <p className="font-inter text-gray-600">
@@ -267,9 +271,10 @@ export default function ContactPage() {
                     Business Hours
                   </h3>
 
+                  {/* --- 6. UPDATED ICON (HOURS) --- */}
                   <div className="flex items-center">
-                    <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
-                      <span className="text-white text-xs">🕒</span>
+                    <div className="mr-4 flex-shrink-0">
+                      <Clock size={24} className="text-orange-500" />
                     </div>
                     <div>
                       <p className="font-inter text-gray-600">

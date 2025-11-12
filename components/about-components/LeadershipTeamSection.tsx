@@ -100,39 +100,7 @@ export default function LeadershipTeamSection() {
           ))}
         </div>
 
-        {/* Trust Indicator */}
-        <motion.div
-          initial="hidden"
-          animate={inView ? "visible" : "hidden"}
-          variants={{
-            hidden: { opacity: 0 },
-            visible: {
-              opacity: 1,
-              transition: { duration: 0.6, delay: 0.6 },
-            },
-          }}
-          className="text-center mt-16 lg:mt-20"
-        >
-          <div className="inline-flex items-center justify-center space-x-8">
-            <div className="text-center">
-              <div className="font-oswald text-3xl lg:text-4xl font-medium text-orange-500">
-                25+
-              </div>
-              <div className="font-inter text-sm text-gray-400 uppercase tracking-wider mt-1">
-                Years Experience
-              </div>
-            </div>
-            <div className="w-px h-12 bg-gray-700"></div>
-            <div className="text-center">
-              <div className="font-oswald text-3xl lg:text-4xl font-medium text-orange-500">
-                300+
-              </div>
-              <div className="font-inter text-sm text-gray-400 uppercase tracking-wider mt-1">
-                Projects Delivered
-              </div>
-            </div>
-          </div>
-        </motion.div>
+        {/* --- Trust Indicator Section REMOVED as requested --- */}
       </div>
     </section>
   );

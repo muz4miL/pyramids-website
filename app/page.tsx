@@ -21,6 +21,7 @@ export default function Home() {
       <div className="relative z-10 bg-transparent">
         {/* Black background container - ADD ID HERE */}
         <section id="expertise" className="bg-black">
+          a
           <SpecializationPreview />
         </section>
 

@@ -21,7 +21,7 @@ export default function Navbar() {
   const otherLinks = [
     { href: "/others/clients", label: "Clients" },
     { href: "/others/team", label: "Team" },
-    { href: "/others/future", label: "Future" },
+    { href: "/others/gallery", label: "Gallery" },
   ];
 
   // Close dropdown when clicking outside

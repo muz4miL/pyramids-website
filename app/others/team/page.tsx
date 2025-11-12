@@ -1,18 +1,33 @@
+"use client";
+
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+import TeamHero from "@/components/team-components/TeamHero";
+import ArchitecturalDivider from "@/components/StructuralDivider";
+import ExpertiseCTA from "@/components/expertise-components/ExpertiseCTA";
+// --- 1. IMPORT THE NEW COMPONENT ---
+import TeamShowcase from "@/components/team-components/TeamShowcase";
 
 export default function TeamPage() {
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-black">
       <Navbar />
-      <div className="pt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <h1 className="text-4xl font-bold text-foreground mb-8">Our Team</h1>
-          <p className="text-lg text-gray-600">
-            Team page content coming soon...
-          </p>
-        </div>
-      </div>
+
+      {/* Section 1: Hero (Black) */}
+      <TeamHero />
+
+      {/* --- DIVIDER: BLACK-TO-WHITE --- */}
+      <ArchitecturalDivider direction="black-to-white" />
+
+      {/* --- 2. ADD THE NEW SHOWCASE SECTION --- */}
+      <TeamShowcase />
+
+      {/* --- DIVIDER: WHITE-TO-BLACK --- */}
+      <ArchitecturalDivider direction="white-to-black" />
+
+      {/* Section 3: Careers CTA (Black) */}
+      <ExpertiseCTA />
+
       <Footer />
     </main>
   );
