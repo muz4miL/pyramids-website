@@ -878,7 +878,6 @@
     display: none;
   }
 }
-
 /* Fix mobile hero video aspect ratio */
 @media (max-width: 767px) {
   .hero-swiper-wrapper {
