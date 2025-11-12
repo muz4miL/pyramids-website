@@ -32,8 +32,19 @@ export default function HeroPreview() {
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
   const videoRefs = useRef<HTMLVideoElement[]>([]);
   const swiperRef = useRef<SwiperType | null>(null);
+
+  // Detect mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   // Define video slides
   const videoSlides: VideoSlide[] = useMemo(
@@ -69,15 +80,24 @@ export default function HeroPreview() {
     []
   );
 
-  // Preload videos for smoother transitions
+  // Optimized video preloading for mobile
   useEffect(() => {
-    videoSlides.forEach((slide) => {
-      const video = document.createElement("video");
-      video.src = slide.video;
-      video.preload = "auto";
-      video.load();
-    });
-  }, [videoSlides]);
+    if (isMobile) {
+      // On mobile, only preload the first video initially
+      const firstVideo = document.createElement("video");
+      firstVideo.src = videoSlides[0].video;
+      firstVideo.preload = "metadata"; // Use metadata instead of auto for mobile
+      firstVideo.load();
+    } else {
+      // On desktop, preload all videos
+      videoSlides.forEach((slide) => {
+        const video = document.createElement("video");
+        video.src = slide.video;
+        video.preload = "auto";
+        video.load();
+      });
+    }
+  }, [videoSlides, isMobile]);
 
   const handleVideoReady = () => {
     setIsVideoLoaded(true);
@@ -85,6 +105,16 @@ export default function HeroPreview() {
 
   const handleSlideChange = (swiper: SwiperType) => {
     setActiveSlide(swiper.realIndex);
+
+    // Preload next video when slide changes on mobile
+    if (isMobile) {
+      const nextIndex = (swiper.realIndex + 1) % videoSlides.length;
+      const nextVideo = document.createElement("video");
+      nextVideo.src = videoSlides[nextIndex].video;
+      nextVideo.preload = "metadata";
+      nextVideo.load();
+    }
+
     if (isPlaying) {
       videoRefs.current.forEach((video) => {
         if (video) video.play().catch(() => {});
@@ -93,7 +123,16 @@ export default function HeroPreview() {
   };
 
   const addVideoRef = (el: HTMLVideoElement | null, index: number) => {
-    if (el) videoRefs.current[index] = el;
+    if (el) {
+      videoRefs.current[index] = el;
+
+      // Optimize video for mobile
+      if (isMobile) {
+        el.playsInline = true;
+        el.muted = true;
+        el.preload = "metadata";
+      }
+    }
   };
 
   const togglePlayPause = useCallback(() => {
@@ -101,8 +140,15 @@ export default function HeroPreview() {
       videoRefs.current.forEach((v) => v?.pause());
       swiperRef.current?.autoplay?.stop();
     } else {
-      videoRefs.current.forEach((v) => v?.play().catch(() => {}));
-      swiperRef.current?.autoplay?.start();
+      videoRefs.current.forEach((v) => {
+        if (v) {
+          v.play().catch((e) => {
+            console.log("Video play failed:", e);
+            // Fallback: restart swiper autoplay even if video fails
+            swiperRef.current?.autoplay?.start();
+          });
+        }
+      });
     }
     setIsPlaying((prev) => !prev);
   }, [isPlaying]);
@@ -125,10 +171,6 @@ export default function HeroPreview() {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          //
-          // --- FIX 1: UPDATED CLASSNAME FOR PARENT DIV ---
-          // Swapped 'max-w-xs' for 'w-full' (mobile) and 'md:max-w-md' (desktop)
-          //
           className="flex flex-col items-start text-left w-full md:max-w-md lg:max-w-lg space-y-4 sm:space-y-5 md:space-y-6"
         >
           {/* Headline */}
@@ -139,11 +181,6 @@ export default function HeroPreview() {
             className="font-oswald text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold uppercase leading-tight"
           >
             {videoSlides[activeSlide]?.title}
-            {/* // --- FIX 2: HIDE <br> ON MOBILE ---
-            // 'hidden' = hidden by default (mobile)
-            // 'md:block' = display:block on medium screens and up (desktop)
-            //
-            */}
             <br className="hidden md:block" />{" "}
             <span className="text-orange-500">
               {videoSlides[activeSlide]?.subtitle}
@@ -155,7 +192,6 @@ export default function HeroPreview() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            // This class is correct now and will work with the parent fix
             className="font-inter text-sm sm:text-base md:text-lg leading-relaxed max-w-full md:max-w-lg"
           >
             {videoSlides[activeSlide]?.description}
@@ -210,7 +246,7 @@ export default function HeroPreview() {
                   loop
                   muted
                   playsInline
-                  preload="auto"
+                  preload={isMobile ? "metadata" : "auto"}
                   poster={slide.poster}
                   className="hero-video"
                   onCanPlayThrough={handleVideoReady}

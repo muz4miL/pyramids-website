@@ -20,6 +20,45 @@ interface Testimonial {
   company: string;
 }
 
+// Move testimonials array to the top, before any hooks that use it
+const testimonials: Testimonial[] = [
+  {
+    id: 1,
+    quote:
+      "Working with Pyramids has been a seamless experience. Their professionalism, attention to detail, and commitment to quality set them apart in every project.",
+    author: "Saif Associates",
+    company: "Peshawar",
+  },
+  {
+    id: 2,
+    quote:
+      "Pyramids has been a trusted partner throughout our project. Their expertise and customer-focused approach made a real difference.",
+    author: "Danish Red Cross",
+    company: "International",
+  },
+  {
+    id: 3,
+    quote:
+      "Pyramids consistently deliver outstanding service with reliability and integrity. Their team is knowledgeable, responsive, and a pleasure to work with.",
+    author: "German Red Cross",
+    company: "International",
+  },
+  {
+    id: 4,
+    quote:
+      "Our experience with Pyramids has been exceptional. Their dedication to excellence and timely delivery exceeded our expectations.",
+    author: "Canadian Red Cross",
+    company: "International",
+  },
+  {
+    id: 5,
+    quote:
+      "We truly value our partnership with Pyramids. Their professionalism and commitment to delivering high-quality work have been remarkable.",
+    author: "Reach Out to Asia",
+    company: "International",
+  },
+];
+
 export default function ClientsPreview() {
   const { ref, inView } = useInView({
     triggerOnce: true,
@@ -28,6 +67,7 @@ export default function ClientsPreview() {
 
   const [isMobile, setIsMobile] = useState(false);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -38,6 +78,17 @@ export default function ClientsPreview() {
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
+
+  // Auto-rotate testimonials
+  useEffect(() => {
+    if (!isAutoPlaying) return;
+
+    const interval = setInterval(() => {
+      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+    }, 4000); // Change every 4 seconds
+
+    return () => clearInterval(interval);
+  }, [isAutoPlaying, testimonials.length]);
 
   const clientLogos = [
     {
@@ -84,44 +135,6 @@ export default function ClientsPreview() {
     },
   ];
 
-  const testimonials: Testimonial[] = [
-    {
-      id: 1,
-      quote:
-        "Working with Pyramids has been a seamless experience. Their professionalism, attention to detail, and commitment to quality set them apart in every project.",
-      author: "Saif Associates",
-      company: "Peshawar",
-    },
-    {
-      id: 2,
-      quote:
-        "Pyramids has been a trusted partner throughout our project. Their expertise and customer-focused approach made a real difference.",
-      author: "Danish Red Cross",
-      company: "International",
-    },
-    {
-      id: 3,
-      quote:
-        "Pyramids consistently deliver outstanding service with reliability and integrity. Their team is knowledgeable, responsive, and a pleasure to work with.",
-      author: "German Red Cross",
-      company: "International",
-    },
-    {
-      id: 4,
-      quote:
-        "Our experience with Pyramids has been exceptional. Their dedication to excellence and timely delivery exceeded our expectations.",
-      author: "Canadian Red Cross",
-      company: "International",
-    },
-    {
-      id: 5,
-      quote:
-        "We truly value our partnership with Pyramids. Their professionalism and commitment to delivering high-quality work have been remarkable.",
-      author: "Reach Out to Asia",
-      company: "International",
-    },
-  ];
-
   // Filter featured clients and duplicate for seamless loop
   const featuredClients = clientLogos.filter((client) => client.featured);
   const duplicatedLogos = [
@@ -131,13 +144,29 @@ export default function ClientsPreview() {
   ];
 
   const nextTestimonial = () => {
+    setIsAutoPlaying(false); // Pause auto-play on manual navigation
     setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+
+    // Resume auto-play after 10 seconds of inactivity
+    setTimeout(() => setIsAutoPlaying(true), 10000);
   };
 
   const prevTestimonial = () => {
+    setIsAutoPlaying(false); // Pause auto-play on manual navigation
     setCurrentTestimonial(
       (prev) => (prev - 1 + testimonials.length) % testimonials.length
     );
+
+    // Resume auto-play after 10 seconds of inactivity
+    setTimeout(() => setIsAutoPlaying(true), 10000);
+  };
+
+  const goToTestimonial = (index: number) => {
+    setIsAutoPlaying(false); // Pause auto-play on manual navigation
+    setCurrentTestimonial(index);
+
+    // Resume auto-play after 10 seconds of inactivity
+    setTimeout(() => setIsAutoPlaying(true), 10000);
   };
 
   return (
@@ -240,7 +269,7 @@ export default function ClientsPreview() {
           <button
             onClick={prevTestimonial}
             aria-label="Previous testimonial"
-            className="absolute -left-16 top-1/2 transform -translate-y-1/2 z-20 w-12 h-12 bg-orange-500 hover:bg-orange-600 rounded-none flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-lg"
+            className="absolute -left-16 top-1/2 transform -translate-y-1/2 z-20 w-12 h-12 bg-orange-500 hover:bg-orange-600 rounded-none flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-lg hidden lg:flex"
           >
             <span className="text-white text-lg font-bold">←</span>
           </button>
@@ -248,13 +277,17 @@ export default function ClientsPreview() {
           <button
             onClick={nextTestimonial}
             aria-label="Next testimonial"
-            className="absolute -right-16 top-1/2 transform -translate-y-1/2 z-20 w-12 h-12 bg-orange-500 hover:bg-orange-600 rounded-none flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-lg"
+            className="absolute -right-16 top-1/2 transform -translate-y-1/2 z-20 w-12 h-12 bg-orange-500 hover:bg-orange-600 rounded-none flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-lg hidden lg:flex"
           >
             <span className="text-white text-lg font-bold">→</span>
           </button>
 
           {/* TESTIMONIAL CARD - WITH GLASS EFFECT & CIRCULAR QUOTE */}
-          <div className="bg-neutral-900 border border-white/10 rounded-none p-8 lg:p-12 relative overflow-hidden shadow-2xl">
+          <div
+            className="bg-neutral-900 border border-white/10 rounded-none p-8 lg:p-12 relative overflow-hidden shadow-2xl"
+            onMouseEnter={() => setIsAutoPlaying(false)} // Pause on hover
+            onMouseLeave={() => setIsAutoPlaying(true)} // Resume when not hovering
+          >
             {/* CIRCULAR QUOTATION MARK - STANDS OUT PERFECTLY */}
             <div className="absolute bottom-2 right-2 lg:top-1 lg:right-2 w-10 h-10 lg:w-12 lg:h-12 bg-orange-500 rounded-full flex items-center justify-center shadow-lg z-20">
               <span className="text-black text-lg lg:text-xl font-serif font-bold">
@@ -266,9 +299,9 @@ export default function ClientsPreview() {
             <div className="relative z-10">
               <motion.div
                 key={currentTestimonial}
-                initial={{ opacity: 0, x: 50 }}
+                initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -50 }}
+                exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.5 }}
                 className="text-center"
               >
@@ -289,12 +322,30 @@ export default function ClientsPreview() {
               </motion.div>
             </div>
 
+            {/* MOBILE NAVIGATION ARROWS */}
+            <div className="flex justify-center space-x-4 mt-6 lg:hidden">
+              <button
+                onClick={prevTestimonial}
+                aria-label="Previous testimonial"
+                className="w-10 h-10 bg-orange-500 hover:bg-orange-600 rounded-none flex items-center justify-center transition-all duration-300"
+              >
+                <span className="text-white font-bold">←</span>
+              </button>
+              <button
+                onClick={nextTestimonial}
+                aria-label="Next testimonial"
+                className="w-10 h-10 bg-orange-500 hover:bg-orange-600 rounded-none flex items-center justify-center transition-all duration-300"
+              >
+                <span className="text-white font-bold">→</span>
+              </button>
+            </div>
+
             {/* CLEAN DOTS INDICATOR - MINIMAL NAVIGATION */}
-            <div className="flex justify-center space-x-3 mt-10">
+            <div className="flex justify-center space-x-3 mt-8 lg:mt-10">
               {testimonials.map((_, index) => (
                 <button
                   key={index}
-                  onClick={() => setCurrentTestimonial(index)}
+                  onClick={() => goToTestimonial(index)}
                   aria-label={`Go to testimonial ${index + 1}`}
                   className={`w-3 h-3 transition-all duration-300 ${
                     index === currentTestimonial

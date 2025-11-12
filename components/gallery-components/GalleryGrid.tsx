@@ -13,7 +13,7 @@ export interface GalleryItem {
 }
 
 const galleryImageData: GalleryItem[] = [
-  // --- UPDATED WITH CORRECT PATHS FROM PROJECT DATA ---
+  // ... (your image data remains unchanged)
   {
     id: 1,
     title: "AFI Tower",
@@ -72,10 +72,29 @@ export default function GalleryGrid() {
   return (
     <section className="py-16 lg:py-24 bg-neutral-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* This is the Masonry Grid.
-          'columns-1' on mobile, 'columns-2' on tablet, 'columns-3' on desktop.
-          The browser will automatically arrange the images.
-        */}
+        {/* --- 1. NEW SECTION HEADER --- */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="text-center mb-12 lg:mb-16"
+        >
+          <span className="text-xs lg:text-sm font-bold text-orange-500 tracking-widest uppercase font-oswald">
+            OUR PORTFOLIO
+          </span>
+          <h2 className="text-3xl lg:text-5xl font-bold text-gray-900 leading-tight font-oswald mt-4">
+            PROJECT GALLERY
+          </h2>
+          <p className="text-base lg:text-lg text-gray-600 leading-relaxed max-w-2xl mx-auto font-inter mt-6">
+            A showcase of our diverse capabilities, from towering high-rises to
+            intricate interiors. Each project reflects our commitment to
+            engineering and architectural excellence.
+          </p>
+        </motion.div>
+        {/* --- END OF NEW HEADER --- */}
+
+        {/* This is the Masonry Grid. */}
         <motion.div
           className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-6"
           initial={{ opacity: 0 }}
@@ -117,9 +136,7 @@ export default function GalleryGrid() {
         </motion.div>
       </div>
 
-      {/* This is the Lightbox Modal.
-        It appears when 'selectedImage' is not null.
-      */}
+      {/* This is the Lightbox Modal. */}
       <AnimatePresence>
         {selectedImage && (
           <motion.div

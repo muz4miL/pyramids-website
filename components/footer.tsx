@@ -1,34 +1,48 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Link from "next/link";
+import Link from "next/link"; // Re-enabled for proper navigation
 import { Facebook, Twitter, Linkedin, Instagram } from "lucide-react";
+
+// --- 1. DEFINE LINK INTERFACE ---
+interface FooterLink {
+  name: string;
+  href: string;
+}
+
+// --- 2. UPDATE LINKS OBJECT WITH ALL PAGES ---
+const footerLinks: { [key: string]: FooterLink[] } = {
+  Services: [
+    { name: "Architectural Design", href: "/expertise" },
+    { name: "Structural Engineering", href: "/expertise" },
+    { name: "Urban Planning", href: "/expertise" },
+    { name: "Construction Management", href: "/expertise" },
+  ],
+  Expertise: [
+    { name: "Sustainable Architecture", href: "/expertise" },
+    { name: "Interior Design", href: "/expertise" },
+    { name: "Project Oversight", href: "/expertise" },
+    { name: "Technical Consulting", href: "/expertise" },
+  ],
+  Company: [
+    { name: "About Us", href: "/about" },
+    { name: "Our Team", href: "/others/team" },
+    { name: "Projects", href: "/projects" },
+    { name: "Clients", href: "/others/clients" },
+    { name: "Gallery", href: "/others/gallery" },
+    { name: "Careers", href: "/contact" }, // Changed to "Careers" to match your text
+  ],
+};
+
+const socialLinks = [
+  { icon: Facebook, href: "#" },
+  { icon: Twitter, href: "#" },
+  { icon: Linkedin, href: "#" },
+  { icon: Instagram, href: "#" },
+];
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
-
-  const footerLinks = {
-    Services: [
-      "Architectural Design",
-      "Structural Engineering",
-      "Urban Planning",
-      "Construction Management",
-    ],
-    Expertise: [
-      "Sustainable Architecture",
-      "Interior Design",
-      "Project Oversight",
-      "Technical Consulting",
-    ],
-    Company: ["About Us", "Our Team", "Projects", "Careers"],
-  };
-
-  const socialLinks = [
-    { icon: Facebook, href: "#" },
-    { icon: Twitter, href: "#" },
-    { icon: Linkedin, href: "#" },
-    { icon: Instagram, href: "#" },
-  ];
 
   return (
     <footer className="bg-black text-white py-16 lg:py-20">
@@ -42,12 +56,13 @@ export default function Footer() {
         >
           {/* Brand - PREMIUM VERSION */}
           <div className="lg:col-span-1">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 bg-orange-500 rounded-none flex items-center justify-center">
-                <span className="text-white font-heading text-xl font-bold">
-                  P
-                </span>
-              </div>
+            {/* --- 3. REPLACED 'P' BLOCK WITH LOGO IMAGE --- */}
+            <Link href="/" className="flex items-center gap-3 mb-6 group">
+              <img
+                src="/logo.png"
+                alt="Pyramids Logo"
+                className="h-14 w-auto" // Sized for the footer
+              />
               <div>
                 <p className="text-base font-bold font-heading tracking-wide">
                   PYRAMIDS
@@ -56,7 +71,7 @@ export default function Footer() {
                   ENGINEERS & ARCHITECTS
                 </p>
               </div>
-            </div>
+            </Link>
             <p className="text-sm opacity-75 leading-relaxed font-sans">
               Engineering excellence and architectural innovation for spaces
               that inspire.
@@ -70,13 +85,14 @@ export default function Footer() {
                 {category}
               </h4>
               <ul className="space-y-3">
+                {/* --- 4. CHANGED <a> to <Link> --- */}
                 {links.map((link) => (
-                  <li key={link}>
+                  <li key={link.name}>
                     <Link
-                      href="#"
+                      href={link.href}
                       className="text-sm opacity-75 hover:opacity-100 hover:text-orange-500 transition-all duration-300 font-sans"
                     >
-                      {link}
+                      {link.name}
                     </Link>
                   </li>
                 ))}
@@ -111,6 +127,7 @@ export default function Footer() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
+                  {/* --- 4. CHANGED <a> to <Link> --- */}
                   <Link
                     href={social.href}
                     className="w-10 h-10 bg-neutral-900 border border-neutral-800 rounded-none flex items-center justify-center hover:bg-orange-500 hover:border-orange-500 transition-all duration-300 group"

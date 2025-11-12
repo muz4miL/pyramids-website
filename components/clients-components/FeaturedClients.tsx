@@ -20,7 +20,7 @@ const featuredClientData: ClientProject[] = [
     name: "DHA Peshawar",
     logoUrl: "/clients/Dha-logo.png",
     // --- URGENT: REPLACE THIS PLACEHOLDER ---
-    projectImageUrl: "/projects/dha-project-image.jpg", // Example: "[https://placehold.co/600x400/](https://placehold.co/600x400/)..."
+    projectImageUrl: "/expertise-images/dhaPeshawar.png", // Example: "[https://placehold.co/600x400/](https://placehold.co/600x400/)..."
     info: "A leading residential and commercial real estate developer in Pakistan, known for large-scale, master-planned communities.",
     services: [
       "Structural Engineering",
@@ -33,7 +33,7 @@ const featuredClientData: ClientProject[] = [
     name: "Danish Red Cross",
     logoUrl: "/clients/danish.png",
     // --- URGENT: REPLACE THIS PLACEHOLDER ---
-    projectImageUrl: "/projects/red-cross-project.jpg", // Example: "[https://placehold.co/600x400/](https://placehold.co/600x400/)..."
+    projectImageUrl: "/expertise-images/danishRedCross.png", // Example: "[https://placehold.co/600x400/](https://placehold.co/600x400/)..."
     info: "Part of the global Red Cross network, providing humanitarian aid, disaster response, and community health services worldwide.",
     services: [
       "Humanitarian Architecture",
@@ -46,7 +46,7 @@ const featuredClientData: ClientProject[] = [
     name: "Saif Associates",
     logoUrl: "/clients/saifLogo.png",
     // --- URGENT: REPLACE THIS PLACEHOLDER ---
-    projectImageUrl: "/projects/saif-project.jpg", // Example: "[https://placehold.co/600x400/](https://placehold.co/600x400/)..."
+    projectImageUrl: "/expertise-images/saifMall.png", // Example: "[https://placehold.co/600x400/](https://placehold.co/600x400/)..."
     info: "A prominent Pakistani consultancy firm specializing in engineering, architecture, and project management for major infrastructure.",
     services: [
       "Collaborative Engineering",
@@ -59,7 +59,7 @@ const featuredClientData: ClientProject[] = [
     name: "Rabbani Associates",
     logoUrl: "/clients/rabani-logo.png",
     // --- URGENT: REPLACE THIS PLACEHOLDER ---
-    projectImageUrl: "/projects/rabbani-project.jpg", // Example: "[https://placehold.co/600x400/](https://placehold.co/600x400/)..."
+    projectImageUrl: "/expertise-images/rabbaniAssociates.png", // Example: "[https://placehold.co/600x400/](https://placehold.co/600x400/)..."
     info: "An award-winning architectural and design firm based in Pakistan, recognized for its innovative and contemporary building designs.",
     services: [
       "Structural Consultation",

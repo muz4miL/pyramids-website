@@ -117,10 +117,13 @@ export default function Navbar() {
             {/* Vertical line and CTA Button */}
             <div className="hidden md:flex items-center gap-6">
               <div className="h-20 w-px bg-gray-300 ml-4"></div>
-              <button className="px-6 py-2.5 bg-orange-500 text-white font-medium whitespace-nowrap rounded-none hover:bg-orange-600 transition-all duration-300 transform hover:scale-105 flex items-center gap-2 font-oswald ml-4">
-                Get In Touch
-                <ArrowRight size={16} />
-              </button>
+              {/* --- 1. WRAPPED BUTTON IN LINK --- */}
+              <Link href="/contact">
+                <button className="px-6 py-2.5 bg-orange-500 text-white font-medium whitespace-nowrap rounded-none hover:bg-orange-600 transition-all duration-300 transform hover:scale-105 flex items-center gap-2 font-oswald ml-4">
+                  Get In Touch
+                  <ArrowRight size={16} />
+                </button>
+              </Link>
             </div>
 
             {/* Mobile Menu Button */}
@@ -178,10 +181,13 @@ export default function Navbar() {
             ))}
 
             <div className="pt-4">
-              <button className="w-full px-6 py-3 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600 transition-all duration-300 flex items-center justify-center gap-2 font-oswald">
-                Get In Touch
-                <ArrowRight size={18} />
-              </button>
+              {/* --- 2. WRAPPED MOBILE BUTTON IN LINK --- */}
+              <Link href="/contact" onClick={() => setIsOpen(false)}>
+                <button className="w-full px-6 py-3 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600 transition-all duration-300 flex items-center justify-center gap-2 font-oswald">
+                  Get In Touch
+                  <ArrowRight size={18} />
+                </button>
+              </Link>
             </div>
           </div>
         </motion.div>
