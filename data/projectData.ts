@@ -129,7 +129,7 @@ export const projects: Project[] = [
     title: "La Vita, Malam Jabba",
     category: "Buildings",
     stat: "G+7 Hotel",
-    image: "/expertise-images/MalamJabbaLavita.PNG",
+    image: "/expertise-images/LavitaMalamJabba.PNG",
     description:
       "A G+7 hotel apartment project consisting of 3 towers, managed and designed by Pyramids.",
     location: "Malam Jabba, Swat",
