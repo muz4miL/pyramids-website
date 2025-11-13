@@ -54,7 +54,7 @@ const galleryImageData: GalleryItem[] = [
     id: 7,
     title: "Town Residency",
     category: "Residential",
-    imageUrl: "/expertise-images/townHeights.png",
+    imageUrl: "/expertise-images/Heights.png",
   },
   {
     id: 9,
