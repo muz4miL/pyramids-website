@@ -165,7 +165,7 @@ export const projects: Project[] = [
     title: "Town Heights",
     category: "Buildings",
     stat: "Commercial Complex",
-    image: "/expertise-images/TownHeights.PNG",
+    image: "/expertise-images/townHeights.png",
     description:
       "Modern commercial complex featuring contemporary architectural design and premium business facilities.",
     location: "Peshawar, Pakistan",
