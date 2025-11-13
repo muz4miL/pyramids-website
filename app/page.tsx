@@ -27,15 +27,15 @@ export default function Home() {
     <main className="min-h-screen bg-background">
       <Navbar />
 
-      {/* Conditional Sticky Hero - Only for Desktop */}
+      {/* Conditional Hero Section */}
       {!isMobile ? (
-        // Desktop: Sticky hero with scroll effect
+        // Desktop: Sticky hero with fixed height
         <div className="sticky top-0 h-screen z-0">
           <HeroPreview />
         </div>
       ) : (
-        // Mobile: Regular hero without sticky
-        <div className="h-screen z-0">
+        // Mobile: Hero with auto height - NO fixed height!
+        <div className="relative z-0">
           <HeroPreview />
         </div>
       )}

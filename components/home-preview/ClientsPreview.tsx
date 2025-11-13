@@ -288,13 +288,6 @@ export default function ClientsPreview() {
             onMouseEnter={() => setIsAutoPlaying(false)} // Pause on hover
             onMouseLeave={() => setIsAutoPlaying(true)} // Resume when not hovering
           >
-            {/* CIRCULAR QUOTATION MARK - STANDS OUT PERFECTLY */}
-            <div className="absolute bottom-2 right-2 lg:top-1 lg:right-2 w-10 h-10 lg:w-12 lg:h-12 bg-orange-500 rounded-full flex items-center justify-center shadow-lg z-20">
-              <span className="text-black text-lg lg:text-xl font-serif font-bold">
-                "
-              </span>
-            </div>
-
             {/* Testimonial Content */}
             <div className="relative z-10">
               <motion.div

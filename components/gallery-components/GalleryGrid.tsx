@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 import { X } from "lucide-react";
+import Image from "next/image";
 
 // Define interface and data directly in the component
 export interface GalleryItem {
@@ -13,7 +14,6 @@ export interface GalleryItem {
 }
 
 const galleryImageData: GalleryItem[] = [
-  // ... (your image data remains unchanged)
   {
     id: 1,
     title: "AFI Tower",
@@ -54,10 +54,8 @@ const galleryImageData: GalleryItem[] = [
     id: 7,
     title: "Town Residency",
     category: "Residential",
-    imageUrl: "/expertise-images/TownHeights.png",
+    imageUrl: "/expertise-images/townHeights.png",
   },
-
-  // --- AI IMAGES ---
   {
     id: 9,
     title: "Islamabad C Mall",
@@ -66,35 +64,142 @@ const galleryImageData: GalleryItem[] = [
   },
 ];
 
+// --- PREMIUM FAN-SHOWCASE COMPONENT ---
+const FannedShowcase = () => {
+  const showcaseImages = galleryImageData.slice(0, 5);
+
+  // Fixed TypeScript variants using Framer Motion's built-in Variants type
+  const cardVariants: Variants = {
+    hidden: {
+      opacity: 0,
+      y: 50,
+    },
+    visible: (i: number) => {
+      const transforms = [
+        { x: -100, rotate: -15 },
+        { x: -50, rotate: -10 },
+        { x: 0, rotate: 0 },
+        { x: 50, rotate: 10 },
+        { x: 100, rotate: 15 },
+      ];
+
+      const zIndex = i === 2 ? 10 : 5 - Math.abs(i - 2);
+
+      return {
+        opacity: 1,
+        y: 0,
+        x: `${transforms[i].x}%`,
+        rotate: transforms[i].rotate,
+        zIndex: zIndex,
+        filter: i === 2 ? "grayscale(0%)" : "grayscale(100%)",
+        transition: {
+          duration: 0.8,
+          delay: i * 0.1,
+          ease: "easeOut" as const,
+        },
+      };
+    },
+  };
+
+  return (
+    <div className="space-y-16">
+      {/* INTRO TEXT SECTION */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true }}
+        className="text-center max-w-4xl mx-auto"
+      >
+        <h3 className="font-oswald text-3xl md:text-4xl font-bold text-gray-900 uppercase mb-6">
+          Where <span className="text-orange-500">Excellence</span> Meets
+          Innovation
+        </h3>
+        <p className="font-inter text-lg text-gray-600 leading-relaxed">
+          Every structure we create embodies our commitment to architectural
+          precision, engineering{" "}
+          <span className="text-orange-500">excellence</span>, and sustainable
+          design principles that stand the test of time.
+        </p>
+      </motion.div>
+
+      {/* FANNED SHOWCASE */}
+      <motion.div
+        className="relative h-64 md:h-96 w-full flex justify-center items-center"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+      >
+        {showcaseImages.map((item, i) => (
+          <motion.div
+            key={item.id}
+            className="absolute w-48 h-64 md:w-64 md:h-80 shadow-2xl overflow-hidden"
+            variants={cardVariants}
+            custom={i}
+            style={{
+              transformOrigin: "center bottom",
+            }}
+          >
+            <Image
+              src={item.imageUrl}
+              alt={item.title}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 192px, 256px"
+              priority={i === 2}
+            />
+          </motion.div>
+        ))}
+      </motion.div>
+    </div>
+  );
+};
+
 export default function GalleryGrid() {
   const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null);
 
   return (
     <section className="py-16 lg:py-24 bg-neutral-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* --- 1. NEW SECTION HEADER --- */}
+        {/* HEADER */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="text-center mb-12 lg:mb-16"
+          className="text-center mb-16 lg:mb-20"
         >
           <span className="text-xs lg:text-sm font-bold text-orange-500 tracking-widest uppercase font-oswald">
-            OUR PORTFOLIO
+            OUR <span className="text-orange-500">PORTFOLIO</span>
           </span>
           <h2 className="text-3xl lg:text-5xl font-bold text-gray-900 leading-tight font-oswald mt-4">
             PROJECT GALLERY
           </h2>
-          <p className="text-base lg:text-lg text-gray-600 leading-relaxed max-w-2xl mx-auto font-inter mt-6">
-            A showcase of our diverse capabilities, from towering high-rises to
-            intricate interiors. Each project reflects our commitment to
-            engineering and architectural excellence.
+        </motion.div>
+
+        {/* FANNED SHOWCASE WITH TEXT SECTIONS */}
+        <FannedShowcase />
+
+        {/* FULL PORTFOLIO SECTION TITLE */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="text-center mt-20 mb-12"
+        >
+          <h3 className="font-oswald text-2xl md:text-3xl font-bold text-gray-900 uppercase">
+            Explore Our Complete{" "}
+            <span className="text-orange-500">Portfolio</span>
+          </h3>
+          <p className="font-inter text-gray-600 mt-4 max-w-2xl mx-auto">
+            Discover our diverse range of projects showcasing architectural{" "}
+            <span className="text-orange-500">excellence</span>
+            across commercial, residential, and mixed-use developments.
           </p>
         </motion.div>
-        {/* --- END OF NEW HEADER --- */}
 
-        {/* This is the Masonry Grid. */}
+        {/* MASONRY GRID */}
         <motion.div
           className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-6"
           initial={{ opacity: 0 }}
@@ -105,7 +210,7 @@ export default function GalleryGrid() {
           {galleryImageData.map((item) => (
             <motion.div
               key={item.id}
-              className="mb-6 break-inside-avoid relative overflow-hidden rounded-lg shadow-lg cursor-pointer group"
+              className="mb-6 break-inside-avoid relative overflow-hidden shadow-lg cursor-pointer group"
               onClick={() => setSelectedImage(item)}
               layoutId={`card-${item.id}`}
               variants={{
@@ -136,7 +241,7 @@ export default function GalleryGrid() {
         </motion.div>
       </div>
 
-      {/* This is the Lightbox Modal. */}
+      {/* MODAL */}
       <AnimatePresence>
         {selectedImage && (
           <motion.div
@@ -169,24 +274,19 @@ export default function GalleryGrid() {
                 <img
                   src={selectedImage.imageUrl}
                   alt={selectedImage.title}
-                  className="w-auto h-auto max-w-full max-h-[75vh] rounded-lg shadow-2xl"
+                  className="w-auto h-auto max-w-full max-h-[75vh] shadow-2xl"
                 />
               </motion.div>
 
-              {/* Title and Category - Bottom Centered */}
-              <motion.div
-                className="mt-6 text-center"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-              >
+              {/* Image Info */}
+              <div className="mt-6 text-center">
                 <h3 className="font-oswald text-3xl font-bold text-white uppercase mb-2">
                   {selectedImage.title}
                 </h3>
-                <p className="font-inter text-orange-400 text-lg border border-orange-400 px-4 py-1 rounded-full inline-block">
+                <p className="font-inter text-orange-400 text-lg border border-orange-400 px-4 py-1 inline-block">
                   {selectedImage.category}
                 </p>
-              </motion.div>
+              </div>
             </motion.div>
           </motion.div>
         )}

@@ -282,6 +282,7 @@
     scrollbar-color: #f97316 #0a0a0a;
   }
 }
+
 /* =======================================
    PREMIUM SWIPER HERO STYLES - NORR.COM STYLE
    ======================================= */
@@ -575,102 +576,6 @@
 }
 
 /* =======================================
-   MOBILE RESPONSIVE FIXES
-   ======================================= */
-@media (max-width: 768px) {
-  /* 1. Change to stacked layout */
-  .hero-container {
-    position: static;
-    height: auto;
-    display: flex;
-    flex-direction: column;
-  }
-
-  /* 2. Text block becomes white box */
-  .hero-text-content {
-    position: static;
-    height: auto;
-    background-color: #fff;
-    color: #111;
-    padding: 40px 20px;
-    order: 1;
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  /* FIX: Subtitle stays on one line */
-  .hero-text-content .subtitle {
-    white-space: nowrap;
-    font-size: 0.75rem;
-    letter-spacing: 0.05em;
-    margin-bottom: 12px;
-    display: block;
-    width: 100%;
-    overflow: hidden;
-  }
-
-  .hero-text-content h1 {
-    color: #111;
-    font-size: 2.5rem;
-    line-height: 1.1;
-    margin-bottom: 16px;
-  }
-
-  /* FIX: Paragraph uses full width */
-  .hero-text-content p {
-    color: #555;
-    max-width: 100% !important;
-    width: 100%;
-    font-size: 1rem;
-    line-height: 1.5;
-    margin-bottom: 24px;
-  }
-
-  /* 3. Video becomes second item with proper mobile nav */
-  .hero-swiper-wrapper {
-    position: relative;
-    height: 60vh;
-    order: 2;
-  }
-
-  /* 4. Hide desktop-only elements */
-  .desktop-overlay,
-  .desktop-scroll {
-    display: none;
-  }
-
-  /* 5. Mobile-specific Swiper adjustments */
-  .hero-swiper .swiper-pagination {
-    bottom: 60px !important;
-  }
-
-  .hero-swiper .swiper-pagination-bullet {
-    width: 12px !important;
-    height: 12px !important;
-    background: rgba(255, 255, 255, 0.7) !important;
-    opacity: 0.8 !important;
-    transition: all 0.3s ease !important;
-  }
-
-  .hero-swiper .swiper-pagination-bullet-active {
-    background: #f97316 !important;
-    opacity: 1 !important;
-    transform: scale(1.4) !important;
-    box-shadow: 0 0 8px rgba(249, 115, 22, 0.6) !important;
-  }
-
-  .hero-swiper .swiper-button-next,
-  .hero-swiper .swiper-button-prev {
-    display: none;
-  }
-
-  /* Stronger video filter for mobile */
-  .hero-video {
-    filter: brightness(70%) contrast(120%) saturate(105%);
-  }
-}
-
-/* =======================================
    PLAY/PAUSE BUTTON STYLING
    ======================================= */
 .video-controls {
@@ -702,60 +607,155 @@
   height: 20px;
 }
 
-/* Mobile specific play button */
-@media (max-width: 768px) {
-  .video-controls {
-    bottom: 65px;
-    right: 15px;
-    width: 42px;
-    height: 42px;
-    background: rgba(0, 0, 0, 0.9);
-  }
-
-  .video-controls svg {
-    width: 18px;
-    height: 18px;
-  }
-}
-
 /* =======================================
-   EXTRA MOBILE OPTIMIZATIONS
+   CLEAN MOBILE HERO FIX - NO BLACK VOIDS
    ======================================= */
-@media (max-width: 480px) {
-  /* For very small phones */
+@media (max-width: 768px) {
+  /* Reset container for mobile */
+  .hero-container {
+    position: relative !important;
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    background: black !important;
+  }
+
+  /* Video comes FIRST on mobile - 50vh height */
+  .hero-swiper-wrapper {
+    order: 1 !important;
+    position: relative !important;
+    height: 50vh !important;
+    width: 100% !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  .hero-swiper,
+  .video-slide {
+    height: 100% !important;
+    width: 100% !important;
+  }
+
+  .hero-video {
+    object-fit: contain !important;
+    width: 100% !important;
+    height: 100% !important;
+    filter: brightness(70%) contrast(120%) saturate(105%) !important;
+  }
+
+  /* Text comes SECOND on mobile - White background */
   .hero-text-content {
-    min-height: 40vh;
-    padding: 25px 15px;
+    order: 2 !important;
+    position: relative !important;
+    background: white !important;
+    color: #111 !important;
+    padding: 40px 20px !important;
+    height: auto !important;
+    min-height: 40vh !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    width: 100% !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
   }
 
   .hero-text-content h1 {
-    font-size: 2rem;
+    color: #111 !important;
+    text-align: center !important;
+    font-size: 2.5rem !important;
+    line-height: 1.1 !important;
+    margin-bottom: 16px !important;
   }
 
   .hero-text-content p {
-    font-size: 0.9rem;
+    color: #555 !important;
+    text-align: center !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    font-size: 1rem !important;
+    line-height: 1.5 !important;
+    margin-bottom: 24px !important;
   }
 
-  .hero-swiper-wrapper {
-    height: 50vh;
+  /* Hide desktop elements on mobile */
+  .desktop-overlay,
+  .desktop-scroll {
+    display: none !important;
   }
 
+  /* Mobile pagination */
+  .hero-swiper .swiper-pagination {
+    bottom: 20px !important;
+  }
+
+  .hero-swiper .swiper-pagination-bullet {
+    width: 12px !important;
+    height: 12px !important;
+    background: rgba(255, 255, 255, 0.7) !important;
+    opacity: 0.8 !important;
+  }
+
+  .hero-swiper .swiper-pagination-bullet-active {
+    background: #f97316 !important;
+    opacity: 1 !important;
+    transform: scale(1.4) !important;
+  }
+
+  .hero-swiper .swiper-button-next,
+  .hero-swiper .swiper-button-prev {
+    display: none !important;
+  }
+
+  /* Mobile video controls */
   .video-controls {
-    bottom: 60px;
-    right: 12px;
-    width: 38px;
-    height: 38px;
+    bottom: 65px !important;
+    right: 15px !important;
+    width: 42px !important;
+    height: 42px !important;
+    background: rgba(0, 0, 0, 0.9) !important;
   }
 
   .video-controls svg {
-    width: 16px;
-    height: 16px;
+    width: 18px !important;
+    height: 18px !important;
+  }
+}
+
+/* Extra small phone optimization */
+@media (max-width: 480px) {
+  .hero-text-content {
+    padding: 30px 15px !important;
+    min-height: 35vh !important;
   }
 
-  /* Smaller dots for very small screens */
-  .hero-swiper .swiper-pagination-bullet {
-    width: 10px !important;
-    height: 10px !important;
+  .hero-text-content h1 {
+    font-size: 2rem !important;
+  }
+
+  .hero-text-content p {
+    font-size: 0.9rem !important;
+  }
+
+  .hero-swiper-wrapper {
+    height: 45vh !important;
+  }
+
+  .video-controls {
+    bottom: 60px !important;
+    right: 12px !important;
+    width: 38px !important;
+    height: 38px !important;
+  }
+
+  .video-controls svg {
+    width: 16px !important;
+    height: 16px !important;
   }
 }
 
@@ -817,106 +817,4 @@
 .hero-swiper .swiper-pagination {
   bottom: 18px !important;
   text-align: center !important;
-}
-
-/* Hero Container */
-.hero-container {
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  min-height: 600px;
-  max-height: 1200px;
-  overflow: hidden;
-}
-
-/* Swiper Wrapper - Full screen video */
-.hero-swiper-wrapper {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-}
-
-.hero-swiper {
-  width: 100%;
-  height: 100%;
-}
-
-.video-slide {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-.hero-video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Mobile video overlay for better text readability */
-.mobile-video-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 60%;
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.8) 0%,
-    rgba(0, 0, 0, 0.4) 50%,
-    transparent 100%
-  );
-  z-index: 2;
-  display: block;
-}
-
-@media (min-width: 768px) {
-  .mobile-video-overlay {
-    display: none;
-  }
-}
-/* Fix mobile hero video aspect ratio */
-@media (max-width: 767px) {
-  .hero-swiper-wrapper {
-    height: 100vh !important;
-    position: relative;
-  }
-
-  .video-slide {
-    height: 100vh !important;
-    width: 100% !important;
-    background: black; /* Match video background */
-  }
-
-  .hero-video {
-    width: 100% !important;
-    height: auto !important; /* Change from 100% to auto */
-    max-height: 100vh !important;
-    object-fit: contain !important;
-    object-position: center center !important;
-  }
-
-  .hero-swiper {
-    height: 100vh !important;
-    background: black; /* Ensure black background */
-  }
-
-  .swiper-slide {
-    height: 100vh !important;
-    background: black; /* Ensure black background */
-  }
-
-  /* Hide pagination dots on mobile */
-  .swiper-pagination {
-    display: none !important;
-  }
-
-  /* Ensure text content stays visible */
-  .hero-text-content {
-    z-index: 20;
-    position: relative;
-  }
 }

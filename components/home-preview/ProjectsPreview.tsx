@@ -22,7 +22,7 @@ export default function ProjectsPreview() {
     {
       name: "Saif Mall & Residency",
       location: "Peshawar",
-      image: "/SiafMall.PNG",
+      image: "/expertise-images/saifMall.png",
       aspect: "850/545",
     },
     {

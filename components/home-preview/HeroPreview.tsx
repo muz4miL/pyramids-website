@@ -32,19 +32,8 @@ export default function HeroPreview() {
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
-  const [isMobile, setIsMobile] = useState(false);
   const videoRefs = useRef<HTMLVideoElement[]>([]);
   const swiperRef = useRef<SwiperType | null>(null);
-
-  // Detect mobile device
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
 
   // Define video slides
   const videoSlides: VideoSlide[] = useMemo(
@@ -80,41 +69,12 @@ export default function HeroPreview() {
     []
   );
 
-  // Optimized video preloading for mobile
-  useEffect(() => {
-    if (isMobile) {
-      // On mobile, only preload the first video initially
-      const firstVideo = document.createElement("video");
-      firstVideo.src = videoSlides[0].video;
-      firstVideo.preload = "metadata"; // Use metadata instead of auto for mobile
-      firstVideo.load();
-    } else {
-      // On desktop, preload all videos
-      videoSlides.forEach((slide) => {
-        const video = document.createElement("video");
-        video.src = slide.video;
-        video.preload = "auto";
-        video.load();
-      });
-    }
-  }, [videoSlides, isMobile]);
-
   const handleVideoReady = () => {
     setIsVideoLoaded(true);
   };
 
   const handleSlideChange = (swiper: SwiperType) => {
     setActiveSlide(swiper.realIndex);
-
-    // Preload next video when slide changes on mobile
-    if (isMobile) {
-      const nextIndex = (swiper.realIndex + 1) % videoSlides.length;
-      const nextVideo = document.createElement("video");
-      nextVideo.src = videoSlides[nextIndex].video;
-      nextVideo.preload = "metadata";
-      nextVideo.load();
-    }
-
     if (isPlaying) {
       videoRefs.current.forEach((video) => {
         if (video) video.play().catch(() => {});
@@ -125,13 +85,8 @@ export default function HeroPreview() {
   const addVideoRef = (el: HTMLVideoElement | null, index: number) => {
     if (el) {
       videoRefs.current[index] = el;
-
-      // Optimize video for mobile
-      if (isMobile) {
-        el.playsInline = true;
-        el.muted = true;
-        el.preload = "metadata";
-      }
+      el.playsInline = true;
+      el.muted = true;
     }
   };
 
@@ -144,7 +99,6 @@ export default function HeroPreview() {
         if (v) {
           v.play().catch((e) => {
             console.log("Video play failed:", e);
-            // Fallback: restart swiper autoplay even if video fails
             swiperRef.current?.autoplay?.start();
           });
         }
@@ -153,70 +107,11 @@ export default function HeroPreview() {
     setIsPlaying((prev) => !prev);
   }, [isPlaying]);
 
-  const handleScrollDown = () => {
-    const nextSection = document.getElementById("expertise");
-    if (nextSection) {
-      nextSection.scrollIntoView({ behavior: "smooth" });
-    } else {
-      window.scrollBy({ top: window.innerHeight, behavior: "smooth" });
-    }
-  };
-
   return (
-    <div className="hero-container">
-      {/* --- TEXT SECTION --- */}
-      <div className="hero-text-content">
-        <motion.div
-          key={activeSlide}
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="flex flex-col items-start text-left w-full md:max-w-md lg:max-w-lg space-y-4 sm:space-y-5 md:space-y-6"
-        >
-          {/* Headline */}
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.15 }}
-            className="font-oswald text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold uppercase leading-tight"
-          >
-            {videoSlides[activeSlide]?.title}
-            <br className="hidden md:block" />{" "}
-            <span className="text-orange-500">
-              {videoSlides[activeSlide]?.subtitle}
-            </span>
-          </motion.h1>
-
-          {/* Description */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
-            className="font-inter text-sm sm:text-base md:text-lg leading-relaxed max-w-full md:max-w-lg"
-          >
-            {videoSlides[activeSlide]?.description}
-          </motion.p>
-
-          {/* CTA Button */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.45 }}
-            className="w-full sm:w-auto"
-          >
-            <motion.button
-              whileHover={{ scale: 1.03, y: -1 }}
-              whileTap={{ scale: 0.97 }}
-              className="w-full sm:w-auto px-6 py-3 sm:px-8 sm:py-4 bg-orange-500 text-black font-bold text-base sm:text-lg rounded-none uppercase tracking-wider transition-all duration-300 hover:bg-white flex items-center justify-center gap-2 font-inter border-2 border-orange-500 hover:border-white"
-            >
-              Get In Touch
-              <ArrowRight size={16} className="sm:w-18" />
-            </motion.button>
-          </motion.div>
-        </motion.div>
-      </div>
-
-      {/* --- VIDEO SWIPER SECTION --- */}
+    <div className="hero-container mt-0 md:mt-0">
+      {" "}
+      {/* Force no top margin */}
+      {/* Video Section - Will be first on mobile via CSS */}
       <div className="hero-swiper-wrapper">
         <Swiper
           onSwiper={(swiper) => (swiperRef.current = swiper)}
@@ -239,22 +134,16 @@ export default function HeroPreview() {
         >
           {videoSlides.map((slide, index) => (
             <SwiperSlide key={slide.id}>
-              <div
-                className={`video-slide ${
-                  isMobile ? "mobile-video-slide" : ""
-                }`}
-              >
+              <div className="video-slide">
                 <video
                   ref={(el) => addVideoRef(el, index)}
                   autoPlay
                   loop
                   muted
                   playsInline
-                  preload={isMobile ? "metadata" : "auto"}
+                  preload="metadata"
                   poster={slide.poster}
-                  className={`hero-video ${
-                    isMobile ? "object-contain w-full h-full" : "object-cover"
-                  }`}
+                  className="hero-video"
                   onCanPlayThrough={handleVideoReady}
                   onError={() =>
                     console.error(`Video ${index + 1} failed to load`)
@@ -268,16 +157,60 @@ export default function HeroPreview() {
           ))}
         </Swiper>
 
-        {/* Play/Pause Button */}
         <div className="video-controls" onClick={togglePlayPause}>
           {isPlaying ? <Pause /> : <Play />}
         </div>
 
-        {/* Desktop-only overlay */}
         <div className="desktop-overlay" />
-
-        {/* Swiper pagination container */}
         <div className="swiper-pagination" />
+      </div>
+      {/* Text Section - Will be second on mobile via CSS */}
+      <div className="hero-text-content">
+        <motion.div
+          key={activeSlide}
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="flex flex-col items-start text-left w-full md:max-w-md lg:max-w-lg space-y-4 sm:space-y-5 md:space-y-6"
+        >
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.15 }}
+            className="font-oswald text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold uppercase leading-tight"
+          >
+            {videoSlides[activeSlide]?.title}
+            <br className="hidden md:block" />{" "}
+            <span className="text-orange-500">
+              {videoSlides[activeSlide]?.subtitle}
+            </span>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            className="font-inter text-sm sm:text-base md:text-lg leading-relaxed max-w-full md:max-w-lg"
+          >
+            {videoSlides[activeSlide]?.description}
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.45 }}
+            className="w-full sm:w-auto"
+          >
+            <motion.button
+              whileHover={{ scale: 1.03, y: -1 }}
+              whileTap={{ scale: 0.97 }}
+              className="w-full sm:w-auto px-6 py-3 sm:px-8 sm:py-4 bg-orange-500 text-black font-bold text-base sm:text-lg rounded-none uppercase tracking-wider transition-all duration-300 hover:bg-white flex items-center justify-center gap-2 font-inter border-2 border-orange-500 hover:border-white"
+            >
+              Get In Touch
+              <ArrowRight size={16} className="sm:w-18" />
+            </motion.button>
+          </motion.div>
+        </motion.div>
       </div>
     </div>
   );
