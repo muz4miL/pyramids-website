@@ -64,11 +64,10 @@ const galleryImageData: GalleryItem[] = [
   },
 ];
 
-// --- PREMIUM FAN-SHOWCASE COMPONENT ---
-const FannedShowcase = () => {
+// --- DESKTOP FANNED SHOWCASE (Your original code) ---
+const DesktopFannedShowcase = () => {
   const showcaseImages = galleryImageData.slice(0, 5);
 
-  // Fixed TypeScript variants using Framer Motion's built-in Variants type
   const cardVariants: Variants = {
     hidden: {
       opacity: 0,
@@ -155,6 +154,94 @@ const FannedShowcase = () => {
   );
 };
 
+// --- MOBILE FANNED SHOWCASE (Optimized for mobile) ---
+const MobileFannedShowcase = () => {
+  const showcaseImages = galleryImageData.slice(0, 3); // Only 3 images for mobile
+
+  const mobileCardVariants: Variants = {
+    hidden: {
+      opacity: 0,
+      y: 30,
+    },
+    visible: (i: number) => {
+      const transforms = [
+        { x: -60, rotate: -8 }, // Reduced spread and rotation
+        { x: 0, rotate: 0 }, // Center card
+        { x: 60, rotate: 8 }, // Reduced spread and rotation
+      ];
+
+      const zIndex = i === 1 ? 10 : 5 - Math.abs(i - 1); // Center is index 1 now
+
+      return {
+        opacity: 1,
+        y: 0,
+        x: `${transforms[i].x}%`,
+        rotate: transforms[i].rotate,
+        zIndex: zIndex,
+        filter: i === 1 ? "grayscale(0%)" : "grayscale(100%)",
+        transition: {
+          duration: 0.6,
+          delay: i * 0.1,
+          ease: "easeOut" as const,
+        },
+      };
+    },
+  };
+
+  return (
+    <div className="space-y-12">
+      {/* INTRO TEXT SECTION - Mobile Optimized */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true }}
+        className="text-center max-w-4xl mx-auto px-4"
+      >
+        <h3 className="font-oswald text-2xl font-bold text-gray-900 uppercase mb-4">
+          Where <span className="text-orange-500">Excellence</span> Meets
+          Innovation
+        </h3>
+        <p className="font-inter text-base text-gray-600 leading-relaxed">
+          Every structure we create embodies our commitment to architectural
+          precision, engineering{" "}
+          <span className="text-orange-500">excellence</span>, and sustainable
+          design principles that stand the test of time.
+        </p>
+      </motion.div>
+
+      {/* MOBILE FANNED SHOWCASE */}
+      <motion.div
+        className="relative h-48 w-full flex justify-center items-center lg:hidden"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+      >
+        {showcaseImages.map((item, i) => (
+          <motion.div
+            key={item.id}
+            className="absolute w-32 h-48 shadow-xl overflow-hidden"
+            variants={mobileCardVariants}
+            custom={i}
+            style={{
+              transformOrigin: "center bottom",
+            }}
+          >
+            <Image
+              src={item.imageUrl}
+              alt={item.title}
+              fill
+              className="object-cover"
+              sizes="128px"
+              priority={i === 1}
+            />
+          </motion.div>
+        ))}
+      </motion.div>
+    </div>
+  );
+};
+
 export default function GalleryGrid() {
   const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null);
 
@@ -178,7 +265,15 @@ export default function GalleryGrid() {
         </motion.div>
 
         {/* FANNED SHOWCASE WITH TEXT SECTIONS */}
-        <FannedShowcase />
+        {/* Desktop Version */}
+        <div className="hidden lg:block">
+          <DesktopFannedShowcase />
+        </div>
+
+        {/* Mobile Version */}
+        <div className="lg:hidden">
+          <MobileFannedShowcase />
+        </div>
 
         {/* FULL PORTFOLIO SECTION TITLE */}
         <motion.div

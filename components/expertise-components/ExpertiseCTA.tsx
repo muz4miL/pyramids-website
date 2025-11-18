@@ -1,11 +1,12 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useInView } from "react-intersection-observer";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react"; // Add this import
 
 export default function ExpertiseCTA() {
-  const { ref, inView } = useInView({
-    triggerOnce: true,
+  const ref = useRef(null);
+  const isInView = useInView(ref, {
+    once: true,
     threshold: 0.1,
   });
 
@@ -27,12 +28,12 @@ export default function ExpertiseCTA() {
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
         >
           <motion.h2
             initial={{ opacity: 0 }}
-            animate={inView ? { opacity: 1 } : {}}
+            animate={isInView ? { opacity: 1 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-4xl md:text-5xl lg:text-6xl font-bold text-white uppercase mb-8 font-oswald leading-tight"
           >
@@ -43,7 +44,7 @@ export default function ExpertiseCTA() {
 
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
-            animate={inView ? { opacity: 1, scale: 1 } : {}}
+            animate={isInView ? { opacity: 1, scale: 1 } : {}}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
             <motion.a
