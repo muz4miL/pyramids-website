@@ -1,10 +1,8 @@
-// app/developments/page.tsx
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import ArchitecturalDivider from "@/components/StructuralDivider";
 
-// Development page components with updated names
-("@/components/about-components/AboutHero");
+// Development page components
 import HeroDevelopment from "@/components/development-components/HeroDevelopment";
 import ProjectShowcaseSection from "@/components/development-components/ProjectShowcaseSection";
 import InvestAdvantages from "@/components/development-components/InvestAdvantages";

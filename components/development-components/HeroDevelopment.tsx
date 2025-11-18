@@ -1,4 +1,3 @@
-// components/developments-components/HeroDevelopment.tsx
 "use client";
 
 import { motion } from "framer-motion";
@@ -43,8 +42,8 @@ const HeroDevelopment = () => {
       {/* LAYER 1: BACKGROUND IMAGE */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/expertise-images/Lavita.png" // Using your LaVita image
-          alt="LaVita Malam Jabba - Luxury Development"
+          src="/expertise-images/Lavita.png"
+          alt="Premium Real Estate Developments"
           fill
           priority
           quality={90}
@@ -73,11 +72,11 @@ const HeroDevelopment = () => {
           >
             <div className="w-4 h-4 bg-orange-500 mr-3" />
             <span className="font-inter text-orange-500 font-medium text-sm tracking-widest uppercase">
-              OUR DEVELOPMENTS
+              PREMIUM OPPORTUNITIES
             </span>
           </motion.div>
 
-          {/* Main Headline */}
+          {/* Main Headline - UPDATED TEXT */}
           <motion.h1
             className="font-oswald text-5xl md:text-6xl lg:text-7xl font-medium uppercase leading-tight tracking-tight"
             variants={itemVariants}
@@ -86,17 +85,16 @@ const HeroDevelopment = () => {
             <br />
             Real Estate
             <br />
-            <span className="text-orange-500">Developments</span>
+            <span className="text-orange-500">Opportunities</span>
           </motion.h1>
 
-          {/* Brand Description Text */}
+          {/* Brand Description Text - UPDATED */}
           <motion.p
             className="font-inter text-lg lg:text-xl text-gray-200 mt-10 max-w-md leading-relaxed"
             variants={itemVariants}
           >
-            Discover our portfolio of luxury developments, from mountain
-            retreats to urban landmarks. Each project embodies our commitment to
-            excellence and innovation.
+            Exclusive investment opportunities in luxury developments that
+            redefine premium living and deliver exceptional returns.
           </motion.p>
         </motion.div>
       </div>

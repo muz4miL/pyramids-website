@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import Link from "next/link"; // Add Link for the "View Profile" buttons
 
 export default function LeadershipTeamSection() {
   const { ref, inView } = useInView({
@@ -11,27 +12,29 @@ export default function LeadershipTeamSection() {
 
   const teamMembers = [
     {
-      name: "ENGR. ABDUL REHMAN",
-      position: "PRINCIPAL ENGINEER & FOUNDER",
+      name: "ENGR. IMRAN SIDDIQUE",
+      position: "CHIEF EXECUTIVE OFFICER",
+      // Shortened, punchy description
       description:
-        "With over 25 years of experience in structural engineering and project management, Engr. Abdul Rehman provides strategic leadership and technical oversight for all major projects.",
+        "25+ years of experience providing the strategic vision and technical leadership that defines Pyramids' excellence.",
     },
     {
-      name: "ENGR. MUHAMMAD ALI",
-      position: "SENIOR PROJECT DIRECTOR",
+      name: "ARCH. SHAKEEL",
+      position: "PRINCIPAL ARCHITECT",
       description:
-        "Specializing in high-rise structures and complex architectural designs, Engr. Muhammad Ali ensures precision engineering and innovative solutions for our most challenging projects.",
+        "Blending aesthetic innovation with functional design to create landmark structures across the region.",
     },
     {
-      name: "ARCH. SARA AHMED",
-      position: "LEAD ARCHITECT",
+      name: "ENGR. ASAD KHAN",
+      position: "STRUCTURAL ENGINEER",
       description:
-        "Bringing creative vision and technical expertise, Arch. Sara Ahmed leads our architectural team in designing spaces that blend aesthetic appeal with functional excellence.",
+        "Ensuring structural integrity and precision engineering for our most complex high-rise developments.",
     },
   ];
 
   return (
-    <section ref={ref} className="w-full bg-black text-white py-16 lg:py-28">
+    // Reduced vertical padding (py-20 instead of py-28)
+    <section ref={ref} className="w-full bg-black text-white py-16 lg:py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
@@ -41,7 +44,7 @@ export default function LeadershipTeamSection() {
             hidden: { opacity: 0, y: 20 },
             visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
           }}
-          className="text-center mb-16 lg:mb-20"
+          className="text-center mb-12"
         >
           <div className="flex items-center justify-center mb-4">
             <div className="w-4 h-4 bg-orange-500 mr-3" />
@@ -55,16 +58,10 @@ export default function LeadershipTeamSection() {
             <br />
             DRIVING EXCELLENCE
           </h2>
-
-          <p className="font-inter text-lg text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Our leadership team brings decades of combined experience in
-            engineering and architecture, ensuring every project benefits from
-            seasoned expertise and innovative thinking.
-          </p>
         </motion.div>
 
         {/* Team Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {teamMembers.map((member, index) => (
             <motion.div
               key={index}
@@ -81,26 +78,33 @@ export default function LeadershipTeamSection() {
                   },
                 },
               }}
-              className="bg-gray-900 rounded-lg p-8 border border-gray-800 hover:border-orange-500 transition-all duration-300 hover:transform hover:-translate-y-2"
+              // FIX: Removed rounded-lg, added border-white/10, reduced padding
+              className="group bg-neutral-900 p-8 border border-white/10 hover:border-orange-500 transition-all duration-300"
             >
-              <div className="mb-6">
-                <div className="w-16 h-1 bg-orange-500 mb-4"></div>
-                <h3 className="font-oswald text-2xl font-medium text-white uppercase mb-2">
+              <div className="mb-4">
+                <div className="w-12 h-1 bg-orange-500 mb-4 transition-all duration-300 group-hover:w-20"></div>
+                <h3 className="font-oswald text-xl font-medium text-white uppercase mb-1">
                   {member.name}
                 </h3>
-                <p className="font-inter text-orange-500 text-sm uppercase tracking-wider mb-4">
+                <p className="font-inter text-orange-500 text-xs uppercase tracking-wider mb-4">
                   {member.position}
                 </p>
               </div>
 
-              <p className="font-inter text-gray-300 leading-relaxed">
+              <p className="font-inter text-gray-400 text-sm leading-relaxed mb-6">
                 {member.description}
               </p>
+
+              {/* Added Link to full team page */}
+              <Link
+                href="/others/team"
+                className="inline-flex items-center text-xs font-bold uppercase tracking-widest text-white hover:text-orange-500 transition-colors"
+              >
+                View Profile <span className="ml-2">→</span>
+              </Link>
             </motion.div>
           ))}
         </div>
-
-        {/* --- Trust Indicator Section REMOVED as requested --- */}
       </div>
     </section>
   );

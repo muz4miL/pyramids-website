@@ -1,4 +1,3 @@
-// components/developments-components/ContactDev.tsx
 "use client";
 
 import { motion } from "framer-motion";
@@ -31,17 +30,17 @@ const ContactDev = () => {
     {
       city: "PESHAWAR",
       address:
-        "Office 333, 3rd floor, Uhad tower, phase 3 chowk, near jaili kabab, Peshawar",
+        "Office 333, 3rd floor, Uhad tower, phase 3 chowk, near Jalil Kabab, Peshawar",
       type: "Main Office",
     },
     {
       city: "SWAT SITE OFFICE",
-      address: "LAVITA malam jabba, main malam chowk, malam jabba, Sawat",
+      address: "LAVITA malam jabba, main malam chowk, malam jabba, Swat",
       type: "Site Office",
     },
     {
       city: "ISLAMABAD",
-      address: "Office 30, 2nd floor, Aslam plaza, E11/2, Islamabad",
+      address: "Office 30, 2nd floor, Aslam Business Square, E11/2, Islamabad",
       type: "Branch Office",
     },
   ];
@@ -84,8 +83,8 @@ const ContactDev = () => {
         </svg>
       ),
       label: "Email Us",
-      details: ["info@lavitamalamjabba.com"],
-      link: "mailto:info@lavitamalamjabba.com",
+      details: ["info@pyramids.pk"],
+      link: "imran514@hotmail.com",
     },
     {
       icon: (
@@ -142,11 +141,12 @@ const ContactDev = () => {
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
-          {/* Contact Information */}
+          {/* Contact Information - WRAPPED IN GRAY CARD */}
           <motion.div
             initial="hidden"
             animate={inView ? "visible" : "hidden"}
             variants={fadeIn(0.2)}
+            className="bg-gray-50 p-8 border border-gray-200"
           >
             <h3 className="font-oswald text-2xl uppercase text-gray-900 mb-8">
               Contact Information
@@ -160,10 +160,10 @@ const ContactDev = () => {
                   initial="hidden"
                   animate={inView ? "visible" : "hidden"}
                   variants={fadeIn(0.3 + index * 0.1)}
-                  className="flex items-start space-x-4 p-4 rounded-xl bg-gray-50 border border-gray-200 hover:border-orange-500/30 transition-all duration-300 group"
+                  className="flex items-start space-x-4 p-4 bg-white border border-gray-200 hover:border-orange-500/30 transition-all duration-300 group"
                 >
                   {/* Icon */}
-                  <div className="flex-shrink-0 w-12 h-12 bg-orange-500/10 rounded-lg flex items-center justify-center group-hover:bg-orange-500/20 transition-colors">
+                  <div className="flex-shrink-0 w-12 h-12 bg-orange-500/10 flex items-center justify-center group-hover:bg-orange-500/20 transition-colors">
                     <div className="text-orange-500">{contact.icon}</div>
                   </div>
 
@@ -214,7 +214,7 @@ const ContactDev = () => {
                           {office.address}
                         </p>
                       </div>
-                      <span className="font-inter text-orange-500 text-xs uppercase tracking-wider bg-orange-500/10 px-2 py-1 rounded">
+                      <span className="font-inter text-orange-500 text-xs uppercase tracking-wider bg-orange-500/10 px-2 py-1">
                         {office.type}
                       </span>
                     </div>
@@ -224,109 +224,57 @@ const ContactDev = () => {
             </div>
           </motion.div>
 
-          {/* CTA Card */}
+          {/* PREMIUM CTA SECTION */}
           <motion.div
             initial="hidden"
             animate={inView ? "visible" : "hidden"}
             variants={fadeIn(0.4)}
+            className="relative min-h-[400px] flex items-center justify-center overflow-hidden"
           >
-            <div className="bg-gray-900 rounded-2xl p-8 lg:p-10 text-white h-full">
-              <div className="text-center mb-8">
-                <div className="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg
-                    className="w-8 h-8 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1.5}
-                      d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                    />
-                  </svg>
-                </div>
-                <h3 className="font-oswald text-2xl uppercase text-white mb-2">
-                  Ready to Invest?
-                </h3>
-                <p className="font-inter text-gray-300">
-                  Schedule a personalized consultation with our investment
-                  specialists
-                </p>
-              </div>
+            {/* Parallax Background */}
+            <div
+              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+              style={{
+                backgroundImage: 'url("/cta.png")',
+              }}
+            />
 
-              {/* Quick Actions */}
-              <div className="space-y-4 mb-8">
-                <motion.a
-                  href="tel:03358080802"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="flex items-center justify-center w-full bg-orange-500 text-black font-bold uppercase py-4 rounded-lg font-inter text-sm border-2 border-orange-500 hover:bg-white transition-all duration-300"
+            {/* Overlay */}
+            <div className="absolute inset-0 bg-black/50" />
+
+            {/* Content */}
+            <div className="relative z-10 w-full max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.8 }}
+              >
+                <motion.h2
+                  initial={{ opacity: 0 }}
+                  animate={inView ? { opacity: 1 } : {}}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  className="text-3xl md:text-4xl lg:text-5xl font-bold text-white uppercase mb-6 font-oswald leading-tight"
                 >
-                  <svg
-                    className="w-4 h-4 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                    />
-                  </svg>
-                  Call Now: 0335 8080802
-                </motion.a>
+                  Ready to Invest in
+                  <br />
+                  <span className="text-orange-500">Premium Real Estate?</span>
+                </motion.h2>
 
-                <motion.a
-                  href="/contact"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="flex items-center justify-center w-full bg-transparent text-white font-bold uppercase py-4 rounded-lg font-inter text-sm border-2 border-white hover:bg-white hover:text-black transition-all duration-300"
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={inView ? { opacity: 1, scale: 1 } : {}}
+                  transition={{ duration: 0.6, delay: 0.4 }}
                 >
-                  <svg
-                    className="w-4 h-4 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
+                  <motion.a
+                    href="/contact"
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="inline-block bg-orange-500 text-black font-bold uppercase px-12 py-4 shadow-2xl hover:bg-white transition-all duration-300 cursor-pointer font-inter text-lg border-2 border-orange-500 hover:border-white"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
-                    />
-                  </svg>
-                  Send Message
-                </motion.a>
-              </div>
-
-              {/* Additional Info */}
-              <div className="text-center">
-                <p className="font-inter text-gray-400 text-sm mb-4">
-                  What you'll get:
-                </p>
-                <div className="grid grid-cols-2 gap-3 text-xs">
-                  {[
-                    "Project Brochure",
-                    "Payment Plan",
-                    "Floor Plans",
-                    "Site Visit",
-                    "ROI Analysis",
-                    "Legal Documentation",
-                  ].map((item, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center justify-center text-gray-300"
-                    >
-                      <div className="w-1.5 h-1.5 bg-orange-500 rounded-full mr-2" />
-                      {item}
-                    </div>
-                  ))}
-                </div>
-              </div>
+                    START YOUR INVESTMENT
+                  </motion.a>
+                </motion.div>
+              </motion.div>
             </div>
           </motion.div>
         </div>

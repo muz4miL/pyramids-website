@@ -1,4 +1,3 @@
-// components/developments-components/InvestAdvantages.tsx
 "use client";
 
 import { motion } from "framer-motion";
@@ -223,7 +222,7 @@ const InvestAdvantages = () => {
                   initial="hidden"
                   animate={inView ? "visible" : "hidden"}
                   variants={fadeIn(0.3 + index * 0.1)}
-                  className="flex items-start space-x-4 p-4 rounded-xl bg-gray-900/50 border border-gray-800 hover:border-orange-500/30 transition-all duration-300 group"
+                  className="flex items-start space-x-4 p-4 border border-white/10 bg-gray-900/50 hover:border-orange-500/50 transition-all duration-300 group"
                 >
                   {/* Icon */}
                   <div className="flex-shrink-0 w-12 h-12 bg-orange-500/10 rounded-lg flex items-center justify-center group-hover:bg-orange-500/20 transition-colors">
@@ -250,7 +249,7 @@ const InvestAdvantages = () => {
             animate={inView ? "visible" : "hidden"}
             variants={fadeIn(0.4)}
           >
-            <div className="bg-gray-900 rounded-2xl p-8 border border-gray-800 sticky top-8">
+            <div className="bg-gray-900 border border-gray-800 p-8 sticky top-8">
               {/* Price Plan Header */}
               <div className="text-center mb-8">
                 <h3 className="font-oswald text-2xl uppercase text-white mb-2">
@@ -279,7 +278,7 @@ const InvestAdvantages = () => {
               </div>
 
               {/* Special Offer */}
-              <div className="bg-gradient-to-r from-orange-500/20 to-orange-500/10 rounded-xl p-6 border border-orange-500/30 mb-6">
+              <div className="bg-gradient-to-r from-orange-500/20 to-orange-500/10 p-6 border border-orange-500/30 mb-6">
                 <div className="text-center">
                   <div className="flex items-center justify-center mb-2">
                     <svg
@@ -313,7 +312,7 @@ const InvestAdvantages = () => {
                 href="/contact"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="block w-full bg-orange-500 text-black font-bold uppercase py-4 rounded-lg text-center font-inter text-sm border-2 border-orange-500 hover:bg-white transition-all duration-300"
+                className="block w-full bg-orange-500 text-black font-bold uppercase py-4 text-center font-inter text-sm border-2 border-orange-500 hover:bg-white transition-all duration-300"
               >
                 Schedule Investment Consultation
               </motion.a>

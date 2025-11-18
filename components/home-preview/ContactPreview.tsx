@@ -81,20 +81,20 @@ export default function ContactPreview() {
                   {
                     icon: Mail,
                     title: "Email",
-                    value: "contact@pyramids.com",
+                    value: "imran514@hotmail.com",
                     description: "Send us your project details",
                   },
                   {
                     icon: Phone,
                     title: "Phone",
-                    value: "+1 (555) 123-4567",
+                    value: "0334-514-8335",
                     description: "Direct consultation",
                   },
                   {
                     icon: MapPin,
                     title: "Studio",
-                    value: "Design District",
-                    description: "Visit our office",
+                    value: "Peshawar Office",
+                    description: "LG 25, Town Heights, Old Bara Road, Peshawar",
                   },
                 ].map((contact, index) => {
                   const Icon = contact.icon;

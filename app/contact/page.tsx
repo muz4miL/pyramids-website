@@ -2,313 +2,378 @@
 
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import Navbar from "@/components/navbar";
-import Footer from "@/components/footer";
-// --- 1. IMPORT THE NEW ICONS ---
-import { Building2, Phone, Mail, Clock } from "lucide-react";
+import { Variants } from "framer-motion";
+import Image from "next/image";
+import { useState, useEffect } from "react";
+import { developments } from "@/data/developmentsData";
+import { useRouter } from "next/navigation";
+import { X, Check, Calendar, Download } from "lucide-react";
 
-export default function ContactPage() {
-  const { ref: formRef, inView: formInView } = useInView({
+const fadeIn = (delay = 0): Variants => ({
+  hidden: {
+    opacity: 0,
+    y: 20,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut",
+      delay,
+    },
+  },
+});
+
+interface ProjectModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  project: (typeof developments)[0] | null;
+}
+
+const ProjectModal = ({ isOpen, onClose, project }: ProjectModalProps) => {
+  const [activeTab, setActiveTab] = useState<"overview" | "investment">(
+    "overview"
+  );
+  const router = useRouter();
+
+  // PREVENT BACKGROUND SCROLL WHEN MODAL IS OPEN
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
+
+  if (!project) return null;
+
+  const handleScheduleVisit = () => {
+    onClose();
+    router.push("/contact");
+  };
+
+  const handleDownloadBrochure = () => {
+    const link = document.createElement("a");
+    link.href = "/Brochure.pdf";
+    link.download = `Pyramids-${project.title.replace(
+      /\s+/g,
+      "-"
+    )}-Brochure.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  return (
+    <div
+      className={`fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm ${
+        isOpen ? "flex" : "hidden"
+      }`}
+      onClick={onClose}
+    >
+      <div
+        className="bg-white max-w-4xl w-full max-h-[80vh] overflow-auto border border-gray-300 relative my-8 lg:translate-y-12 flex flex-col"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header with Fixed Close Button */}
+        <div className="relative h-64 bg-gray-900 flex-shrink-0">
+          {" "}
+          {/* CHANGED: Added flex-shrink-0 */}
+          <Image
+            src={project.image}
+            alt={project.title}
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+          {/* FIXED CLOSE BUTTON - Perfect positioning */}
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 z-[99999] w-12 h-12 bg-black/90 hover:bg-orange-500 text-white flex items-center justify-center transition-all duration-300 group border border-white/20"
+            aria-label="Close modal"
+            title="Close modal"
+          >
+            <X className="w-6 h-6 group-hover:scale-110 transition-transform" />
+          </button>
+          <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+            <h2 className="font-oswald text-3xl md:text-4xl uppercase mb-2">
+              {project.title}
+            </h2>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                <span className="font-inter text-gray-300 text-sm">
+                  {project.location}
+                </span>
+                <span className="font-inter text-orange-400 text-sm">
+                  {project.category}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Tabs */}
+        <div className="flex border-b border-gray-200 flex-shrink-0">
+          {" "}
+          {/* CHANGED: Added flex-shrink-0 */}
+          {[
+            { id: "overview" as const, label: "Project Overview" },
+            { id: "investment" as const, label: "Investment" },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex-1 py-4 font-inter text-sm uppercase tracking-wider transition-all duration-300 ${
+                activeTab === tab.id
+                  ? "text-orange-500 border-b-2 border-orange-500 font-semibold"
+                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Tab Content - FIXED SCROLLING AREA */}
+        <div className="flex-1 min-h-0 overflow-y-auto">
+          {" "}
+          {/* CHANGED: Added overflow-y-auto here */}
+          <div className="p-6">
+            {" "}
+            {/* REMOVED: Fixed height */}
+            {activeTab === "overview" && (
+              <div className="space-y-6">
+                <p className="font-inter text-gray-700 leading-relaxed text-base">
+                  {project.description}
+                </p>
+
+                <div>
+                  <h4 className="font-oswald text-lg uppercase text-gray-900 mb-4">
+                    Key Features
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {project.features.map((feature, index) => (
+                      <div key={index} className="flex items-center">
+                        <div className="w-5 h-5 bg-orange-500 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                          <Check className="w-3 h-3 text-white" />
+                        </div>
+                        <span className="font-inter text-gray-600 text-sm">
+                          {feature}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+            {activeTab === "investment" && (
+              <div className="space-y-6">
+                <div className="bg-gradient-to-r from-orange-500/10 to-orange-500/5 p-6 border border-orange-500/20">
+                  <h4 className="font-oswald text-lg uppercase text-gray-900 mb-3">
+                    Investment Details
+                  </h4>
+                  <p className="font-oswald text-2xl text-orange-500 mb-2">
+                    {project.price}
+                  </p>
+                  <p className="font-inter text-gray-600 text-sm">
+                    Competitive pricing with exceptional value proposition
+                  </p>
+                </div>
+
+                <div>
+                  <h4 className="font-oswald text-lg uppercase text-gray-900 mb-4">
+                    Investment Benefits
+                  </h4>
+                  <div className="space-y-3">
+                    {project.investment.map((benefit, index) => (
+                      <div key={index} className="flex items-start">
+                        <div className="w-5 h-5 bg-orange-500 rounded-full flex items-center justify-center mr-3 mt-0.5 flex-shrink-0">
+                          <Check className="w-3 h-3 text-white" />
+                        </div>
+                        <span className="font-inter text-gray-700 text-sm leading-relaxed">
+                          {benefit}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Footer Buttons - ALWAYS VISIBLE AT BOTTOM */}
+        <div className="flex flex-col sm:flex-row gap-3 p-6 border-t border-gray-200 bg-gray-50 flex-shrink-0">
+          {" "}
+          {/* CHANGED: Added flex-shrink-0 */}
+          <motion.button
+            onClick={handleScheduleVisit}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="flex-1 bg-orange-500 text-white font-bold uppercase py-4 font-inter text-sm border-2 border-orange-500 hover:bg-orange-600 transition-all duration-300 flex items-center justify-center gap-2"
+          >
+            <Calendar className="w-4 h-4" />
+            Schedule Site Visit
+          </motion.button>
+          <motion.button
+            onClick={handleDownloadBrochure}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="flex-1 bg-transparent text-gray-700 font-bold uppercase py-4 font-inter text-sm border-2 border-gray-300 hover:border-orange-500 hover:text-orange-500 transition-all duration-300 flex items-center justify-center gap-2"
+          >
+            <Download className="w-4 h-4" />
+            Download Brochure
+          </motion.button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Rest of your component remains exactly the same...
+const ProjectShowcaseSection = () => {
+  const { ref, inView } = useInView({
     triggerOnce: true,
     threshold: 0.1,
   });
 
-  const scrollToMap = () => {
-    document
-      .getElementById("office-map")
-      ?.scrollIntoView({ behavior: "smooth" });
+  const [selectedProject, setSelectedProject] = useState<
+    (typeof developments)[0] | null
+  >(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleProjectClick = (project: (typeof developments)[0]) => {
+    setSelectedProject(project);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedProject(null);
   };
 
   return (
-    <main className="min-h-screen bg-background">
-      <Navbar />
+    <section
+      ref={ref}
+      className="relative w-full bg-white text-black overflow-hidden py-20 lg:py-28"
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section Header */}
+        <motion.div
+          className="text-center mb-16"
+          initial="hidden"
+          animate={inView ? "visible" : "hidden"}
+          variants={fadeIn(0)}
+        >
+          <div className="flex items-center justify-center mb-4">
+            <div className="w-4 h-4 bg-orange-500 mr-3" />
+            <span className="font-inter text-orange-500 font-medium text-sm tracking-widest uppercase">
+              FEATURED DEVELOPMENTS
+            </span>
+          </div>
 
-      {/* Hero Section - ONLY HEADER */}
-      <section className="relative bg-black text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center"
-          >
-            {/* Main Headline */}
-            <h1 className="font-oswald text-5xl md:text-6xl lg:text-7xl font-bold uppercase leading-tight mb-6">
-              Start Your
-              <br />
-              <span className="text-orange-500">Project</span>
-            </h1>
+          <h2 className="font-oswald text-4xl lg:text-5xl font-medium uppercase text-gray-900 leading-tight mb-6">
+            Current
+            <br />
+            <span className="text-orange-500">Projects</span>
+          </h2>
 
-            {/* Description */}
-            <p className="font-inter text-lg md:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
-              Ready to bring your vision to life? Let's discuss your project
-              with our architectural and engineering experts.
-            </p>
-          </motion.div>
-        </div>
-      </section>
+          <p className="font-inter text-lg text-gray-600 max-w-2xl mx-auto">
+            Explore our premium real estate developments that combine luxury
+            living with exceptional investment potential.
+          </p>
+        </motion.div>
 
-      {/* Main Content - 2 Column Layout */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
-            {/* Column 1: Contact Form */}
+        {/* Projects Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {developments.map((project, index) => (
             <motion.div
-              ref={formRef}
-              initial={{ opacity: 0, x: -50 }}
-              animate={formInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.8 }}
+              key={project.id}
+              initial="hidden"
+              animate={inView ? "visible" : "hidden"}
+              variants={fadeIn(0.2 + index * 0.2)}
+              className="group cursor-pointer"
+              onClick={() => handleProjectClick(project)}
             >
-              <h2 className="font-oswald text-3xl font-bold uppercase text-gray-900 mb-8">
-                Send Us a Message
-              </h2>
-
-              <form className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label
-                      htmlFor="firstName"
-                      className="block font-inter text-gray-700 mb-2"
-                    >
-                      First Name *
-                    </label>
-                    <input
-                      type="text"
-                      id="firstName"
-                      name="firstName"
-                      required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-300"
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="lastName"
-                      className="block font-inter text-gray-700 mb-2"
-                    >
-                      Last Name *
-                    </label>
-                    <input
-                      type="text"
-                      id="lastName"
-                      name="lastName"
-                      required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-300"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block font-inter text-gray-700 mb-2"
-                  >
-                    Email Address *
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-300"
+              {/* Project Card */}
+              <div className="bg-white border border-gray-200 shadow-lg overflow-hidden transition-all duration-300 group-hover:shadow-xl group-hover:border-orange-500/30">
+                {/* Image Container */}
+                <div className="relative h-80 overflow-hidden">
+                  <Image
+                    src={project.image}
+                    alt={project.title}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
-                <div>
-                  <label
-                    htmlFor="phone"
-                    className="block font-inter text-gray-700 mb-2"
-                  >
-                    Phone Number
-                  </label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-300"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="subject"
-                    className="block font-inter text-gray-700 mb-2"
-                  >
-                    Subject *
-                  </label>
-                  <input
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-300"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="message"
-                    className="block font-inter text-gray-700 mb-2"
-                  >
-                    Message *
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    rows={6}
-                    required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-300 resize-vertical"
-                  ></textarea>
-                </div>
-
-                <motion.button
-                  type="submit"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full bg-orange-500 text-black font-inter font-bold text-lg uppercase py-4 rounded-lg hover:bg-orange-600 transition-all duration-300 shadow-lg hover:shadow-orange-500/25"
-                >
-                  Send Message
-                </motion.button>
-              </form>
-            </motion.div>
-
-            {/* Column 2: Contact Information - PREMIUM CARD */}
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              animate={formInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.2 }}
-            >
-              <div className="bg-white rounded-2xl border border-gray-200 shadow-xl p-8 hover:shadow-2xl transition-all duration-300">
-                <h2 className="font-oswald text-3xl font-bold uppercase text-gray-900 mb-8">
-                  Get In Touch
-                </h2>
-
-                {/* Our Offices */}
-                <div className="mb-8">
-                  <h3 className="font-oswald text-xl font-bold uppercase text-gray-900 mb-4">
-                    Our Offices
-                  </h3>
-
-                  <div className="space-y-4">
-                    {/* --- 2. UPDATED ICON (ISLAMABAD) --- */}
-                    <div className="flex items-start">
-                      <div className="mr-4 mt-1 flex-shrink-0">
-                        <Building2 size={24} className="text-orange-500" />
-                      </div>
-                      <div>
-                        <h4 className="font-inter font-semibold text-gray-900">
-                          Islamabad (Head Office)
-                        </h4>
-                        <button
-                          onClick={scrollToMap}
-                          className="font-inter text-gray-600 hover:text-orange-500 transition-colors duration-300 text-left"
-                        >
-                          Office No.30, 2nd Floor, Aslam Business Square,
-                          E-11/2, Islamabad
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* --- 3. UPDATED ICON (PESHAWAR) --- */}
-                    <div className="flex items-start">
-                      <div className="mr-4 mt-1 flex-shrink-0">
-                        <Building2 size={24} className="text-orange-500" />
-                      </div>
-                      <div>
-                        <h4 className="font-inter font-semibold text-gray-900">
-                          Peshawar Office
-                        </h4>
-                        <p className="font-inter text-gray-600">
-                          LG 25, Town Heights, Old Bara Road, Peshawar
-                        </p>
-                      </div>
-                    </div>
+                  {/* Overlay Content */}
+                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                    <h3 className="font-oswald text-2xl uppercase mb-2">
+                      {project.title}
+                    </h3>
+                    <p className="font-inter text-gray-300 text-sm">
+                      {project.location}
+                    </p>
                   </div>
                 </div>
 
-                {/* Contact Details */}
-                <div className="mb-8">
-                  <h3 className="font-oswald text-xl font-bold uppercase text-gray-900 mb-4">
-                    Contact Details
-                  </h3>
-
-                  <div className="space-y-4">
-                    {/* --- 4. UPDATED ICON (PHONE) --- */}
-                    <div className="flex items-center">
-                      <div className="mr-4 flex-shrink-0">
-                        <Phone size={24} className="text-orange-500" />
-                      </div>
-                      <div>
-                        <p className="font-inter text-gray-600">
-                          0334-514-8335
-                        </p>
-                        <p className="font-inter text-gray-600">051-230-5537</p>
-                      </div>
-                    </div>
-
-                    {/* --- 5. UPDATED ICON (EMAIL) --- */}
-                    <div className="flex items-center">
-                      <div className="mr-4 flex-shrink-0">
-                        <Mail size={24} className="text-orange-500" />
-                      </div>
-                      <div>
-                        <p className="font-inter text-gray-600">
-                          imran514@hotmail.com
-                        </p>
-                        <div className="flex items-center mt-1">
-                          <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
-                          <p className="font-inter text-sm text-orange-500 font-semibold">
-                            Professional email recommended: info@pyramids.pk
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Business Hours */}
-                <div>
-                  <h3 className="font-oswald text-xl font-bold uppercase text-gray-900 mb-4">
-                    Business Hours
-                  </h3>
-
-                  {/* --- 6. UPDATED ICON (HOURS) --- */}
-                  <div className="flex items-center">
-                    <div className="mr-4 flex-shrink-0">
-                      <Clock size={24} className="text-orange-500" />
-                    </div>
+                {/* Card Content */}
+                <div className="p-6">
+                  <div className="flex justify-between items-start mb-4">
                     <div>
-                      <p className="font-inter text-gray-600">
-                        Monday - Friday: 10:00 AM - 5:00 PM
+                      <span className="font-inter text-orange-500 text-sm uppercase tracking-wider">
+                        {project.category}
+                      </span>
+                      <p className="font-oswald text-lg text-gray-900 mt-1">
+                        {project.price}
                       </p>
                     </div>
                   </div>
+
+                  <p className="font-inter text-gray-600 text-sm mb-4 leading-relaxed">
+                    {project.description}
+                  </p>
+
+                  {/* Features */}
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {project.features
+                      .slice(0, 3)
+                      .map((feature, featureIndex) => (
+                        <span
+                          key={featureIndex}
+                          className="px-2 py-1 bg-gray-100 text-gray-600 text-xs font-inter"
+                        >
+                          {feature}
+                        </span>
+                      ))}
+                  </div>
+
+                  {/* Button */}
+                  <button className="w-full py-3 border border-gray-300 text-gray-700 font-inter text-sm uppercase tracking-wider hover:bg-orange-500 hover:border-orange-500 hover:text-white transition-all duration-300">
+                    View Project Details
+                  </button>
                 </div>
               </div>
             </motion.div>
-          </div>
+          ))}
         </div>
-      </section>
+      </div>
 
-      {/* Interactive Map Section - NO HEADER */}
-      <section id="office-map" className="bg-gray-100 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Google Map Embed */}
-          <div className="rounded-2xl overflow-hidden shadow-2xl">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3320.552391328333!2d73.03121527533824!3d33.68444037331807!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38dfbfb2bfc1dafd%3A0x5a1b583b641e6f1e!2sE-11%2C%20Islamabad%2C%20Islamabad%20Capital%20Territory%2C%20Pakistan!5e0!3m2!1sen!2s!4v1698765432107!5m2!1sen!2s"
-              width="100%"
-              height="450"
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="Pyramids Head Office Location"
-            ></iframe>
-          </div>
-        </div>
-      </section>
-
-      <Footer />
-    </main>
+      {/* Modal */}
+      <ProjectModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        project={selectedProject}
+      />
+    </section>
   );
-}
+};
+
+export default ProjectShowcaseSection;
