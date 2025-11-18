@@ -32,8 +32,20 @@ export default function HeroPreview() {
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
   const videoRefs = useRef<HTMLVideoElement[]>([]);
   const swiperRef = useRef<SwiperType | null>(null);
+
+  // Check if mobile on component mount and resize
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   // Define video slides
   const videoSlides: VideoSlide[] = useMemo(
@@ -107,11 +119,12 @@ export default function HeroPreview() {
     setIsPlaying((prev) => !prev);
   }, [isPlaying]);
 
+  // For mobile, we'll use the second slide (ENGINEERING EXCELLENCE) as static content
+  const mobileSlide = videoSlides[1]; // ENGINEERING EXCELLENCE slide
+
   return (
     <div className="hero-container mt-0 md:mt-0">
-      {" "}
-      {/* Force no top margin */}
-      {/* Video Section - Will be first on mobile via CSS */}
+      {/* Video Section */}
       <div className="hero-swiper-wrapper">
         <Swiper
           onSwiper={(swiper) => (swiperRef.current = swiper)}
@@ -164,53 +177,89 @@ export default function HeroPreview() {
         <div className="desktop-overlay" />
         <div className="swiper-pagination" />
       </div>
-      {/* Text Section - Will be second on mobile via CSS */}
+
+      {/* Text Section */}
       <div className="hero-text-content">
-        <motion.div
-          key={activeSlide}
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="flex flex-col items-start text-left w-full md:max-w-md lg:max-w-lg space-y-4 sm:space-y-5 md:space-y-6"
-        >
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.15 }}
-            className="font-oswald text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold uppercase leading-tight"
-          >
-            {videoSlides[activeSlide]?.title}
-            <br className="hidden md:block" />{" "}
-            <span className="text-orange-500">
-              {videoSlides[activeSlide]?.subtitle}
-            </span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
-            className="font-inter text-sm sm:text-base md:text-lg leading-relaxed max-w-full md:max-w-lg"
-          >
-            {videoSlides[activeSlide]?.description}
-          </motion.p>
-
+        {/* Desktop: Animated text that changes with slides */}
+        {!isMobile && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.45 }}
-            className="w-full sm:w-auto"
+            key={activeSlide}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="flex flex-col items-start text-left w-full md:max-w-md lg:max-w-lg space-y-4 sm:space-y-5 md:space-y-6"
           >
-            <motion.button
-              whileHover={{ scale: 1.03, y: -1 }}
-              whileTap={{ scale: 0.97 }}
-              className="w-full sm:w-auto px-6 py-3 sm:px-8 sm:py-4 bg-orange-500 text-black font-bold text-base sm:text-lg rounded-none uppercase tracking-wider transition-all duration-300 hover:bg-white flex items-center justify-center gap-2 font-inter border-2 border-orange-500 hover:border-white"
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.15 }}
+              className="font-oswald text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold uppercase leading-tight"
             >
-              Get In Touch
-              <ArrowRight size={16} className="sm:w-18" />
-            </motion.button>
+              {videoSlides[activeSlide]?.title}
+              <br className="hidden md:block" />{" "}
+              <span className="text-orange-500">
+                {videoSlides[activeSlide]?.subtitle}
+              </span>
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.7, delay: 0.3 }}
+              className="font-inter text-sm sm:text-base md:text-lg leading-relaxed max-w-full md:max-w-lg"
+            >
+              {videoSlides[activeSlide]?.description}
+            </motion.p>
+
+            {/* NO BUTTON ON DESKTOP - Removed completely */}
           </motion.div>
-        </motion.div>
+        )}
+
+        {/* Mobile: Static ENGINEERING EXCELLENCE text with button */}
+        {isMobile && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="flex flex-col items-start text-left w-full space-y-5"
+          >
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+              className="font-oswald text-4xl font-bold uppercase leading-tight text-center w-full"
+            >
+              {mobileSlide.title}
+              <br />
+              <span className="text-orange-500">{mobileSlide.subtitle}</span>
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.7, delay: 0.4 }}
+              className="font-inter text-base leading-relaxed text-center w-full px-4"
+            >
+              {mobileSlide.description}
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.6 }}
+              className="w-full flex justify-center"
+            >
+              <motion.button
+                whileHover={{ scale: 1.03, y: -1 }}
+                whileTap={{ scale: 0.97 }}
+                className="px-8 py-4 bg-orange-500 text-black font-bold text-lg rounded-none uppercase tracking-wider transition-all duration-300 hover:bg-white flex items-center justify-center gap-2 font-inter border-2 border-orange-500 hover:border-white"
+              >
+                Get In Touch
+                <ArrowRight size={18} />
+              </motion.button>
+            </motion.div>
+          </motion.div>
+        )}
       </div>
     </div>
   );
