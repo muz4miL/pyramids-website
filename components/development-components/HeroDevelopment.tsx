@@ -42,7 +42,7 @@ const HeroDevelopment = () => {
       {/* LAYER 1: BACKGROUND IMAGE */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/expertise-images/Lavita.png"
+          src="/expertise-images/MalamJabbaLavita.PNG"
           alt="Premium Real Estate Developments"
           fill
           priority

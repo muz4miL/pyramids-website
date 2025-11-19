@@ -1,10 +1,13 @@
 "use client";
 
-import type React from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { useState } from "react";
 import { Mail, Phone, MapPin, ArrowRight } from "lucide-react";
+import emailjs from "@emailjs/browser";
+
+// Initialize EmailJS
+emailjs.init("Cpn322BDQ9EFLPqiq");
 
 export default function ContactPreview() {
   const { ref, inView } = useInView({
@@ -13,10 +16,15 @@ export default function ContactPreview() {
   });
 
   const [formData, setFormData] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
     email: "",
+    phone: "",
+    subject: "",
     message: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [status, setStatus] = useState("");
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -25,10 +33,48 @@ export default function ContactPreview() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    setFormData({ name: "", email: "", message: "" });
+    setIsLoading(true);
+    setStatus("");
+
+    try {
+      const result = await emailjs.send(
+        "service_7syzf8p", // Your Service ID
+        "template_siau848", // Your Template ID
+        {
+          from_name: `${formData.firstName} ${formData.lastName}`,
+          from_email: formData.email,
+          phone: formData.phone,
+          subject: formData.subject,
+          message: formData.message,
+          to_email: "shirazmuzamil2@gmail.com", // TEST EMAIL - Change to imran514@hotmail.com later
+          reply_to: formData.email,
+        },
+        "Cpn322BDQ9EFLPqiq" // Your Public Key
+      );
+
+      console.log("Email sent successfully:", result);
+      setStatus("success");
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        subject: "",
+        message: "",
+      });
+    } catch (error: any) {
+      console.error("Email sending failed:", error);
+      console.error("Error details:", {
+        text: error.text,
+        status: error.status,
+        message: error.message,
+      });
+      setStatus("error");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -60,6 +106,18 @@ export default function ContactPreview() {
             Ready to bring your vision to life? Let's discuss your project.
           </p>
         </motion.div>
+
+        {/* Status Messages */}
+        {status === "success" && (
+          <div className="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg text-center">
+            ✅ Message sent successfully! We'll get back to you soon.
+          </div>
+        )}
+        {status === "error" && (
+          <div className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg text-center">
+            ❌ Failed to send message. Please try again or contact us directly.
+          </div>
+        )}
 
         {/* CLEAN 2-COLUMN LAYOUT */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
@@ -127,30 +185,45 @@ export default function ContactPreview() {
             </div>
           </motion.div>
 
-          {/* RIGHT - CLEAN FORM */}
+          {/* RIGHT - PROFESSIONAL FORM WITH ALL FIELDS */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.3 }}
           >
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Your Name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-none focus:outline-none focus:border-orange-500 text-black placeholder-gray-500 font-sans transition-all duration-300"
-                />
+              {/* Name Fields - Side by Side */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <input
+                    type="text"
+                    name="firstName"
+                    placeholder="First Name *"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 bg-white border border-gray-300 rounded-none focus:outline-none focus:border-orange-500 text-black placeholder-gray-500 font-sans transition-all duration-300"
+                  />
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    name="lastName"
+                    placeholder="Last Name *"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 bg-white border border-gray-300 rounded-none focus:outline-none focus:border-orange-500 text-black placeholder-gray-500 font-sans transition-all duration-300"
+                  />
+                </div>
               </div>
 
+              {/* Email */}
               <div>
                 <input
                   type="email"
                   name="email"
-                  placeholder="Your Email"
+                  placeholder="Email Address *"
                   value={formData.email}
                   onChange={handleChange}
                   required
@@ -158,10 +231,36 @@ export default function ContactPreview() {
                 />
               </div>
 
+              {/* Phone & Subject - Side by Side */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <input
+                    type="tel"
+                    name="phone"
+                    placeholder="Phone Number"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 bg-white border border-gray-300 rounded-none focus:outline-none focus:border-orange-500 text-black placeholder-gray-500 font-sans transition-all duration-300"
+                  />
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    name="subject"
+                    placeholder="Subject *"
+                    value={formData.subject}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 bg-white border border-gray-300 rounded-none focus:outline-none focus:border-orange-500 text-black placeholder-gray-500 font-sans transition-all duration-300"
+                  />
+                </div>
+              </div>
+
+              {/* Message */}
               <div>
                 <textarea
                   name="message"
-                  placeholder="Tell us about your project..."
+                  placeholder="Tell us about your project... *"
                   value={formData.message}
                   onChange={handleChange}
                   required
@@ -170,14 +269,16 @@ export default function ContactPreview() {
                 />
               </div>
 
+              {/* Submit Button */}
               <motion.button
                 type="submit"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="w-full px-8 py-4 bg-black text-white font-bold text-lg rounded-none uppercase tracking-wider hover:bg-orange-500 transition-all duration-300 flex items-center justify-center gap-3 font-heading"
+                disabled={isLoading}
+                whileHover={{ scale: isLoading ? 1 : 1.02 }}
+                whileTap={{ scale: isLoading ? 1 : 0.98 }}
+                className="w-full px-8 py-4 bg-black text-white font-bold text-lg rounded-none uppercase tracking-wider hover:bg-orange-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center gap-3 font-heading"
               >
-                Send Message
-                <ArrowRight size={18} />
+                {isLoading ? "Sending..." : "Send Message"}
+                {!isLoading && <ArrowRight size={18} />}
               </motion.button>
             </form>
           </motion.div>

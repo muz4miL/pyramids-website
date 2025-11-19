@@ -1,4 +1,3 @@
-// components/developments-components/FloorPlansSection.tsx
 "use client";
 
 import { motion } from "framer-motion";
@@ -43,13 +42,36 @@ const FloorPlansSection = () => {
   });
 
   const [selectedPlan, setSelectedPlan] = useState<number>(0);
+  const [isDownloading, setIsDownloading] = useState(false);
+
+  const handleDownloadBrochure = () => {
+    setIsDownloading(true);
+
+    try {
+      // Use absolute path from public folder
+      const link = document.createElement("a");
+      link.href = "/data/Designs.pdf"; // This should work if file is in public/data/
+      link.download = "LaVita-Designs-Brochure.pdf"; // Better filename
+
+      // Append to body, click, and remove
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      console.log("Brochure downloaded successfully");
+    } catch (error) {
+      console.error("Download failed:", error);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
 
   const floorPlans: FloorPlan[] = [
     {
       id: "ground-floor",
       title: "Multifunctional Hall & Dining",
       floor: "Ground Floor",
-      image: "/expertise-images/Lavita.png", // Replace with actual floor plan image
+      image: "/development-images/ground.png",
       suites: [
         {
           type: "Multifunctional Hall",
@@ -63,7 +85,7 @@ const FloorPlansSection = () => {
       id: "fourth-floor",
       title: "Deluxe & Executive Suites",
       floor: "Fourth Floor",
-      image: "/expertise-images/Lavita.png", // Replace with actual floor plan image
+      image: "/development-images/fourth.png",
       suites: [
         {
           type: "Deluxe Suite",
@@ -84,27 +106,27 @@ const FloorPlansSection = () => {
       ],
     },
     {
-      id: "seventh-floor",
-      title: "Stargazing Suites",
-      floor: "Seventh Floor",
-      image: "/expertise-images/Lavita.png", // Replace with actual floor plan image
+      id: "eighth-floor",
+      title: "Stargazing Floor", // Based on "Stargazing" labels on the plan [cite: 818, 828]
+      floor: "Eighth Floor", // Source: "8TH FLOOR PLAN" [cite: 832]
+      image: "/development-images/eighth.png",
       suites: [
         {
-          type: "Stargazing Deluxe Suite",
-          size: "540-612 SFT",
-          rooms: ["Studio Room", "Bath", "Premium Features"],
+          type: "Stargazing Studio", // Source: "STARGAZING STUDIO ROOM"
+          size: "450-500 SFT", // Based on dimensions 18'-3" x 25'-3" [cite: 804]
+          rooms: ["Spacious Bedroom", "Attached Bath", "Panoramic View"],
         },
         {
-          type: "Stargazing Executive Suite",
-          size: "887-914 SFT",
-          rooms: ["Bed Rooms", "Lounge", "Multiple Baths", "Premium Amenities"],
+          type: "Standard Studio", // Source: "STUDIO ROOM" [cite: 836]
+          size: "350-400 SFT", // Based on dimensions 13'-1" x 14'-8" [cite: 836]
+          rooms: ["Studio Space", "Attached Bath", "Services Access"],
         },
       ],
       features: [
-        "Stargazing Observatory Access",
-        "Premium Finishes",
-        "Luxury Bathrooms",
-        "Panoramic Views",
+        "Top Floor Elevation", // Inferred from "8TH FLOOR PLAN" [cite: 832]
+        "Stargazing Views", // Source: "STARGAZING" labels
+        "Direct Roof Access",
+        "Private & Exclusive",
       ],
     },
   ];
@@ -119,7 +141,7 @@ const FloorPlansSection = () => {
   return (
     <section
       ref={ref}
-      className="relative w-full bg-gray-50 text-black overflow-hidden py-20 lg:py-28"
+      className="relative w-full bg-black text-white overflow-hidden py-20 lg:py-28"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
@@ -136,13 +158,13 @@ const FloorPlansSection = () => {
             </span>
           </div>
 
-          <h2 className="font-oswald text-4xl lg:text-5xl font-medium uppercase text-gray-900 leading-tight mb-6">
+          <h2 className="font-oswald text-4xl lg:text-5xl font-medium uppercase text-white leading-tight mb-6">
             Floor Plans &
             <br />
             <span className="text-orange-500">Suite Types</span>
           </h2>
 
-          <p className="font-inter text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="font-inter text-lg text-gray-300 max-w-2xl mx-auto">
             Explore the meticulously designed floor plans and luxury suite
             options available at LaVita Malam Jabba. Each space is crafted for
             comfort and elegance.
@@ -160,8 +182,8 @@ const FloorPlansSection = () => {
               onClick={() => setSelectedPlan(index)}
               className={`p-6 rounded-xl text-left transition-all duration-300 ${
                 selectedPlan === index
-                  ? "bg-white shadow-lg border-2 border-orange-500"
-                  : "bg-gray-100 border-2 border-transparent hover:border-orange-500/30"
+                  ? "bg-gray-900 shadow-lg border-2 border-orange-500"
+                  : "bg-gray-800 border-2 border-transparent hover:border-orange-500/30"
               }`}
             >
               <div className="flex items-center mb-3">
@@ -170,11 +192,11 @@ const FloorPlansSection = () => {
                     selectedPlan === index ? "bg-orange-500" : "bg-gray-400"
                   }`}
                 />
-                <h3 className="font-oswald text-xl uppercase text-gray-900">
+                <h3 className="font-oswald text-xl uppercase text-white">
                   {plan.floor}
                 </h3>
               </div>
-              <p className="font-inter text-gray-600 text-sm">{plan.title}</p>
+              <p className="font-inter text-gray-300 text-sm">{plan.title}</p>
             </motion.button>
           ))}
         </div>
@@ -185,11 +207,11 @@ const FloorPlansSection = () => {
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
           variants={fadeIn(0.5)}
-          className="bg-white rounded-2xl shadow-lg overflow-hidden"
+          className="bg-gray-900 rounded-2xl shadow-lg overflow-hidden"
         >
           <div className="grid grid-cols-1 lg:grid-cols-2">
             {/* Floor Plan Image */}
-            <div className="relative h-80 lg:h-96 bg-gray-200">
+            <div className="relative h-80 lg:h-96 bg-gray-700">
               <Image
                 src={floorPlans[selectedPlan].image}
                 alt={floorPlans[selectedPlan].title}
@@ -205,13 +227,13 @@ const FloorPlansSection = () => {
 
             {/* Floor Plan Details */}
             <div className="p-6 lg:p-8">
-              <h3 className="font-oswald text-2xl uppercase text-gray-900 mb-4">
+              <h3 className="font-oswald text-2xl uppercase text-white mb-4">
                 {floorPlans[selectedPlan].title}
               </h3>
 
               {/* Suites */}
               <div className="mb-6">
-                <h4 className="font-oswald text-lg uppercase text-gray-900 mb-3">
+                <h4 className="font-oswald text-lg uppercase text-white mb-3">
                   Suite Types
                 </h4>
                 <div className="space-y-3">
@@ -222,7 +244,7 @@ const FloorPlansSection = () => {
                     >
                       <div className="flex justify-between items-start">
                         <div>
-                          <h5 className="font-oswald text-gray-900">
+                          <h5 className="font-oswald text-white">
                             {suite.type}
                           </h5>
                           <p className="font-inter text-orange-500 text-sm">
@@ -234,7 +256,7 @@ const FloorPlansSection = () => {
                         {suite.rooms.map((room, roomIndex) => (
                           <span
                             key={roomIndex}
-                            className="px-2 py-1 bg-gray-100 rounded text-xs font-inter text-gray-600"
+                            className="px-2 py-1 bg-gray-800 rounded text-xs font-inter text-gray-300"
                           >
                             {room}
                           </span>
@@ -247,14 +269,14 @@ const FloorPlansSection = () => {
 
               {/* Features */}
               <div>
-                <h4 className="font-oswald text-lg uppercase text-gray-900 mb-3">
+                <h4 className="font-oswald text-lg uppercase text-white mb-3">
                   Key Features
                 </h4>
                 <div className="grid grid-cols-2 gap-2">
                   {floorPlans[selectedPlan].features.map((feature, index) => (
                     <div key={index} className="flex items-center">
                       <div className="w-1.5 h-1.5 bg-orange-500 rounded-full mr-2" />
-                      <span className="font-inter text-gray-600 text-sm">
+                      <span className="font-inter text-gray-300 text-sm">
                         {feature}
                       </span>
                     </div>
@@ -262,13 +284,37 @@ const FloorPlansSection = () => {
                 </div>
               </div>
 
-              {/* CTA */}
+              {/* Download Brochure Button */}
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full bg-orange-500 text-black font-bold uppercase py-3 rounded-lg mt-6 font-inter text-sm border-2 border-orange-500 hover:bg-white transition-all duration-300"
+                onClick={handleDownloadBrochure}
+                disabled={isDownloading}
+                className="w-full bg-orange-500 text-black font-bold uppercase py-3 rounded-lg mt-6 font-inter text-sm border-2 border-orange-500 hover:bg-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
-                Download Detailed Floor Plan
+                {isDownloading ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                    Downloading...
+                  </>
+                ) : (
+                  <>
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                      />
+                    </svg>
+                    Download Complete Brochure
+                  </>
+                )}
               </motion.button>
             </div>
           </div>
@@ -281,14 +327,14 @@ const FloorPlansSection = () => {
           variants={fadeIn(0.7)}
           className="mt-16"
         >
-          <h3 className="font-oswald text-2xl uppercase text-gray-900 text-center mb-8">
+          <h3 className="font-oswald text-2xl uppercase text-white text-center mb-8">
             Suite Categories & Sizes
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {suiteTypes.map((suite, index) => (
               <div
                 key={index}
-                className="bg-white rounded-xl p-6 shadow-lg border border-gray-200 text-center"
+                className="bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-700 text-center"
               >
                 <div
                   className={`w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4 ${
@@ -319,7 +365,7 @@ const FloorPlansSection = () => {
                     />
                   </svg>
                 </div>
-                <h4 className="font-oswald text-lg text-gray-900 mb-2">
+                <h4 className="font-oswald text-lg text-white mb-2">
                   {suite.type}
                 </h4>
                 <p className="font-inter text-orange-500 text-sm mb-2">
@@ -328,10 +374,10 @@ const FloorPlansSection = () => {
                 <span
                   className={`inline-block px-3 py-1 rounded-full text-xs font-inter font-medium ${
                     suite.category === "Deluxe"
-                      ? "bg-orange-500/20 text-orange-700"
+                      ? "bg-orange-500/20 text-orange-300"
                       : suite.category === "Executive"
-                      ? "bg-blue-500/20 text-blue-700"
-                      : "bg-purple-500/20 text-purple-700"
+                      ? "bg-blue-500/20 text-blue-300"
+                      : "bg-purple-500/20 text-purple-300"
                   }`}
                 >
                   {suite.category}
