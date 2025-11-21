@@ -192,7 +192,7 @@ export default function Footer() {
             <div className="flex items-center gap-2">
               <img
                 alt="CodeClub"
-                src="/CodeClub.png"
+                src="/code-club-logo.png"
                 className="h-5 lg:h-10 w-auto" // Removed all filters
                 loading="lazy"
               />
