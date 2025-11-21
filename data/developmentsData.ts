@@ -6,7 +6,7 @@ export const developments = [
     location: "Malam Jabba, Swat",
     price: "PKR 18,000 / Sq. Ft",
     status: "Under Development",
-    image: "/expertise-images/MalamJabbaLavita.png",
+    image: "/expertise-images/MalamJabbaLavita.PNG",
     description:
       "The region's only fully serviced, luxury hotel apartments powered by Shelton's Rezidor Group. Perfectly positioned on Malam Jabba Road, offering effortless access to iconic natural attractions.",
     features: [
