@@ -1,14 +1,40 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, LazyMotion, domAnimation, Variants } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { Variants } from "framer-motion";
 import Image from "next/image";
-import { useState, useEffect } from "react";
-import { developments } from "@/data/developmentsData";
+import { useState, useEffect, useCallback, memo } from "react";
+import { createPortal } from "react-dom";
+import { developments } from "../../data/developmentsData";
 import { useRouter } from "next/navigation";
 import { X, Check, Calendar, Download } from "lucide-react";
 
+// Types - UPDATED TO MATCH YOUR DATA STRUCTURE
+interface Project {
+  id: number; // CHANGED FROM string TO number
+  title: string;
+  description: string;
+  image: string;
+  location: string;
+  category: string;
+  price: string;
+  status: string; // ADDED MISSING STATUS PROPERTY
+  features: string[];
+  investment: string[];
+}
+
+interface ProjectModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  project: Project | null;
+}
+
+// Optimized Framer Motion - only load essential animations
+const OptimizedMotion = ({ children }: { children: React.ReactNode }) => (
+  <LazyMotion features={domAnimation}>{children}</LazyMotion>
+);
+
+// Fixed fadeIn variants with proper typing
 const fadeIn = (delay = 0): Variants => ({
   hidden: {
     opacity: 0,
@@ -18,91 +44,142 @@ const fadeIn = (delay = 0): Variants => ({
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.6,
+      duration: 0.4,
       ease: "easeOut",
       delay,
     },
   },
 });
 
-interface ProjectModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  project: (typeof developments)[0] | null;
-}
-
-const ProjectModal = ({ isOpen, onClose, project }: ProjectModalProps) => {
+// Memoized modal component
+const ProjectModal = memo(({ isOpen, onClose, project }: ProjectModalProps) => {
   const [activeTab, setActiveTab] = useState<"overview" | "investment">(
     "overview"
   );
+  const [isVisible, setIsVisible] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const router = useRouter();
 
-  // PREVENT BACKGROUND SCROLL WHEN MODAL IS OPEN
+  // Handle Hydration mismatch for Portal
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
+
+  // Optimized scroll prevention
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
+      document.body.style.paddingRight = "0px";
+      setIsVisible(true);
     } else {
       document.body.style.overflow = "unset";
+      document.body.style.paddingRight = "0px";
+      const timer = setTimeout(() => setIsVisible(false), 300);
+      return () => clearTimeout(timer);
     }
 
     return () => {
       document.body.style.overflow = "unset";
+      document.body.style.paddingRight = "0px";
     };
   }, [isOpen]);
 
-  if (!project) return null;
-
-  const handleScheduleVisit = () => {
+  const handleScheduleVisit = useCallback(() => {
     onClose();
     router.push("/contact");
-  };
+  }, [onClose, router]);
 
-  const handleDownloadBrochure = () => {
-    const link = document.createElement("a");
-    link.href = "/Brochure.pdf";
-    link.download = `Pyramids-${project.title.replace(
-      /\s+/g,
-      "-"
-    )}-Brochure.pdf`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+  const handleDownloadBrochure = useCallback(() => {
+    if (!project) return;
 
-  return (
+    try {
+      const link = document.createElement("a");
+      link.href = "/Brochure.pdf";
+      link.download = `Pyramids-${project.title.replace(
+        /\s+/g,
+        "-"
+      )}-Brochure.pdf`;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("Failed to download brochure:", error);
+      window.open("/Brochure.pdf", "_blank");
+    }
+  }, [project]);
+
+  const handleTabClick = useCallback((tab: "overview" | "investment") => {
+    setActiveTab(tab);
+  }, []);
+
+  // Handle escape key press
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && isOpen) {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("keydown", handleEscape);
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [isOpen, onClose]);
+
+  if (!mounted || !project || !isVisible) return null;
+
+  return createPortal(
     <div
-      className={`fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm ${
-        isOpen ? "flex" : "hidden"
+      className={`fixed inset-0 z-[99999] flex items-center justify-center p-0 sm:p-4 bg-black/80 backdrop-blur-sm transition-opacity duration-300 ${
+        isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
       }`}
       onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
     >
       <div
-        className="bg-white w-full max-w-full sm:max-w-4xl h-full sm:h-auto sm:max-h-[85vh] border border-gray-300 relative sm:my-8 flex flex-col"
+        className={`
+          bg-white 
+          w-full h-full 
+          sm:w-full sm:max-w-4xl sm:h-auto sm:max-h-[85vh] sm:rounded-lg
+          border border-gray-300 relative flex flex-col transform transition-transform duration-300 shadow-2xl
+        `}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header with Fixed Close Button - Mobile Optimized */}
-        <div className="relative h-48 sm:h-64 bg-gray-900 flex-shrink-0">
+        {/* Header with Fixed Close Button */}
+        <div className="relative h-48 sm:h-64 bg-gray-900 flex-shrink-0 sm:rounded-t-lg overflow-hidden">
           <Image
             src={project.image}
             alt={project.title}
             fill
             className="object-cover"
             priority
+            sizes="(max-width: 768px) 100vw, 768px"
+            placeholder="blur"
+            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaUMk8DFbI5oW5I1aYrC4bkS0LDyYWukbqXKJ4ErjLk4gY8OMk6kJA+4n//2Q=="
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
 
-          {/* MOBILE OPTIMIZED CLOSE BUTTON */}
           <button
             onClick={onClose}
-            className="absolute top-3 right-3 sm:top-4 sm:right-4 z-[99999] w-10 h-10 sm:w-12 sm:h-12 bg-black/90 hover:bg-orange-500 text-white flex items-center justify-center transition-all duration-300 group border border-white/20"
+            className="absolute top-3 right-3 sm:top-4 sm:right-4 z-[99999] w-10 h-10 sm:w-12 sm:h-12 bg-black/90 hover:bg-orange-500 text-white flex items-center justify-center transition-all duration-300 group border border-white/20 rounded-full"
             aria-label="Close modal"
-            title="Close modal"
           >
             <X className="w-5 h-5 sm:w-6 sm:h-6 group-hover:scale-110 transition-transform" />
           </button>
 
           <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 text-white">
-            <h2 className="font-oswald text-2xl sm:text-3xl md:text-4xl uppercase mb-2">
+            <h2
+              id="modal-title"
+              className="font-oswald text-2xl sm:text-3xl md:text-4xl uppercase mb-2"
+            >
               {project.title}
             </h2>
             <div className="flex flex-col space-y-2 sm:space-y-0 sm:flex-row sm:items-center sm:justify-between">
@@ -118,15 +195,17 @@ const ProjectModal = ({ isOpen, onClose, project }: ProjectModalProps) => {
           </div>
         </div>
 
-        {/* Tabs - Mobile Optimized */}
+        {/* Tabs */}
+        {/* Tabs */}
         <div className="flex border-b border-gray-200 flex-shrink-0">
           {[
             { id: "overview" as const, label: "Overview" },
             { id: "investment" as const, label: "Investment" },
           ].map((tab) => (
             <button
+              type="button"
               key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
+              onClick={() => handleTabClick(tab.id)}
               className={`flex-1 py-3 sm:py-4 font-inter text-xs sm:text-sm uppercase tracking-wider transition-all duration-300 ${
                 activeTab === tab.id
                   ? "text-orange-500 border-b-2 border-orange-500 font-semibold"
@@ -138,235 +217,335 @@ const ProjectModal = ({ isOpen, onClose, project }: ProjectModalProps) => {
           ))}
         </div>
 
-        {/* MAIN CONTENT AREA - Mobile Optimized */}
+        {/* Content Area */}
         <div className="flex-1 overflow-y-auto">
           <div className="p-4 sm:p-6">
-            {activeTab === "overview" && (
-              <div className="space-y-4 sm:space-y-6">
-                <p className="font-inter text-gray-700 leading-relaxed text-sm sm:text-base">
-                  {project.description}
-                </p>
+            <div
+              id="overview-tab"
+              role="tabpanel"
+              aria-labelledby="overview-tab"
+              className={activeTab === "overview" ? "block" : "hidden"}
+            >
+              <TabContent
+                description={project.description}
+                features={project.features}
+                type="overview"
+              />
+            </div>
 
-                <div>
-                  <h4 className="font-oswald text-lg uppercase text-gray-900 mb-3 sm:mb-4">
-                    Key Features
-                  </h4>
-                  <div className="grid grid-cols-1 gap-2 sm:gap-3">
-                    {project.features.map((feature, index) => (
-                      <div key={index} className="flex items-center">
-                        <div className="w-4 h-4 sm:w-5 sm:h-5 bg-orange-500 rounded-full flex items-center justify-center mr-2 sm:mr-3 flex-shrink-0">
-                          <Check className="w-2 h-2 sm:w-3 sm:h-3 text-white" />
-                        </div>
-                        <span className="font-inter text-gray-600 text-xs sm:text-sm">
-                          {feature}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activeTab === "investment" && (
-              <div className="space-y-4 sm:space-y-6">
-                <div className="bg-gradient-to-r from-orange-500/10 to-orange-500/5 p-4 sm:p-6 border border-orange-500/20">
-                  <h4 className="font-oswald text-lg uppercase text-gray-900 mb-2 sm:mb-3">
-                    Investment Details
-                  </h4>
-                  <p className="font-oswald text-xl sm:text-2xl text-orange-500 mb-2">
-                    {project.price}
-                  </p>
-                  <p className="font-inter text-gray-600 text-xs sm:text-sm">
-                    Competitive pricing with exceptional value proposition
-                  </p>
-                </div>
-
-                <div>
-                  <h4 className="font-oswald text-lg uppercase text-gray-900 mb-3 sm:mb-4">
-                    Investment Benefits
-                  </h4>
-                  <div className="space-y-2 sm:space-y-3">
-                    {project.investment.map((benefit, index) => (
-                      <div key={index} className="flex items-start">
-                        <div className="w-4 h-4 sm:w-5 sm:h-5 bg-orange-500 rounded-full flex items-center justify-center mr-2 sm:mr-3 mt-0.5 flex-shrink-0">
-                          <Check className="w-2 h-2 sm:w-3 sm:h-3 text-white" />
-                        </div>
-                        <span className="font-inter text-gray-700 text-xs sm:text-sm leading-relaxed">
-                          {benefit}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
+            <div
+              id="investment-tab"
+              role="tabpanel"
+              aria-labelledby="investment-tab"
+              className={activeTab === "investment" ? "block" : "hidden"}
+            >
+              <TabContent
+                price={project.price}
+                investment={project.investment}
+                type="investment"
+              />
+            </div>
           </div>
         </div>
 
-        {/* BUTTONS - Mobile Optimized */}
-        <div className="flex flex-col gap-2 sm:gap-3 p-4 sm:p-6 border-t border-gray-200 bg-gray-50 flex-shrink-0">
-          <motion.button
-            onClick={handleScheduleVisit}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="flex-1 bg-orange-500 text-white font-bold uppercase py-3 sm:py-4 font-inter text-xs sm:text-sm border-2 border-orange-500 hover:bg-orange-600 transition-all duration-300 flex items-center justify-center gap-2"
-          >
-            <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
-            Schedule Site Visit
-          </motion.button>
+        {/* Action Buttons */}
+        <div className="flex flex-col gap-2 sm:gap-3 p-4 sm:p-6 border-t border-gray-200 bg-gray-50 flex-shrink-0 sm:rounded-b-lg">
+          <OptimizedMotion>
+            <motion.button
+              onClick={handleScheduleVisit}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full bg-orange-500 text-white font-bold uppercase py-3 sm:py-4 font-inter text-xs sm:text-sm border-2 border-orange-500 hover:bg-orange-600 transition-all duration-300 flex items-center justify-center gap-2"
+            >
+              <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
+              Schedule Site Visit
+            </motion.button>
+          </OptimizedMotion>
 
-          <motion.button
-            onClick={handleDownloadBrochure}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="flex-1 bg-transparent text-gray-700 font-bold uppercase py-3 sm:py-4 font-inter text-xs sm:text-sm border-2 border-gray-300 hover:border-orange-500 hover:text-orange-500 transition-all duration-300 flex items-center justify-center gap-2"
+          <OptimizedMotion>
+            <motion.button
+              onClick={handleDownloadBrochure}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full bg-transparent text-gray-700 font-bold uppercase py-3 sm:py-4 font-inter text-xs sm:text-sm border-2 border-gray-300 hover:border-orange-500 hover:text-orange-500 transition-all duration-300 flex items-center justify-center gap-2"
+            >
+              <Download className="w-3 h-3 sm:w-4 sm:h-4" />
+              Download Brochure
+            </motion.button>
+          </OptimizedMotion>
+        </div>
+      </div>
+    </div>,
+    document.body
+  );
+});
+
+ProjectModal.displayName = "ProjectModal";
+
+// Tab Content Props Interface
+interface TabContentProps {
+  description?: string;
+  features?: string[];
+  price?: string;
+  investment?: string[];
+  type: "overview" | "investment";
+}
+
+// Memoized tab content components
+const TabContent = memo(
+  ({ description, features, price, investment, type }: TabContentProps) => {
+    if (type === "overview") {
+      return (
+        <div className="space-y-4 sm:space-y-6">
+          <p className="font-inter text-gray-700 leading-relaxed text-sm sm:text-base">
+            {description}
+          </p>
+          <div>
+            <h4 className="font-oswald text-lg uppercase text-gray-900 mb-3 sm:mb-4">
+              Key Features
+            </h4>
+            <div className="grid grid-cols-1 gap-2 sm:gap-3">
+              {features?.map((feature, index) => (
+                <div key={index} className="flex items-center">
+                  <div className="w-4 h-4 sm:w-5 sm:h-5 bg-orange-500 rounded-full flex items-center justify-center mr-2 sm:mr-3 flex-shrink-0">
+                    <Check className="w-2 h-2 sm:w-3 sm:h-3 text-white" />
+                  </div>
+                  <span className="font-inter text-gray-600 text-xs sm:text-sm">
+                    {feature}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="space-y-4 sm:space-y-6">
+        <div className="bg-gradient-to-r from-orange-500/10 to-orange-500/5 p-4 sm:p-6 border border-orange-500/20">
+          <h4 className="font-oswald text-lg uppercase text-gray-900 mb-2 sm:mb-3">
+            Investment Details
+          </h4>
+          <p className="font-oswald text-xl sm:text-2xl text-orange-500 mb-2">
+            {price}
+          </p>
+          <p className="font-inter text-gray-600 text-xs sm:text-sm">
+            Competitive pricing with exceptional value proposition
+          </p>
+        </div>
+
+        <div>
+          <h4 className="font-oswald text-lg uppercase text-gray-900 mb-3 sm:mb-4">
+            Investment Benefits
+          </h4>
+          <div className="space-y-2 sm:space-y-3">
+            {investment?.map((benefit, index) => (
+              <div key={index} className="flex items-start">
+                <div className="w-4 h-4 sm:w-5 sm:h-5 bg-orange-500 rounded-full flex items-center justify-center mr-2 sm:mr-3 mt-0.5 flex-shrink-0">
+                  <Check className="w-2 h-2 sm:w-3 sm:h-3 text-white" />
+                </div>
+                <span className="font-inter text-gray-700 text-xs sm:text-sm leading-relaxed">
+                  {benefit}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+);
+
+TabContent.displayName = "TabContent";
+
+// Project Card Props Interface
+interface ProjectCardProps {
+  project: Project;
+  onProjectClick: (project: Project) => void;
+}
+
+// Memoized project card component
+const ProjectCard = memo(({ project, onProjectClick }: ProjectCardProps) => {
+  const handleClick = useCallback(() => {
+    onProjectClick(project);
+  }, [onProjectClick, project]);
+
+  const handleKeyPress = useCallback(
+    (event: React.KeyboardEvent) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        onProjectClick(project);
+      }
+    },
+    [onProjectClick, project]
+  );
+
+  return (
+    <div
+      className="group cursor-pointer"
+      onClick={handleClick}
+      onKeyDown={handleKeyPress}
+      role="button"
+      tabIndex={0}
+      aria-label={`View details for ${project.title}`}
+    >
+      <div className="bg-white border border-gray-200 shadow-lg overflow-hidden transition-all duration-300 group-hover:shadow-xl group-hover:border-orange-500/30 h-full">
+        {/* Image Container - Fixed aspect ratio */}
+        <div className="relative aspect-[4/3] overflow-hidden">
+          <Image
+            src={project.image}
+            alt={project.title}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            placeholder="blur"
+            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaUMk8DFbI5oW5I1aYrC4bkS0LDyYWukbqXKJ4ErjLk4gY8OMk6kJA+4n//2Q=="
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+
+          {/* Overlay Content */}
+          <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+            <h3 className="font-oswald text-2xl uppercase mb-2">
+              {project.title}
+            </h3>
+            <p className="font-inter text-gray-300 text-sm">
+              {project.location}
+            </p>
+          </div>
+        </div>
+
+        <div className="p-6">
+          <div className="flex justify-between items-start mb-4">
+            <div>
+              <span className="font-inter text-orange-500 text-sm uppercase tracking-wider">
+                {project.category}
+              </span>
+              <p className="font-oswald text-lg text-gray-900 mt-1">
+                {project.price}
+              </p>
+            </div>
+          </div>
+
+          <p className="font-inter text-gray-600 text-sm mb-4 leading-relaxed line-clamp-3">
+            {project.description}
+          </p>
+
+          <div className="flex flex-wrap gap-2 mb-4">
+            {project.features.slice(0, 3).map((feature, featureIndex) => (
+              <span
+                key={featureIndex}
+                className="px-2 py-1 bg-gray-100 text-gray-600 text-xs font-inter rounded"
+              >
+                {feature}
+              </span>
+            ))}
+            {project.features.length > 3 && (
+              <span className="px-2 py-1 bg-gray-100 text-gray-500 text-xs font-inter rounded">
+                +{project.features.length - 3} more
+              </span>
+            )}
+          </div>
+
+          <button
+            className="w-full py-3 border border-gray-300 text-gray-700 font-inter text-sm uppercase tracking-wider hover:bg-orange-500 hover:border-orange-500 hover:text-white transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+            aria-label={`View project details for ${project.title}`}
           >
-            <Download className="w-3 h-3 sm:w-4 sm:h-4" />
-            Download Brochure
-          </motion.button>
+            View Project Details
+          </button>
         </div>
       </div>
     </div>
   );
-};
+});
 
-// Rest of your component remains exactly the same...
+ProjectCard.displayName = "ProjectCard";
+
 const ProjectShowcaseSection = () => {
   const { ref, inView } = useInView({
     triggerOnce: true,
-    threshold: 0.1,
+    threshold: 0.05,
   });
 
-  const [selectedProject, setSelectedProject] = useState<
-    (typeof developments)[0] | null
-  >(null);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleProjectClick = (project: (typeof developments)[0]) => {
+  // Memoized event handlers
+  const handleProjectClick = useCallback((project: Project) => {
     setSelectedProject(project);
     setIsModalOpen(true);
-  };
+  }, []);
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     setIsModalOpen(false);
-    setSelectedProject(null);
-  };
+    setTimeout(() => setSelectedProject(null), 300);
+  }, []);
 
   return (
-    <section
-      ref={ref}
-      className="relative w-full bg-white text-black overflow-hidden py-20 lg:py-28"
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <motion.div
-          className="text-center mb-16"
-          initial="hidden"
-          animate={inView ? "visible" : "hidden"}
-          variants={fadeIn(0)}
-        >
-          <div className="flex items-center justify-center mb-4">
-            <div className="w-4 h-4 bg-orange-500 mr-3" />
-            <span className="font-inter text-orange-500 font-medium text-sm tracking-widest uppercase">
-              FEATURED DEVELOPMENTS
-            </span>
-          </div>
+    <OptimizedMotion>
+      <section
+        ref={ref}
+        className="relative w-full bg-white text-black overflow-hidden py-20 lg:py-28"
+        aria-labelledby="projects-section-title"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Section Header */}
+          <motion.div
+            className="text-center mb-16"
+            initial="hidden"
+            animate={inView ? "visible" : "hidden"}
+            variants={fadeIn(0)}
+          >
+            <div className="flex items-center justify-center mb-4">
+              <div className="w-4 h-4 bg-orange-500 mr-3" />
+              <span className="font-inter text-orange-500 font-medium text-sm tracking-widest uppercase">
+                FEATURED DEVELOPMENTS
+              </span>
+            </div>
 
-          <h2 className="font-oswald text-4xl lg:text-5xl font-medium uppercase text-gray-900 leading-tight mb-6">
-            Current
-            <br />
-            <span className="text-orange-500">Projects</span>
-          </h2>
-
-          <p className="font-inter text-lg text-gray-600 max-w-2xl mx-auto">
-            Explore our premium real estate developments that combine luxury
-            living with exceptional investment potential.
-          </p>
-        </motion.div>
-
-        {/* Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {developments.map((project, index) => (
-            <motion.div
-              key={project.id}
-              initial="hidden"
-              animate={inView ? "visible" : "hidden"}
-              variants={fadeIn(0.2 + index * 0.2)}
-              className="group cursor-pointer"
-              onClick={() => handleProjectClick(project)}
+            <h2
+              id="projects-section-title"
+              className="font-oswald text-4xl lg:text-5xl font-medium uppercase text-gray-900 leading-tight mb-6"
             >
-              {/* Project Card */}
-              <div className="bg-white border border-gray-200 shadow-lg overflow-hidden transition-all duration-300 group-hover:shadow-xl group-hover:border-orange-500/30">
-                {/* Image Container */}
-                <div className="relative h-80 overflow-hidden">
-                  <Image
-                    src={project.image}
-                    alt={project.title}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+              Current
+              <br />
+              <span className="text-orange-500">Projects</span>
+            </h2>
 
-                  {/* Overlay Content */}
-                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                    <h3 className="font-oswald text-2xl uppercase mb-2">
-                      {project.title}
-                    </h3>
-                    <p className="font-inter text-gray-300 text-sm">
-                      {project.location}
-                    </p>
-                  </div>
-                </div>
+            <p className="font-inter text-lg text-gray-600 max-w-2xl mx-auto">
+              Explore our premium real estate developments that combine luxury
+              living with exceptional investment potential.
+            </p>
+          </motion.div>
 
-                {/* Card Content */}
-                <div className="p-6">
-                  <div className="flex justify-between items-start mb-4">
-                    <div>
-                      <span className="font-inter text-orange-500 text-sm uppercase tracking-wider">
-                        {project.category}
-                      </span>
-                      <p className="font-oswald text-lg text-gray-900 mt-1">
-                        {project.price}
-                      </p>
-                    </div>
-                  </div>
-
-                  <p className="font-inter text-gray-600 text-sm mb-4 leading-relaxed">
-                    {project.description}
-                  </p>
-
-                  {/* Features */}
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {project.features
-                      .slice(0, 3)
-                      .map((feature, featureIndex) => (
-                        <span
-                          key={featureIndex}
-                          className="px-2 py-1 bg-gray-100 text-gray-600 text-xs font-inter"
-                        >
-                          {feature}
-                        </span>
-                      ))}
-                  </div>
-
-                  {/* Button */}
-                  <button className="w-full py-3 border border-gray-300 text-gray-700 font-inter text-sm uppercase tracking-wider hover:bg-orange-500 hover:border-orange-500 hover:text-white transition-all duration-300">
-                    View Project Details
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+          {/* Projects Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {developments.map((project, index) => (
+              <motion.div
+                key={project.id}
+                initial="hidden"
+                animate={inView ? "visible" : "hidden"}
+                variants={fadeIn(0.1 + index * 0.1)}
+                whileHover={{ y: -5 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                <ProjectCard
+                  project={project}
+                  onProjectClick={handleProjectClick}
+                />
+              </motion.div>
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* Modal */}
-      <ProjectModal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        project={selectedProject}
-      />
-    </section>
+        {/* Modal */}
+        <ProjectModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          project={selectedProject}
+        />
+      </section>
+    </OptimizedMotion>
   );
 };
 

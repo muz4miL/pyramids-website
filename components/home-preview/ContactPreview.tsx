@@ -48,7 +48,8 @@ export default function ContactPreview() {
           phone: formData.phone,
           subject: formData.subject,
           message: formData.message,
-          to_email: "shirazmuzamil2@gmail.com", // TEST EMAIL - Change to imran514@hotmail.com later
+          // UPDATED HERE: Now sending to Imran
+          to_email: "imran514@hotmail.com",
           reply_to: formData.email,
         },
         "Cpn322BDQ9EFLPqiq" // Your Public Key

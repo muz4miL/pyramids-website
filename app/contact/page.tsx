@@ -58,7 +58,8 @@ export default function ContactPage() {
           phone: formData.phone,
           subject: formData.subject,
           message: formData.message,
-          to_email: "shuazmuzamil@gmail.com",
+          // UPDATED: Sending to Imran's email
+          to_email: "imran514@hotmail.com",
           reply_to: formData.email,
         },
         "Cpn322BDQ9EFLPqiq"
